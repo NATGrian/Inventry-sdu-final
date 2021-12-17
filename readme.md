@@ -1,44 +1,29 @@
-# Single Page Application with Laravel 5.4 and Vue.js 2 - Recipe Box
+# Inventry-sdu-final - โปรเจคจบ
 
 ### Frameworks and Libraries:
 
 - Laravel 5.4
 - Vue.js 2.2
 - Vue Router
+- iview ui framework 4.X
 - Axios
 
-### Provides:
-
-- Built in token authentication
-- Image preview and upload
-- Nested forms
-- CRUD
-
-
-![alt tag](https://github.com/codekerala/laravel-and-vue.js-spa-Recipe-Box/raw/master/s1.png)
 
 ### Installation
-`git clone https://github.com/codekerala/laravel-and-vue.js-spa-Recipe-Box.git`
-
-`laravel-and-vue.js-spa-Recipe-Box`
+`git clone https://github.com/NATGrian/Inventry-sdu-final.git`
 
 `composer install`
 
 `npm install`
 
-### Want More?
+`cp .env.example .env`
 
-SAAS invoicing and purchasing solution with multi database.
-Find the link for paid full source code from codecanyon.
+`php artisan key:generate`
 
-[Meridian Demo](https://meridian.codekerala.com)
+`php artisan migrate`
 
-Email: user@meridian.test
-Password: password
+### Fontend dev
+`npm run watch`
 
-[Buy Meridian Now](https://codecanyon.net/item/meridian-saas-platform-for-invoicing-and-purchasing/24225094)
-
-
-### On Youtube
-
-Development: https://youtu.be/LZcwmzTdcLE
+### Backend dev
+`php artisan serve`
