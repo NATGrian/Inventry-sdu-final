@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use Faker\Factory;
+use App\User;
+use App\Models\Peoples;
+use App\Models\Storages;
+class UsersTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        
+            User::create([
+                'role_id' => 1,
+        		'firstname' => 'แอดมิน',
+                'lastname' => 'administrator',
+                'phone' => rand(0000000000,9999999999),
+                'image' => 'avatar.png',
+        		'email' => 'administrator@gmail.com',
+        		'password' => bcrypt('password'),
+        		'api_token' => NULL
+        	]);
+        
+        	Peoples::create([
+                'GID' => 1,
+        		'firstname' => 'แอดมิน',
+                'lastname' => 'administrator',
+                'image' => 'avatar.png'
+        	]);
+
+            Storages::create([
+        		'name' => 'คลังเก็บวัตถุดิบ',
+                'description' => 'ที่เก็บวัตถุดิบ'
+        	]);
+        
+    }
+}
