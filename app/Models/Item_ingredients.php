@@ -14,4 +14,5 @@ class Item_ingredients extends Model
     {
         return $this->belongsTo(Categorys_ingredients::class);
     }
+    
 }

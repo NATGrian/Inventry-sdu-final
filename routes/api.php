@@ -27,3 +27,14 @@ Route::post('category-p', 'Admins\ProductsController@addcategory');
 Route::resource('ingredients', 'Admins\IngredientsController');
 Route::get('recordingredients', 'Admins\IngredientsController@getrecord');
 Route::get('import/{id}', 'Admins\IngredientsController@getimport');
+Route::post('ingredients/import', 'Admins\IngredientsController@import_Ingredients');
+Route::post('ingredients/export', 'Admins\IngredientsController@export_Ingredients');
+
+Route::resource('products', 'Admins\ProductsController');
+Route::get('recordproduct', 'Admins\ProductsController@getrecord');
+Route::get('import-p/{id}', 'Admins\ProductsController@getimport');
+Route::post('product/import', 'Admins\ProductsController@import_product');
+
+Route::get('export/search/{id}', 'Admins\IngredientsController@getsearch');
+Route::get('export-p/search/{id}', 'Admins\ProductsController@getsearch');
+Route::post('product/export', 'Admins\ProductsController@export_product');

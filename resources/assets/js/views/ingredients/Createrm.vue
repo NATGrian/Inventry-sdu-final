@@ -303,7 +303,7 @@ export default {
   },
   methods: {
     focusOut() {
-        this.formcreate.qty =  parseFloat(`${this.formcreate.qty.toFixed(1)}`);
+        this.formcreate.qty =  parseFloat(`${this.formcreate.qty.toFixed(2)}`);
     },
     handleSubmit() {
       this.formcreate.UID = this.id
@@ -345,7 +345,7 @@ export default {
   font-size: 15px;
   font-weight: bold;
   color: #000;
-  text-shadow: 8px 4px 6px #959595a8;
+  text-shadow: 8px 4px 6px hsla(0, 0%, 58%, 0.659);
 }
 .sub-title1 {
   margin-left: 50px;

@@ -48,10 +48,8 @@
     </Row>
     <br>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
-        <template slot-scope="{ row }" slot="name">
-          <strong>{{ row.name }}</strong>
-        </template>
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datalist">
+
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
@@ -68,17 +66,12 @@
 
 
 <script>
-
+import { get } from "../../helpers/api";
 
 
 export default {
   data() {
     return {
-      defaultList: [
-        {
-
-        },
-      ],
       columns: [
         {
           type: "selection",
@@ -86,28 +79,27 @@ export default {
           align: "center",
         },
         {
-          title: "ชื่อวัตถุดิบ",
-          key: "name",
+          title: "ชื่อผลิตภัณฑ์",
+          key: "itemname",
           width: 200,
           align: "center",
-          slot: "name",
         },
         {
           title: "จำนวนคงเหลือ",
-          key: "email",
-          width: 219,
+          key: "qty",
+          width: 100,
           align: "center",
         },
         {
           title: "ประเภท",
-          key: "tel",
-          width: 120,
+          key: "name",
+          width: 150,
           align: "center",
         },
         {
-          title: "ผู้ปัฎิบัติงาน",
-          key: "role",
-          width: 130,
+          title: "ว-ด-ป เข้าระบบ",
+          key: "created_at",
+          width: 230,
           align: "center",
         },
         {
@@ -119,18 +111,11 @@ export default {
           slot: "action",
         },
       ],
-      users: [],
+      datalist: [],
     };
   },
   methods: {
 
-    ok() {
-      this.$Message.info("สำเร็จ");
-      this.addmember = false;
-    },
-    cancel() {
-      this.$Message.info("ยกเลิกแล้ว");
-    },
     show(index) {
       this.$Modal.info({
         title: "User Info",
@@ -141,30 +126,11 @@ export default {
       this.data4.splice(index, 1);
     },
   },
-  components: {
-   
-  },
-  
-  mounted() {
-    this.uploadList = this.$refs.upload.fileList;
-  },
-
-  async created() {
-    const [res, resRole] = await Promise.all([
-      this.callApi("get", "app/get_users"),
-
-    ]);
-    if (res.status == 200) {
-      this.users = res.data;
-    } else {
-      this.swr();
-    }
-    if (resRole.status == 200) {
-      this.roles = resRole.data;
-    } else {
-      this.swr();
-    }
-  },
+  created() {
+     get("/api/products").then((res) => {
+      this.datalist = res.data.list;
+    });
+   }
 };
 </script>
 

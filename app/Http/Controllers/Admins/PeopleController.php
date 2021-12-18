@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admins;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\peoples;
-use App\Models\people_groups;
+use App\Models\Peoples;
+use App\Models\People_groups;
 
 class PeopleController extends Controller
 {
@@ -25,7 +25,7 @@ class PeopleController extends Controller
     }
     public function getgroups()
     {
-        $groups = people_groups::all();
+        $groups = People_groups::all();
 
     	return response()
     		->json([
@@ -63,7 +63,7 @@ class PeopleController extends Controller
             'description' => 'required|max:255',
         ]);
     
-        $groups = new people_groups($request->all());
+        $groups = new People_groups($request->all());
         $groups->save();
 
         return response()

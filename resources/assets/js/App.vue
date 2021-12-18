@@ -178,9 +178,92 @@
   </div>
 </template>
 
+<script type="text/javascript">
+import Auth from "./store/auth";
+import Flash from "./helpers/flash";
+import { post, interceptors,get } from "./helpers/api";
+export default {
+  data() {
+    return {
+      authState: Auth.state,
+      flash: Flash.state,
+      users: {
+        
+      },
+      isCollapsed: false,
+    };
+  },
+  created() {
+      get('/api/users/'+ localStorage.getItem('user_id'))
+              .then((res) => {
+                this.users = res.data.user
+                this.$Loading.finish();
+              });
+    // global error http handler
+    interceptors((err) => {
+      if (err.response.status === 401) {
+        Auth.remove();
+        this.$router.push("/login");
+      }
 
+      if (err.response.status === 500) {
+        Flash.setError(err.response.statusText);
+      }
+
+      if (err.response.status === 404) {
+        this.$router.push("/not-found");
+      }
+    });
+    Auth.initialize();
+  },
+  computed: {
+    auth() {
+      if (this.authState.api_token) {
+        return true;
+      }
+      return false;
+    },
+    guest() {
+      return !this.auth;
+    },
+    rotateIcon() {
+      return ["menu-icon", this.isCollapsed ? "rotate-icon" : ""];
+    },
+    Layout() {
+      return [
+        this.auth ? "" : "Layout-with-sider-hide", "Layout-with-sider", this.isCollapsed ? "Layout-with-sider-Collapsed" : "",
+        
+      ];
+    },
+    HeaderMenu() {
+      return ["HeaderMenu", this.isCollapsed ? "HeaderMenu-Collapsed" : ""];
+    },
+    
+  },
+  methods: {
+    logout() {
+      post("/api/logout").then((res) => {
+        if (res.data.done) {
+          // remove token
+          Auth.remove();
+          Flash.setSuccess("You have successfully logged out.");
+          this.$Loading.finish();
+          window.location.href = '/login';
+        }
+      });
+      
+    },
+    collapsedSider() {
+      this.$refs.side1.toggleCollapse();
+    },
+  },
+};
+</script>
 
 <style scoped>
+.Layout-with-sider-hide {
+  padding-left: 0 !important;
+}
 .ivu-layout {
   background: rgb(240, 240, 240);
 }
@@ -336,82 +419,3 @@
   margin-left: 15px;
 }
 </style>
-<script type="text/javascript">
-import Auth from "./store/auth";
-import Flash from "./helpers/flash";
-import { post, interceptors,get } from "./helpers/api";
-export default {
-  data() {
-    return {
-      authState: Auth.state,
-      flash: Flash.state,
-      users: {
-        
-      },
-      isCollapsed: false,
-    };
-  },
-  created() {
-      get('/api/users/'+ localStorage.getItem('user_id'))
-              .then((res) => {
-                this.users = res.data.user
-                this.$Loading.finish();
-              });
-    // global error http handler
-    interceptors((err) => {
-      if (err.response.status === 401) {
-        Auth.remove();
-        this.$router.push("/login");
-      }
-
-      if (err.response.status === 500) {
-        Flash.setError(err.response.statusText);
-      }
-
-      if (err.response.status === 404) {
-        this.$router.push("/not-found");
-      }
-    });
-    Auth.initialize();
-  },
-  computed: {
-    rotateIcon() {
-      return ["menu-icon", this.isCollapsed ? "rotate-icon" : ""];
-    },
-    Layout() {
-      return [
-        "Layout-with-sider", this.isCollapsed ? "Layout-with-sider-Collapsed" : "",
-      ];
-    },
-    HeaderMenu() {
-      return ["HeaderMenu", this.isCollapsed ? "HeaderMenu-Collapsed" : ""];
-    },
-    auth() {
-      if (this.authState.api_token) {
-        return true;
-      }
-      return false;
-    },
-    guest() {
-      return !this.auth;
-    },
-  },
-  methods: {
-    logout() {
-      post("/api/logout").then((res) => {
-        if (res.data.done) {
-          // remove token
-          Auth.remove();
-          Flash.setSuccess("You have successfully logged out.");
-          this.$Loading.finish();
-          window.location.href = '/login';
-        }
-      });
-      
-    },
-    collapsedSider() {
-      this.$refs.side1.toggleCollapse();
-    },
-  },
-};
-</script>

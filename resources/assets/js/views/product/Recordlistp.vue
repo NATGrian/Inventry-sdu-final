@@ -2,7 +2,8 @@
   <div class="container-fluid">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem>ภาพการบันทึกผลิตภัณฑ์</BreadcrumbItem>
+      <BreadcrumbItem to="/product/list">ผลิตภัณฑ์</BreadcrumbItem>
+      <BreadcrumbItem>ภาพรวมการบันทึก นำเข้า - จ่ายออก</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
@@ -50,11 +51,22 @@
       </Col>
     </Row>
     <br>
+    <Row type="flex" justify="center" align="middle">
+
+      <Col span="4">
+      <Button type="primary" @click="switchim" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การนำเข้า</Button>
+
+      </Col>
+
+      <Col span="4">
+      <Button type="primary" @click="switchex" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การจ่ายออก</Button>
+
+      </Col>
+    </Row>
+    <br>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
-        <template slot-scope="{ row }" slot="name">
-          <strong>{{ row.name }}</strong>
-        </template>
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="!this.switch">
+
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
@@ -63,7 +75,16 @@
           <Page :total="40" size="small" show-elevator show-sizer />
         </template>
       </Table>
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord1" v-else>
 
+        <template slot-scope="{ index }" slot="action">
+          <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
+          <Button type="error" size="small" @click="remove(index)">Delete</Button>
+        </template>
+        <template slot="footer">
+          <Page :total="40" size="small" show-elevator show-sizer />
+        </template>
+      </Table>
     </Row>
 
   </div>
@@ -71,25 +92,11 @@
 
 
 <script>
-
-
-
+import { get } from "../../helpers/api";
 export default {
   data() {
     return {
-      defaultList: [
-        {
-          name: "",
-          url: "",
-        },
-      ],
-      model11: "",
-      imgName: "",
-      visible: false,
-      uploadList: [],
-      value9: "5555",
-      addmember: false,
-      addrole: false,
+      switch: false,
       columns: [
         {
           type: "selection",
@@ -97,28 +104,52 @@ export default {
           align: "center",
         },
         {
-          title: "Name",
-          key: "name",
-          width: 200,
-          align: "center",
-          slot: "name",
-        },
-        {
-          title: "Mail",
-          key: "email",
-          width: 219,
+          title: "ว / ด / ป",
+          key: "created_at",
+          width: 100,
           align: "center",
         },
+
         {
-          title: "เบอร์โทร",
-          key: "tel",
-          width: 120,
+          title: "เลขที่ใบสั่งงาน",
+          key: "order_no",
+          width: 150,
           align: "center",
         },
         {
-          title: "ตำแหน่ง",
-          key: "role",
-          width: 130,
+          title: "เลขที่การผลิต",
+          key: "Batch_no",
+          width: 150,
+          align: "center",
+        },
+        {
+          title: "รายการ",
+          key: "itemname",
+          width: 250,
+          align: "center",
+        },
+        {
+          title: "จำนวน",
+          key: "qty_charge",
+          width: 150,
+          align: "center",
+        },
+        {
+          title: "จำนวนคงเหลือ",
+          key: "qty_balance",
+          width: 150,
+          align: "center",
+        },
+        {
+          title: "สถานะ",
+          key: "status",
+          width: 150,
+          align: "center",
+        },
+        {
+          title: "ผู้ปฎิบัติ",
+          key: "firstname",
+          width: 250,
           align: "center",
         },
         {
@@ -130,52 +161,16 @@ export default {
           slot: "action",
         },
       ],
-      users: [],
+      datarecord: [],
+      datarecord1: [],
     };
   },
   methods: {
-    handleView(name) {
-      this.imgName = name;
-      this.visible = true;
+    switchim() {
+      this.switch = false;
     },
-    handleRemove(file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess(res, file) {
-      file.url = "";
-      file.name = "";
-    },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: "The file format is incorrect",
-        desc:
-          "File format of " +
-          file.name +
-          " is incorrect, please select jpg or png.",
-      });
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "Exceeding file size limit",
-        desc: "File  " + file.name + " is too large, no more than 2M.",
-      });
-    },
-    handleBeforeUpload() {
-      const check = this.uploadList.length < 5;
-      if (!check) {
-        this.$Notice.warning({
-          title: "Up to five pictures can be uploaded.",
-        });
-      }
-      return check;
-    },
-    ok() {
-      this.$Message.info("สำเร็จ");
-      this.addmember = false;
-    },
-    cancel() {
-      this.$Message.info("ยกเลิกแล้ว");
+    switchex() {
+      this.switch = true;
     },
     show(index) {
       this.$Modal.info({
@@ -187,28 +182,11 @@ export default {
       this.data4.splice(index, 1);
     },
   },
-  components: {
-    
-  },
-  
-  mounted() {
-    this.uploadList = this.$refs.upload.fileList;
-  },
-
-  async created() {
-    const [res, resRole] = await Promise.all([
-      this.callApi("get", "app/get_users"),
-    ]);
-    if (res.status == 200) {
-      this.users = res.data;
-    } else {
-      this.swr();
-    }
-    if (resRole.status == 200) {
-      this.roles = resRole.data;
-    } else {
-      this.swr();
-    }
+  created() {
+    get("/api/recordproduct").then((res) => {
+      this.datarecord = res.data.recordproduct;
+      this.datarecord1 = res.data.recordproduct1;
+    });
   },
 };
 </script>

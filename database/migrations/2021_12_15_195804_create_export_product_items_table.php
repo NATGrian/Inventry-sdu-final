@@ -21,7 +21,7 @@ class CreateExportProductItemsTable extends Migration
             $table->date('export_at');
             $table->string('order_no',50);
             $table->double('qty_charge', 15, 2);
-            $table->double('qty', 15, 2);
+            $table->double('qty_balance', 15, 2);
             $table->string('description')->nullable();
             $table->string('status',50);
             $table->timestampsTz();

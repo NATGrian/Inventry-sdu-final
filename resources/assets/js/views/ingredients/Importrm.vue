@@ -99,8 +99,8 @@
             </Col>
           </Row>
           <Row type="flex" justify="center">
-            <Col span="11">
-            <FormItem prop="storage_ID">
+            <Col span="12">
+            <FormItem prop="storageID">
               <span slot="label" style="width: 10%;">สถานที่จัดเก็บ</span>
               <Select v-model="formimport.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
                 <Option v-for="s in storage" :value="s.id" :key="s.id">{{ s.name }}</Option>
@@ -108,15 +108,7 @@
 
             </FormItem>
             </Col>
-            <Col span="11">
-            <FormItem prop="CID">
-              <span slot="label" style="width: 10%;">ประเภทของสิ่งของ</span>
-              <Select v-model="formimport.CID" placeholder="ค้นหา ประเภท" style="width: 50%;" size="small">
-                <Option v-for="c in categorys" :value="c.id" :key="c.id">{{ c.name }}</Option>
-              </Select>
-
-            </FormItem>
-            </Col>
+            
           </Row>
         </div>
         </Col>
@@ -127,8 +119,8 @@
           <Row type="flex" justify="center">
             <Col span="24">
             <div class="input-role">
-              <h5 style="display: inline-block;">รายละเอียดย่อย</h5>
-              <Input v-model="formimport.desc" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
+              <span style="display: inline-block;">รายละเอียดย่อย</span>
+              <Input v-model="formimport.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>
@@ -136,7 +128,7 @@
           <Row type="flex" justify="center">
             <Col span="24">
             <div class="input-role">
-              <h5 style="display: inline-block;">ผู้ตรวจรับ</h5>
+              <span style="display: inline-block;">ผู้ตรวจรับ</span>
               <Input v-model="formimport.UID" readonly type="text" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
@@ -176,40 +168,33 @@ export default {
     get("/api/storages").then((res) => {
       this.storage = res.data.storages;
     });
-    get("/api/category").then((res) => {
-      this.categorys = res.data.category;
-    });
     get("/api/ingredients").then((res) => {
       this.itemrm = res.data.list;
-      
     });
   },
   data() {
     return {
-      
       id: "",
       itemrm: [],
       users: [],
       peoples: [],
       storage: [],
-      categorys: [],
 
       formimport: {
-        rc_no: '',
-        UID: '',
-        itemname: '',
-        import_at: '',
-        EXP: '',
-        MFG: '',
+        rc_no: "",
+        UID: "",
+        itemname: "",
+        import_at: "",
+        EXP: "",
+        MFG: "",
         qty: 0,
         qtyimport: 0,
-        qty_charge: 1,
-        invoice_no: '',
-        description: '..',
-        LOT_no: '',
-        PID: '',
-        storageID: '',
-        CID: '',
+        qty_charge: 0,
+        invoice_no: "",
+        description: "..",
+        LOT_no: "",
+        PID: "",
+        storageID: "",
       },
       ruleCustom: {
         rc_no: [
@@ -252,7 +237,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date1",
+            message: "ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
@@ -260,7 +245,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date2",
+            message: "ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
@@ -268,27 +253,27 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date3",
+            message: "ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
         PID: [
           {
             required: true,
-            message: "Please select the city",
+            message: "กรุณาเลือกด้วย !!",
             trigger: "change",
             type: "number",
           },
         ],
-        storage_ID: [
+        storageID: [
           {
             required: true,
-            message: "Please select the storage_ID",
+            message: "กรุณาเลือกด้วย !!",
             trigger: "change",
             type: "number",
           },
         ],
-        desc: [
+        description: [
           {
             required: false,
             message: "Please enter a personal introduction",
@@ -301,32 +286,60 @@ export default {
             trigger: "blur",
           },
         ],
-        CID: [
-          {
-            required: true,
-            message: "กรุณาเลือกด้วย !!",
-            trigger: "change",
-            type: "number",
-          },
-        ],
       },
     };
   },
   methods: {
     select(data) {
+      console.log(data)
       get("/api/import/" + data.value).then((res) => {
         this.formimport.qtyimport = res.data.itemimport.qty;
+        
       });
     },
     focusOut() {
-      this.formimport.qty_charge = parseFloat(`${this.formimport.qty_charge.toFixed(1)}`);
-      this.formimport.qty = parseFloat(`${this.formimport.qtyimport.toFixed(1)}`) + parseFloat(`${this.formimport.qty_charge.toFixed(1)}`);
+      this.formimport.qty_charge = parseFloat(
+        `${this.formimport.qty_charge.toFixed(2)}`
+      );
+      this.formimport.qty =
+        parseFloat(`${this.formimport.qtyimport.toFixed(2)}`) +
+        parseFloat(`${this.formimport.qty_charge.toFixed(2)}`);
     },
     handleSubmit() {
-      
+      this.formimport.UID = this.id
+      this.$Loading.start();
+      post("/api/ingredients/import", this.formimport)
+        .then((res) => {
+          this.$Loading.finish();
+          if (res.data.succeed) {
+            this.$router.push("/ingredients/recordlist");
+          }
+          
+        })
+        .catch((err) => {
+          this.$Loading.error();
+          if (err.response.status === 422) {
+            this.error = err.response.data;
+            this.$Message.error("เกิดข้อผิดพลาด");
+          }
+        });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
+      this.formimport.rc_no = "";
+      this.formimport.itemname = "";
+      this.formimport.import_at = "";
+      this.formimport.EXP = "";
+      this.formimport.MFG = "";
+      this.formimport.qty = 0;
+      this.formimport.qtyimport = 0;
+      this.formimport.qty_charge = 1;
+      this.formimport.invoice_no = "";
+      this.formimport.description = "";
+      this.formimport.LOT_no = "";
+      this.formimport.PID = "";
+      this.formimport.storageID = "";
+      this.formimport.CID = "";
     },
   },
 };

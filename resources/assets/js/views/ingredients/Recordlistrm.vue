@@ -51,9 +51,22 @@
       </Col>
     </Row>
     <br>
+    <Row type="flex" justify="center" align="middle">
+
+      <Col span="4">
+      <Button type="primary" @click="switchim" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การนำเข้า</Button>
+
+      </Col >
+
+      <Col span="4">
+      <Button type="primary" @click="switchex" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การจ่ายออก</Button>
+
+      </Col>
+    </Row>
+    <br>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord">
-        
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="!this.switch">
+
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
@@ -62,7 +75,16 @@
           <Page :total="40" size="small" show-elevator show-sizer />
         </template>
       </Table>
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord1" v-else>
 
+        <template slot-scope="{ index }" slot="action">
+          <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
+          <Button type="error" size="small" @click="remove(index)">Delete</Button>
+        </template>
+        <template slot="footer">
+          <Page :total="40" size="small" show-elevator show-sizer />
+        </template>
+      </Table>
     </Row>
 
   </div>
@@ -73,8 +95,8 @@ import { get } from "../../helpers/api";
 export default {
   data() {
     return {
-      addmember: false,
-      addrole: false,
+      switch: false,
+
       columns: [
         {
           type: "selection",
@@ -119,7 +141,7 @@ export default {
         },
         {
           title: "จำนวนคงเหลือ",
-          key: "qty",
+          key: "qty_balance",
           width: 150,
           align: "center",
         },
@@ -145,9 +167,16 @@ export default {
         },
       ],
       datarecord: [],
+      datarecord1: [],
     };
   },
   methods: {
+    switchim() {
+      this.switch = false;
+    },
+    switchex() {
+      this.switch = true;
+    },
     show(index) {
       this.$Modal.info({
         title: "User Info",
@@ -159,10 +188,10 @@ export default {
     },
   },
 
-
- created() {
+  created() {
     get("/api/recordingredients").then((res) => {
       this.datarecord = res.data.record;
+      this.datarecord1 = res.data.record1;
     });
   },
 };

@@ -23,7 +23,7 @@ class CreateExportIngredientsItemsTable extends Migration
             $table->date('export_at');
             $table->string('invoice_no',50)->nullable();
             $table->double('qty_charge', 15, 5);
-            $table->double('qty', 15, 5);
+            $table->double('qty_balance', 15, 5);
             $table->string('description')->nullable();
             $table->string('code_product',50)->nullable();
             $table->string('status',50);

@@ -33,7 +33,7 @@
             <FormItem prop="PID">
               <span slot="label">ผู้เบิก</span>
               <Select v-model="formexportp.PID" placeholder="ค้นหา ผู้เบิก" style="width: 80%;" size="small">
-                <Option v-for="item in formexportp.PID" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
               </Select>
             </FormItem>
             </Col>
@@ -42,14 +42,14 @@
             <Col span="8">
             <FormItem prop="export_at">
               <span slot="label">ว-ด-ป นำออก:</span>
-              <DatePicker v-model="formexportp.export_at" size="small" type="date" placeholder="Select date" style="width: 50%;" />
+              <DatePicker v-model="formexportp.export_at" @on-change="(value) => this.formexportp.export_at=value.toString()" size="small" type="date" placeholder="Select date" style="width: 50%;" />
 
             </FormItem>
             </Col>
             <Col span="9">
-            <FormItem prop="code_product" :label-width="133">
+            <FormItem prop="order_no" :label-width="133">
               <span slot="label" style="text-align: center;">เลขที่ใบสังงาน</span>
-              <Input v-model="formexportp.code_product" type="text" placeholder="" style="width: 60%;" />
+              <Input v-model="formexportp.order_no" type="text" placeholder="" style="width: 60%;" />
             </FormItem>
             </Col>
           </Row>
@@ -57,7 +57,9 @@
             <Col span="20">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">ค้นหารายการ:</span>
-              <Input v-model="formexportp.storage_ID" prefix="md-barcode" type="text" placeholder="" style="width: 80%;" />
+              <Select v-model="formexportp.search"  @on-select="select" filterable prefix="md-barcode" style="width: 80%;">
+                <Option v-for="g in getsearch" :value="g.id" :key="g.id">{{ g.itemname }} - {{ g.Batch_no }}</Option>
+            </Select>
 
             </FormItem>
             </Col>
@@ -74,13 +76,13 @@
               <tr>
                 <td>
                   <FormItem :label-width="0">
-                    <Input readonly v-model="formexportp.name_rm" type="text" size="small" placeholder="" />
+                    <Input readonly v-model="formexportp.itemname" type="text" size="small" placeholder="" />
                   </FormItem>
                 </td>
 
                 <td>
                   <FormItem prop="qty_charge" :label-width="0">
-                    <InputNumber v-model="formexportp.qty_charge" size="small" :formatter="value => ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')" :parser="value => value.replace(/[^\d\.]/g, '') " controls-outside />
+                    <InputNumber v-model="formexportp.qty_charge" size="small" @on-change="focusOut" controls-outside />
                   </FormItem>
                 </td>
                 <td>
@@ -99,7 +101,7 @@
             <Col span="20">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">หมายเหตุ:</span>
-              <Input v-model="formexportp.storage_ID" type="textarea" placeholder="" style="width: 80%;" />
+              <Input v-model="formexportp.description" type="textarea" placeholder="" style="width: 80%;" />
             </FormItem>
             </Col>
 
@@ -107,7 +109,7 @@
           <Row type="flex" justify="center" align="middle">
             <Col span="4">
             <FormItem>
-              <Button type="primary" @click="handleSubmit('formexportp')" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มรายการ</Button>
+              <Button type="primary" @click="handleSubmit" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มรายการ</Button>
             </FormItem>
             </Col>
 
@@ -122,26 +124,43 @@
 </template>
 
 <script >
+import { get, post, put } from "../../helpers/api";
 export default {
+  created() {
+    get("/api/users/" + localStorage.getItem("user_id")).then((res) => {
+      this.users = res.data.user;
+      this.formexportp.UID = res.data.user.firstname;
+      this.id = res.data.user.id;
+    });
+    get("/api/peoples").then((res) => {
+      this.peoples = res.data.peoples;
+    });
+    get("/api/recordproduct").then((res) => {
+      this.getsearch = res.data.recordproduct;
+    });
+  },
   data() {
     return {
+      id: "",
+      idrm: "",
+      getsearch: [],
+      users: [],
+      peoples: [],
       formexportp: {
-        UID: "",
-        PID: [],
-        export_at: "",
-        code_product: "",
-        storage_ID: "",
-        name_rm: "",
-        RC_no: "",
-        invoice_no: "",
-        qty_charge: "1",
-        qty: "",
-        LOT_no: "",
-        storage_ID: "",
+        UID: '',
+        PID: '',
+        export_at: '',
+        itemname: '',
+        order_no: '',
+        qty_ex: 0,
+        qty_charge: 0,
+        qty: 0,
+        qty: '',
+        search: '',
       },
 
       ruleCustom: {
-        code_product: [
+        order_no: [
           {
             required: true,
             message: "กรุณากรอกด้วย !!",
@@ -151,8 +170,9 @@ export default {
         PID: [
           {
             required: true,
-            message: "Please select the storage_ID",
+            message: "กรุณาเลือก !!",
             trigger: "change",
+            type: "number",
           },
         ],
         qty_charge: [
@@ -168,7 +188,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date3",
+            message: "ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
@@ -176,14 +196,41 @@ export default {
     };
   },
   methods: {
-    handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
+    select(data) {
+      // console.log(data)
+      get("/api/export-p/search/" + data.value).then((res) => {
+        this.idrm = res.data.itemexport.idproduct;
+        this.formexportp.itemname = res.data.itemexport.itemname;
+        this.formexportp.qty_ex = res.data.itemexport.qty ;
+        this.formexportp.qty = res.data.itemexport.qty;
+        this.$forceUpdate();
       });
+    },
+    focusOut() {
+      this.formexportp.qty_charge = parseFloat(`${this.formexportp.qty_charge.toFixed(2)}`);
+      this.formexportp.qty =
+        parseFloat(`${this.formexportp.qty_ex.toFixed(2)}`) -
+        parseFloat(`${this.formexportp.qty_charge.toFixed(2)}`);
+    },
+    handleSubmit() {
+      this.formexportp.UID = this.id
+      this.formexportp.itemname = this.idrm
+      this.$Loading.start();
+      post("/api/product/export", this.formexportp)
+        .then((res) => {
+          this.$Loading.finish();
+          if (res.data.succeed) {
+            this.$router.push("/product/recordlist");
+          }
+          
+        })
+        .catch((err) => {
+          this.$Loading.error();
+          if (err.response.status === 422) {
+            this.error = err.response.data;
+            this.$Message.error("เกิดข้อผิดพลาด");
+          }
+        });
     },
     handleReset(name) {
       this.$refs[name].resetFields();

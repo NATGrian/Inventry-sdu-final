@@ -6,7 +6,7 @@
       <BreadcrumbItem>เพิ่มผลิตภัณฑ์ใหม่</BreadcrumbItem>
     </Breadcrumb>
     <br>
-    
+
     <Form ref="formcreatep" :model="formcreatep" :rules="ruleCustom">
       <Row type="flex" justify="space-around" align="middle">
         <Col span="15">
@@ -24,113 +24,92 @@
           </Row>
           <br>
           <Row type="flex" justify="space-between">
-            <Col span="10" class="left-Formitem">
-            <FormItem prop="Batch_no" :label-width="133">
+            <Col span="11" class="left-Formitem">
+            <FormItem prop="Batch_no">
               <span slot="label" style="width: 10%;">เลขที่ครังที่ผลิต:</span>
-              <Input type="text" v-model="formcreatep.Batch_no" placeholder=""  size="small" />
+              <Input type="text" v-model="formcreatep.Batch_no" style="width: 55%;" placeholder="" size="small" />
 
             </FormItem>
             </Col>
-            <Col span="10" class="right-Formitem">
-            <FormItem prop="name_p">
+            <Col span="11" class="right-Formitem">
+            <FormItem prop="itemname">
               <span slot="label" style="width: 10%;">รายการ:</span>
-              <Input type="text" v-model="formcreatep.name_p" placeholder="" style="width: 65%;" size="small" />
+              <Input type="text" v-model="formcreatep.itemname" placeholder=""  style="width: 65%;" size="small" />
 
             </FormItem>
             </Col>
           </Row>
           <Row type="flex" justify="space-between">
             <Col span="12" class="left-Formitem">
-            <FormItem prop="import_at" :label-width="133">
-              <span slot="label" style="word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker v-model="formcreatep.import_at" size="small" type="date" placeholder="Select date" style="width: 90%;" />
+            <FormItem prop="CID">
+              <span slot="label" style="width: 10%;">ประเภทของสิ่งของ</span>
+              <Select v-model="formcreatep.CID" placeholder="ค้นหา ประเภท" style="width: 50%;" size="small">
+                <Option v-for="c in categorys" :value="c.id" :key="c.id">{{ c.name }}</Option>
+              </Select>
+
             </FormItem>
             </Col>
             <Col span="10" class="right-Formitem">
-            <FormItem prop="qty_charge">
+            <FormItem prop="qty">
               <span slot="label" style="width: 10%;">จำนวน:</span>
-              <InputNumber size="small" v-model="formcreatep.qty_charge" :formatter="value => `${value}`.replace(/\B(?=(?!\d))/g, '.')" :parser="value => value.replace(/\$\s?|(,*)/g, '')" controls-outside />
+              <InputNumber size="small" v-model="formcreatep.qty" @on-blur="focusOut" controls-outside />
             </FormItem>
             </Col>
           </Row>
           <Row type="flex" justify="space-between">
-            <Col span="10" class="left-Formitem">
-            <FormItem prop="storage" :label-width="133">
-              <span slot="label" >สถานที่จัดเก็บ</span>
-              <Select v-model="formcreatep.storage" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" size="small">
-                <Option v-for="item in formcreatep.storage" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
-
-            </FormItem>
-            </Col>
-            <Col span="13" class="right-Formitem">
-            <FormItem prop="PID">
-              <span slot="label" style="width: 10%;">ผู้ส่ง:</span>
-              <Select v-model="formcreatep.PID" placeholder="ค้นหา ผู้ส่ง" style="width: 45%;" size="small">
-                <Option v-for="item in formcreatep.PID" :value="item.value" :key="item.value">{{ item.label }}</Option>
-              </Select>
-
-            </FormItem>
-            </Col>
-          </Row>
-
-          <Row type="flex" justify="space-around">
             <Col span="11" class="left-Formitem">
-            <FormItem prop="MFG" :label-width="133">
-              <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป ที่ผลิต (FG.):</span>
-              <DatePicker v-model="formcreatep.MFG" size="small" type="date" placeholder="Select date" style="width: 90%;" />
+            <FormItem prop="storageID" >
+              <span slot="label">สถานที่จัดเก็บ</span>
+              <Select v-model="formcreatep.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 55%;" size="small">
+                <Option v-for="s in storage" :value="s.id" :key="s.id">{{ s.name }}</Option>
+              </Select>
 
             </FormItem>
             </Col>
             <Col span="11" class="right-Formitem">
-            <FormItem prop="EXP" :label-width="133">
-              <span slot="label" style="width: 10px;word-wrap: break-word;">ว-ด-ป หมดอายุ (EXP.):</span>
-              <DatePicker v-model="formcreatep.EXP" size="small" type="date" placeholder="Select date" style="width: 90%;" />
+            <FormItem prop="PID">
+              <span slot="label" style="width: 10%;">ผู้ส่ง:</span>
+              <Select v-model="formcreatep.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 60%;" size="small">
+                <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
+              </Select>
+
             </FormItem>
             </Col>
-
           </Row>
-          <Row type="flex" justify="center">
-            <Col span="12">
 
+          <Row type="flex" justify="space-between">
+            <Col span="7" class="left-Formitem">
+            <FormItem prop="MFG">
+              <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป ที่ผลิต (MFG.):</span>
+              <DatePicker v-model="formcreatep.MFG"  @on-change="(value) => this.formcreatep.MFG=value.toString()"  size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+
+            </FormItem>
+            </Col>
+            <Col span="7">
+            <FormItem prop="EXP">
+              <span slot="label" style="width: 10px;word-wrap: break-word;">ว-ด-ป หมดอายุ (EXP.):</span>
+              <DatePicker v-model="formcreatep.EXP"  @on-change="(value) => this.formcreatep.EXP=value.toString()"  size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
+            </FormItem>
+            </Col>
+            <Col span="7" class="right-Formitem">
+            <FormItem prop="import_at">
+              <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
+              <DatePicker v-model="formcreatep.import_at" @on-change="(value) => this.formcreatep.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
+            </FormItem>
             </Col>
           </Row>
+         
         </div>
         </Col>
 
         <Col span="7">
         <div class="Createfrom2-p">
-          <!-- <br> -->
-          <!-- <Row type="flex" justify="center">
-            <Col span="24">
-            <div style="background-color: rgb(255, 255, 255);">
-              <div class="demo-upload-list">
-                <template>
-                  <img :src="defaultList.url">
-                  <div class="demo-upload-list-cover">
-                    <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                  </div>
-                </template>
-
-              </div>
-              <Divider />
-              <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" type="drag" action="//jsonplaceholder.typicode.com/posts/" style="margin: 5px;">
-                <div style="padding: 10px 0; ">
-                  <span>กด เพื่ออัปเดตรูปภาพ</span>
-                </div>
-
-              </Upload>
-
-            </div>
-            </Col>
-          </Row> -->
           <br>
           <Row type="flex" justify="center">
             <Col span="24">
             <div class="input-role">
-              <h5 style="display: inline-block;">รายละเอียดย่อย</h5>
-              <Input v-model="formcreatep.desc" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
+              <span style="display: inline-block;">รายละเอียดย่อย</span>
+              <Input v-model="formcreatep.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>
@@ -138,7 +117,7 @@
           <Row type="flex" justify="center">
             <Col span="24">
             <div class="input-role">
-              <h5 style="display: inline-block;">ผู้ตรวจรับ</h5>
+              <span style="display: inline-block;">รายละเอียดย่อย</span>
               <Input v-model="formcreatep.UID" readonly type="text" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
@@ -148,8 +127,8 @@
             <Col span="24">
             <FormItem>
               <Row type="flex" justify="center">
-              <Button type="primary" @click="handleSubmit('formcreatep')">Submit</Button>
-              <Button @click="handleReset('formcreatep')" style="margin-left: 8px">Reset</Button>
+                <Button type="primary" @click="handleSubmit" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มรายการ</Button>
+                <Button @click="handleReset('formcreatep')" style="margin-left: 8px">Reset</Button>
               </Row>
             </FormItem>
             </Col>
@@ -164,32 +143,44 @@
 </template>
 
 <script>
+import { get, post, put } from "../../helpers/api";
 export default {
+  created() {
+    get("/api/users/" + localStorage.getItem("user_id")).then((res) => {
+      this.users = res.data.user;
+      this.formcreatep.UID = res.data.user.firstname;
+      this.id = res.data.user.id;
+    });
+    get("/api/peoples").then((res) => {
+      this.peoples = res.data.peoples;
+    });
+    get("/api/storages").then((res) => {
+      this.storage = res.data.storages;
+    });
+    get("/api/category-p").then((res) => {
+      this.categorys = res.data.category;
+    });
+  },
   data() {
     return {
-      defaultList: [
-        {
-          name: "a42bdcc1178e62b4694c830f028db5c0",
-          url: "https://scontent.fbkk28-1.fna.fbcdn.net/v/t1.6435-9/p180x540/254085434_2709976465978344_5093268077704129993_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=8bfeb9&_nc_ohc=QsqbCcSREhMAX-FH-Wa&tn=ZRHz0vOh5V0LaJlp&_nc_ht=scontent.fbkk28-1.fna&oh=3a7a1affff2278e907577002ac31396a&oe=61B0B0D2",
-        },
-      ],
-      imgName: "",
-      visible: false,
-      uploadList: [],
-      value9: "5555",
+      id: "",
+      users: [],
+      peoples: [],
+      storage: [],
+      categorys: [],
       formcreatep: {
-        Batch_no: "",
-        UID: "test",
-        name_p: "",
-        import_at: "",
-        EXP: "",
-        MFG: "",
-        qty_charge: 1,
-        invoice_no: "",
-        desc: "--",
-        LOT_no: "",
-        PID: [],
-        storage: [],
+        Batch_no: '',
+        UID: '',
+        itemname: '',
+        import_at: '',
+        EXP: '',
+        MFG: '',
+        qty: 1,
+        invoice_no: '',
+        description: '.',
+        PID: '',
+        CID: '',
+        storageID: '',
       },
 
       ruleCustom: {
@@ -200,7 +191,7 @@ export default {
             trigger: "blur",
           },
         ],
-        name_p: [
+        itemname: [
           {
             required: true,
             message: "กรุณากรอกด้วย !!",
@@ -214,14 +205,7 @@ export default {
             trigger: "blur",
           },
         ],
-        LOT_no: [
-          {
-            required: true,
-            message: "กรุณากรอกด้วย !!",
-            trigger: "blur",
-          },
-        ],
-        qty_charge: [
+        qty: [
           {
             required: true,
             message: "กรุณากรอกด้วย !!",
@@ -233,7 +217,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date1",
+            message: "กรุณา ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
@@ -241,7 +225,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date2",
+            message: "กรุณา ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
@@ -249,25 +233,35 @@ export default {
           {
             required: true,
             type: "date",
-            message: "Please select the date3",
+            message: "กรุณา ตั้งค่าเวลา !!",
             trigger: "change",
           },
         ],
         PID: [
           {
             required: true,
-            message: "Please select the city",
+            message: "กรุณาเลือก",
             trigger: "change",
+            type: "number",
           },
         ],
-        storage: [
+        storageID: [
           {
             required: true,
-            message: "Please select the storage",
+            message: "กรุณาเลือก",
             trigger: "change",
+            type: "number",
           },
         ],
-        desc: [
+        CID: [
+          {
+            required: true,
+            message: "กรุณาเลือก",
+            trigger: "change",
+            type: "number",
+          },
+        ],
+        description: [
           {
             required: false,
             message: "Please enter a personal introduction",
@@ -284,57 +278,31 @@ export default {
     };
   },
   methods: {
-    handleView(name) {
-      this.imgName = name;
-      this.visible = true;
+    focusOut() {
+        this.formcreatep.qty =  parseFloat(`${this.formcreatep.qty.toFixed(2)}`);
     },
-    handleRemove(file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-    },
-    handleSuccess(res, file) {
-      file.url = "";
-      file.name = "";
-    },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: "The file format is incorrect",
-        desc:
-          "File format of " +
-          file.name +
-          " is incorrect, please select jpg or png.",
-      });
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "Exceeding file size limit",
-        desc: "File  " + file.name + " is too large, no more than 2M.",
-      });
-    },
-    handleBeforeUpload() {
-      const check = this.uploadList.length < 5;
-      if (!check) {
-        this.$Notice.warning({
-          title: "Up to five pictures can be uploaded.",
+    handleSubmit() {
+      this.formcreatep.UID = this.id
+      this.$Loading.start();
+      post("/api/products", this.formcreatep)
+        .then((res) => {
+          this.$Loading.finish();
+          if (res.data.succeed) {
+            this.$router.push("/product/list");
+          }
+          
+        })
+        .catch((err) => {
+          this.$Loading.error();
+          if (err.response.status === 422) {
+            this.error = err.response.data;
+            this.$Message.error("เกิดข้อผิดพลาด");
+          }
         });
-      }
-      return check;
-    },
-    handleSubmit(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$Message.success("Success!");
-        } else {
-          this.$Message.error("Fail!");
-        }
-      });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
     },
-  },
-  mounted() {
-    this.uploadList = this.$refs.upload.fileList;
   },
 };
 </script>
@@ -365,7 +333,7 @@ export default {
 }
 .Createfrom2-p {
   background-color: rgb(255, 255, 255);
-  height: 500px;
+  height: 300px;
 }
 
 .ivu-form-item-error-tip {
@@ -375,44 +343,6 @@ export default {
   margin-bottom: 10px;
 }
 
-.demo-upload-list {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 120px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fff;
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-top: 3px;
-}
-.demo-upload-list img {
-  width: 100%;
-  height: 100%;
-}
-.demo-upload-list-cover {
-  display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.demo-upload-list:hover .demo-upload-list-cover {
-  display: block;
-}
-.demo-upload-list-cover i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0 2px;
-}
 .ivu-divider-horizontal {
   margin: 10px 0;
 }

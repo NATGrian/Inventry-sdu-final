@@ -23,7 +23,7 @@ class CreateImportProductItemsTable extends Migration
             $table->date('MFG');
             $table->date('EXP');
             $table->double('qty_charge', 15, 2);
-            $table->double('qty', 15, 2);
+            $table->double('qty_balance', 15, 2);
             $table->string('description')->nullable();
             $table->integer('storageID')->unsigned();
             $table->string('status',50);

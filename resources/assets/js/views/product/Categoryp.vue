@@ -102,7 +102,6 @@ export default {
           key: "name",
           width: 200,
           align: "center",
-          slot: "name",
         },
         {
           title: "เกี่ยวกับ",

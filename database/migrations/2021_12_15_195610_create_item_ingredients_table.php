@@ -17,7 +17,7 @@ class CreateItemIngredientsTable extends Migration
             $table->increments('id');
             $table->integer('CID')->unsigned();
             $table->string('itemname');
-            $table->bigInteger('qty');
+            $table->double('qty', 15, 2);
             $table->string('image')->default('ingredients-demo.png');
             $table->string('description')->nullable();
             $table->timestampsTz();
