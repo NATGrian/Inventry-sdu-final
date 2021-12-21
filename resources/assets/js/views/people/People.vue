@@ -187,7 +187,7 @@ export default {
   },
   methods: {
     ok() {
-      post("/api/peoples", this.addpeoples)
+      post("/api-inv/peoples", this.addpeoples)
         .then((res) => {
           if (res.data.succeed) {
             
@@ -207,7 +207,7 @@ export default {
         });
     },
     addgroups() {
-      post("/api/addgroups", this.groupsadd)
+      post("/api-inv/addgroups", this.groupsadd)
         .then((res) => {
           if (res.data.succeed) {
             
@@ -239,11 +239,11 @@ export default {
     },
   },
   created() {
-    get("/api/peoples").then((res) => {
+    get("/api-inv/peoples").then((res) => {
       this.datapeople = res.data.peoples;
       this.loading = false;
     });
-    get("/api/groups").then((res) => {
+    get("/api-inv/groups").then((res) => {
       this.groups = res.data.groups;
     });
   },

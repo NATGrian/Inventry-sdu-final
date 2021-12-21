@@ -17,7 +17,7 @@
 			}
 		},
 		created() {
-			get('/api/recipes')
+			get('/api-inv/recipes')
 				.then((res) => {
 					this.recipes = res.data.recipes
 				})

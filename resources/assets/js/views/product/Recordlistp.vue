@@ -183,7 +183,7 @@ export default {
     },
   },
   created() {
-    get("/api/recordproduct").then((res) => {
+    get("/api-inv/recordproduct").then((res) => {
       this.datarecord = res.data.recordproduct;
       this.datarecord1 = res.data.recordproduct1;
     });

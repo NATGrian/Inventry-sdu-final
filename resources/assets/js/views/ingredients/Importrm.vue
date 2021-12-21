@@ -157,18 +157,18 @@
 import { get, post, put } from "../../helpers/api";
 export default {
   created() {
-    get("/api/users/" + localStorage.getItem("user_id")).then((res) => {
+    get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
       this.users = res.data.user;
       this.formimport.UID = res.data.user.firstname;
       this.id = res.data.user.id;
     });
-    get("/api/peoples").then((res) => {
+    get("/api-inv/peoples").then((res) => {
       this.peoples = res.data.peoples;
     });
-    get("/api/storages").then((res) => {
+    get("/api-inv/storages").then((res) => {
       this.storage = res.data.storages;
     });
-    get("/api/ingredients").then((res) => {
+    get("/api-inv/ingredients").then((res) => {
       this.itemrm = res.data.list;
     });
   },
@@ -308,7 +308,7 @@ export default {
     handleSubmit() {
       this.formimport.UID = this.id
       this.$Loading.start();
-      post("/api/ingredients/import", this.formimport)
+      post("/api-inv/ingredients/import", this.formimport)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.succeed) {

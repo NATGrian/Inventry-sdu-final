@@ -127,15 +127,15 @@
 import { get, post, put } from "../../helpers/api";
 export default {
   created() {
-    get("/api/users/" + localStorage.getItem("user_id")).then((res) => {
+    get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
       this.users = res.data.user;
       this.formexportp.UID = res.data.user.firstname;
       this.id = res.data.user.id;
     });
-    get("/api/peoples").then((res) => {
+    get("/api-inv/peoples").then((res) => {
       this.peoples = res.data.peoples;
     });
-    get("/api/recordproduct").then((res) => {
+    get("/api-inv/recordproduct").then((res) => {
       this.getsearch = res.data.recordproduct;
     });
   },
@@ -198,7 +198,7 @@ export default {
   methods: {
     select(data) {
       // console.log(data)
-      get("/api/export-p/search/" + data.value).then((res) => {
+      get("/api-inv/export-p/search/" + data.value).then((res) => {
         this.idrm = res.data.itemexport.idproduct;
         this.formexportp.itemname = res.data.itemexport.itemname;
         this.formexportp.qty_ex = res.data.itemexport.qty ;
@@ -216,7 +216,7 @@ export default {
       this.formexportp.UID = this.id
       this.formexportp.itemname = this.idrm
       this.$Loading.start();
-      post("/api/product/export", this.formexportp)
+      post("/api-inv/product/export", this.formexportp)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.succeed) {

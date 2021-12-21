@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     ok() {
-      post("/api/addroles", this.addroles)
+      post("/api-inv/addroles", this.addroles)
         .then((res) => {
           if (res.data.succeed) {
             
@@ -161,7 +161,7 @@ export default {
     },
   },
   created() {
-    get("/api/roles").then((res) => {
+    get("/api-inv/roles").then((res) => {
       this.roledata = res.data.roles;
       this.loading = false;
     });

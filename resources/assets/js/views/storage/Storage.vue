@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     ok() {
-      post("/api/storages", this.storages)
+      post("/api-inv/storages", this.storages)
         .then((res) => {
           if (res.data.succeed) {
             
@@ -157,7 +157,7 @@ export default {
     },
   },
   created() {
-    get("/api/storages").then((res) => {
+    get("/api-inv/storages").then((res) => {
       this.storage = res.data.storages;
       this.loading = false;
     });

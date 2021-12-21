@@ -11,16 +11,7 @@ use Hash;
 class AuthController extends Controller
 {
 
-    // public function index(Request $request)
-    // {
-    //     if (!Auth::check() && $request->path() != 'login') {
-    //         return redirect('/login');
-    //     }
-    //     if (!Auth::check() && $request->path() == 'login') {
-            
-    //         return view('welcome');
-    //     }
-    // }
+
     
 	public function __construct()
 	{
@@ -57,6 +48,7 @@ class AuthController extends Controller
 
         if($user && Hash::check($request->password, $user->password)) {
             // generate new api token
+
             $user->api_token = str_random(60);
             $user->save();
 
@@ -64,7 +56,8 @@ class AuthController extends Controller
                 ->json([
                     'authenticated' => true,
                     'api_token' => $user->api_token,
-                    'user_id' => $user->id
+                    'user_id' => $user->id,
+
                 ]);
         }
 

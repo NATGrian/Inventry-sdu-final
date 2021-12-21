@@ -77,15 +77,15 @@
 				},
 				error: {},
 				isProcessing: false,
-				initializeURL: `/api/recipes/create`,
-				storeURL: `/api/recipes`,
+				initializeURL: `/api-inv/recipes/create`,
+				storeURL: `/api-inv/recipes`,
 				action: 'Create'
 			}
 		},
 		created() {
 			if(this.$route.meta.mode === 'edit') {
-				this.initializeURL = `/api/recipes/${this.$route.params.id}/edit`
-				this.storeURL = `/api/recipes/${this.$route.params.id}?_method=PUT`
+				this.initializeURL = `/api-inv/recipes/${this.$route.params.id}/edit`
+				this.storeURL = `/api-inv/recipes/${this.$route.params.id}?_method=PUT`
 				this.action = 'Update'
 			}
 			get(this.initializeURL)

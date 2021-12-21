@@ -2,10 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Login from '../views/Auth/Login.vue'
-// import Register from '../views/Auth/Register.vue'
-import RecipeIndex from '../views/Recipe/Index.vue'
-import RecipeShow from '../views/Recipe/Show.vue'
-import RecipeForm from '../views/Recipe/Form.vue'
+
 import NotFound from '../views/NotFound.vue'
 
 import profile from '../views/profile/Profile.vue'
@@ -45,194 +42,279 @@ Vue.use(VueRouter)
 const router = new VueRouter({
 	mode: 'history',
 	routes: [
-		{ path: '/recipes', component: RecipeIndex, meta: { requiresAuth: true } },
-		{ path: '/', component: dashboard, meta: { requiresAuth: true } },
-		{ path: '/recipes/create', component: RecipeForm, meta: { mode: 'create' ,requiresAuth: true}},
-		{ path: '/recipes/:id/edit', component: RecipeForm, meta: { mode: 'edit' ,requiresAuth: true}},
-		{ path: '/recipes/:id', component: RecipeShow },
-		// { path: '/register', component: Register },
-		{ path: '/login', component: Login },
-		{ path: '/not-found', component: NotFound },
-		{ path: '*', component: NotFound },
+		{
+			path: '/',
+			component: dashboard,
+			name: 'หน้าหลัก',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | หน้าหลัก'
+			}
+		},
+
+		{
+			path: '/login',
+			component: Login,
+			name: 'ล็อกอิน',
+			meta: {
+				redirectIfLogged: true,
+				title: 'ระบบคงคลังออนไลน์ | ล็อกอิน'
+			}
+		},
+		{
+			path: '/not-found',
+			component: NotFound,
+			meta: {
+				title: 'ระบบคงคลังออนไลน์ | ไม่พบหน้านี้'
+			}
+		},
+		{
+			path: '*',
+			component: NotFound,
+			meta: {
+				title: 'ระบบคงคลังออนไลน์ | ไม่พบหน้านี้'
+			}
+		},
 
 		{
 			path: '/dashboard',
 			component: dashboard,
-			name: 'dashboard',
-			meta: { requiresAuth: true }
+			name: 'หน้าหลัก',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | หน้าหลัก'
+			}
 		},
 
 		{
 			path: '/member',
 			component: member,
-			name: 'member',
-			meta: { requiresAuth: true }
+			name: 'เจ้าหน้าที่ดูแลระบบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | เจ้าหน้าที่ดูแลระบบ'
+			}
 		},
-		// {
-		// 	path: '/member/create',
-		// 	component: member,
-		// 	name: 'member'
-		// },
+
 		{
 			path: '/member/roles',
 			component: roles,
-			name: 'role',
-			meta: { requiresAuth: true }
+			name: 'ตำแหน่ง',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ตำแหน่งสำหรับเจ้าหน้าที่ดูแลระบบ'
+			}
 		},
 
 		{
 			path: '/people',
 			component: people,
-			name: 'people',
-			meta: { requiresAuth: true }
+			name: 'เจ้าหน้าที่ที่เกี่ยวข้อง',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | เจ้าหน้าที่ที่เกี่ยวข้อง'
+			}
 		},
-		// {
-		// 	path: '/people/create',
-		// 	component: people,
-		// 	name: 'people'
-		// },
+
 		{
 			path: '/storage',
 			component: storage,
-			name: 'storage',
-			meta: { requiresAuth: true }
+			name: 'สถานที่เก็บของ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สถานที่เก็บของ'
+			}
 		},
-		// {
-		// 	path: '/storage/create',
-		// 	component: storage,
-		// 	name: 'storage'
-		// },
 
 		{
 			path: '/ingredients/category',
 			component: categoryingredients,
-			name: 'categoryingredients',
-			meta: { requiresAuth: true }
+			name: 'ประเภทของ วัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ประเภทของ วัตถุดิบ'
+			}
 		},
 		{
 			path: '/ingredients/list',
 			component: listingredients,
-			name: 'listingredients',
-			meta: { requiresAuth: true }
+			name: 'รายการวัตถุดิบคงเหลือ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | รายการวัตถุดิบคงเหลือ'
+			}
 		},
 		{
 			path: '/ingredients/recordlist',
 			component: recordlistingredients,
-			name: 'recordlistingredients',
-			meta: { requiresAuth: true }
+			name: 'ภาพรวมการบันทึก นำเข้า - จ่ายออก',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ภาพรวมการบันทึก นำเข้า - จ่ายออก'
+			}
 		},
 		{
 			path: '/ingredients/create',
 			component: createingredients,
-			name: 'createingredients',
-			meta: { requiresAuth: true }
+			name: 'สร้างวัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สร้างวัตถุดิบ'
+			}
 		},
 		{
 			path: '/ingredients/import',
 			component: importingredients,
-			name: 'importingredients',
-			meta: { requiresAuth: true }
+			name: 'บันทึกการนำเข้า-วัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | บันทึกการนำเข้า-วัตถุดิบ'
+			}
 		},
 		{
 			path: '/ingredients/export',
 			component: exportingredients,
-			name: 'exportingredients',
-			meta: { requiresAuth: true }
+			name: 'บันทึกการจ่ายออก-วัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | บันทึกการจ่ายออก-วัตถุดิบ'
+			}
 		},
 		{
 			path: '/ingredients/create-labelling',
 			component: labellingingredients,
-			name: 'labellingingredients',
-			meta: { requiresAuth: true }
+			name: 'สร้างฉลาก',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สร้างฉลาก'
+			}
 		},
 
 		// *d 
 		{
 			path: '/product/category',
 			component: categoryproduct,
-			name: 'categoryProduct',
-			meta: { requiresAuth: true }
+			name: 'ประเภทของ ผลิตภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ประเภทของ ผลิตภัณฑ์'
+			}
 		},
 		{
 			path: '/product/list',
 			component: listproduct,
-			name: 'listProduct',
-			meta: { requiresAuth: true }
+			name: 'รายการผลิตภัณฑ์คงเหลือ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | รายการผลิตภัณฑ์คงเหลือ'
+			}
 		},
 		{
 			path: '/product/recordlist',
 			component: recordlistproduct,
-			name: 'recordlistProduct',
-			meta: { requiresAuth: true }
+			name: 'ภาพรวมการบันทึก นำเข้า - จ่ายออก(ผลิตภัณฑ์)',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ภาพรวมการบันทึก นำเข้า - จ่ายออก'
+			}
 		},
 		{
 			path: '/product/create',
 			component: createproduct,
-			name: 'createProduct',
-			meta: { requiresAuth: true }
+			name: 'สร้างผลิตภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สร้างผลิตภัณฑ์'
+			}
 		},
 		{
 			path: '/product/import',
 			component: importproduct,
-			name: 'importProduct',
-			meta: { requiresAuth: true }
+			name: ' บันทึกการนำเข้า-ผลิตภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ |  บันทึกการนำเข้า-ผลิตภัณฑ์'
+			}
 		},
 		{
 			path: '/product/export',
 			component: exportproduct,
-			name: 'exportProduct',
-			meta: { requiresAuth: true }
+			name: 'บันทึกการจ่ายออก-ผลิตภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | บันทึกการจ่ายออก-ผลิตภัณฑ์'
+			}
 		},
 
 		{
 			path: '/report',
 			component: report,
-			name: 'report',
-			meta: { requiresAuth: true }
+			name: 'สต็อกการ์ด',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สต็อกการ์ด'
+			}
 		},
 
 		{
 			path: '/report/ingredients',
 			component: reportingredients,
-			name: 'reportingredients',
-			meta: { requiresAuth: true }
+			name: 'สต็อกการ์ด-วัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สต็อกการ์ด-วัตถุดิบ'
+			}
 		},
 		{
 			path: '/report/products',
 			component: reportproduct,
-			name: 'reportproduct',
-			meta: { requiresAuth: true }
+			name: 'สต็อกการ์ด-ผลิตภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สต็อกการ์ด-ผลิตภัณฑ์'
+			}
 		},
 
 		{
 			path: '/profile/:id',
 			component: profile,
-			name: 'profile',
-			meta: { requiresAuth: true }
+			name: 'โปรไฟล์ส่วนตัว',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | โปรไฟล์ส่วนตัว'
+			}
 		},
-		
+
 	]
 })
+
 router.beforeEach((to, from, next) => {
 	ViewUI.LoadingBar.start();
+	document.title = to.meta.title
 	if (to.matched.some(record => record.meta.requiresAuth)) {
-			// this route requires auth, check if logged in
-			// if not, redirect to login page.
-			
-			if (localStorage.getItem('api_token') === null) {
-				ViewUI.LoadingBar.finish();
-
-					next({ path: '/login' })
-			} else {
-				ViewUI.LoadingBar.finish();
-
-					next() // go to wherever I'm going
-			}
+		if (localStorage.getItem('api_token') === null) {
+			next({
+				path: '/login',
+				query: {
+					redirect: to.fullPath
+				}
+			})
+		} else {
+			next()
+		}
+	} else if (to.matched.some(record => record.meta.redirectIfLogged)) {
+		if (localStorage.getItem('authenticated')) {
+			next({
+				path: '/dashboard'
+			})
+		} else {
+			next()
+		}
 	} else {
-			next() // does not require auth, make sure to always call next()!
+		next()
 	}
 })
 router.afterEach(route => {
 	ViewUI.LoadingBar.finish();
 });
-	export default router
+export default router

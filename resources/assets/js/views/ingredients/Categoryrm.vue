@@ -125,7 +125,7 @@ export default {
   methods: {
     
     ok() {
-      post("/api/category", this.categorys)
+      post("/api-inv/category", this.categorys)
         .then((res) => {
           if (res.data.succeed) {
             
@@ -158,7 +158,7 @@ export default {
     },
   },
   created() {
-    get("/api/category").then((res) => {
+    get("/api-inv/category").then((res) => {
       this.category = res.data.category;
       this.loading = false;
     });

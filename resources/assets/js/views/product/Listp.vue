@@ -127,7 +127,7 @@ export default {
     },
   },
   created() {
-     get("/api/products").then((res) => {
+     get("/api-inv/products").then((res) => {
       this.datalist = res.data.list;
     });
    }

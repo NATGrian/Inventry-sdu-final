@@ -54,18 +54,17 @@
     <Row type="flex" justify="center" align="middle">
 
       <Col span="4">
-      <Button type="primary" @click="switchim" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การนำเข้า</Button>
-
-      </Col >
-
-      <Col span="4">
-      <Button type="primary" @click="switchex" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">การจ่ายออก</Button>
+      <i-switch v-model="switch111" size="large" style="width: 80px;" true-color="#000" false-color="#000">
+        <span slot="open" style="font-size: 13px;">การนำเข้า</span>
+        <span slot="close" style="font-size: 13px;">การจ่ายออก</span>
+      </i-switch>
 
       </Col>
+
     </Row>
     <br>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="!this.switch">
+      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="this.switch111">
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
@@ -86,7 +85,11 @@
         </template>
       </Table>
     </Row>
-
+    <Modal v-model="Viewdata" title="Common Modal dialog box title">
+      <p>{{ test }}</p>
+      <p>Content of dialog</p>
+      <p>Content of dialog</p>
+    </Modal>
   </div>
 </template>
 
@@ -95,8 +98,10 @@ import { get } from "../../helpers/api";
 export default {
   data() {
     return {
-      switch: false,
-
+      switch111: true,
+      Viewdata: false,
+      test: "",
+      
       columns: [
         {
           type: "selection",
@@ -171,17 +176,10 @@ export default {
     };
   },
   methods: {
-    switchim() {
-      this.switch = false;
-    },
-    switchex() {
-      this.switch = true;
-    },
     show(index) {
-      this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.data4[index].name}<br>Age：${this.data4[index].age}<br>Address：${this.data4[index].address}`,
-      });
+      // console.log(this.datarecord[index].rc_no)
+      this.modal1 = true;
+      this.test = this.datarecord[index].rc_no;
     },
     remove(index) {
       this.data4.splice(index, 1);
@@ -189,7 +187,7 @@ export default {
   },
 
   created() {
-    get("/api/recordingredients").then((res) => {
+    get("/api-inv/recordingredients").then((res) => {
       this.datarecord = res.data.record;
       this.datarecord1 = res.data.record1;
     });
@@ -235,6 +233,9 @@ export default {
   font-size: 20px;
   cursor: pointer;
   margin: 0 2px;
+}
+.ivu-switch-large.ivu-switch-checked:after {
+  left: 60px;
 }
 </style>
 

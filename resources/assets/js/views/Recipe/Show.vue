@@ -65,7 +65,7 @@
 			}
 		},
 		created() {
-			get(`/api/recipes/${this.$route.params.id}`)
+			get(`/api-inv/recipes/${this.$route.params.id}`)
 				.then((res) => {
 					this.recipe = res.data.recipe
 					this.$Loading.finish();
@@ -74,7 +74,7 @@
 		methods: {
 			remove() {
 				this.isRemoving = false
-				del(`/api/recipes/${this.$route.params.id}`)
+				del(`/api-inv/recipes/${this.$route.params.id}`)
 					.then((res) => {
 						if(res.data.deleted) {
 							Flash.setSuccess('You have successfully deleted recipe!')

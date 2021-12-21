@@ -111,7 +111,7 @@
       </Col>
 
       <Col>
-      <Tooltip content="สั่งปลิ้น" placement="top">
+      <Tooltip content="print" placement="top">
         <Button shape="circle" icon="md-print" size="large" />
       </Tooltip>
       </Col>
@@ -125,8 +125,8 @@
     <br>
     <Row type="flex" justify="center">
       <Table size="small" :loading="loading" width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
-        <template slot-scope="{ row,index }" slot="action">
-          <Button type="primary" size="small" style="margin-right: 3px" @click="show(row, index)">View</Button>
+        <template slot-scope="{ index }" slot="action">
+          <Button type="primary" size="small" style="margin-right: 3px" @click="show( index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
@@ -135,7 +135,20 @@
       </Table>
 
     </Row>
+    <Modal v-model="modalshow" title="ข้อมูล เจ้าหน้าที่ดูแลระบบ" footer-hide width="700" draggable >
+      <Row type="flex" justify="space-around" align="middle">
+        <Col span="11">
+        <p> <b style="color: #000;">ชื่อ - นามสกุล:</b> {{ showdata.firstname }} {{ showdata.lastname }} </p>
+        <p> <b style="color: #000;">email:</b> {{ showdata.email }} </p>
+        <p> <b style="color: #000;">เบอร์โทร:</b> {{ showdata.phone }} </p>
+        <p> <b style="color: #000;">ตำแหน่ง:</b> {{ showdata.role }} </p>
+        </Col>
+        <Col span="11">
+        <img :src="`/images/users/${showdata.image}`" alt="">
+        </Col>
+      </Row>
 
+    </Modal>
   </div>
 </template>
 
@@ -162,7 +175,6 @@ export default {
         email: "",
         phone: "",
         password: "",
-        // image: '',
         role_id: null,
       },
       isAdding: false,
@@ -179,14 +191,12 @@ export default {
           width: 200,
           align: "center",
           sortable: true,
-          // slot: "name",
         },
         {
           title: "Mail",
           key: "email",
           width: 219,
           align: "center",
-          // slot: "email",
         },
         {
           title: "เบอร์โทร",
@@ -265,18 +275,32 @@ export default {
       roledata: [],
       editIndex: -1,
       error: {},
+      showdata: {
+        firstname: "",
+        role: "",
+        image: "",
+        email: "",
+        phone: "",
+        lastname: "",
+      },
+
+      modalshow: false,
     };
   },
   methods: {
     addusers() {
       this.$Loading.start();
-      post("api/users", this.formcreateUser)
+
+      post("api-inv/users", this.formcreateUser)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.registered) {
             this.addmember = false;
             this.users.unshift(res.data.user);
+            this.$forceUpdate();
           }
+          
+          
           this.$Message.info("สำเร็จ");
         })
         .catch((err) => {
@@ -298,10 +322,13 @@ export default {
       this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
-      this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.users[index].name}<br>Age：${this.users[index].age}<br>Address：${this.users[index].address}`,
-      });
+      this.modalshow = true;
+      this.showdata.firstname = this.users[index].firstname;
+      this.showdata.lastname = this.users[index].lastname;
+      this.showdata.phone = this.users[index].phone;
+      this.showdata.email = this.users[index].email;
+      this.showdata.image = this.users[index].image;
+      this.showdata.role = this.users[index].role;
     },
     remove(index) {
       this.users.splice(index, 1);
@@ -309,11 +336,11 @@ export default {
   },
 
   created() {
-    get("/api/users").then((res) => {
+    get("/api-inv/users").then((res) => {
       this.users = res.data.users;
       this.loading = false;
     });
-    get("/api/roles").then((res) => {
+    get("/api-inv/roles").then((res) => {
       this.roledata = res.data.roles;
       this.loading = false;
     });

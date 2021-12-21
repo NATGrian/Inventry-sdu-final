@@ -9,34 +9,34 @@
           </div>
 
           <Divider />
-          <router-link to="/profile" replace>
+          <router-link :to="`/profile/${this.authState.user_id}`" replace>
             <div class="demo-avatar-Collapsed">
               <avatar :src="`/images/users/${users.image}`" size="large" />
             </div>
           </router-link>
           <Divider />
-          <Menu width="auto" :style="{background: 'rgb(14, 14, 14)'}" theme="dark" active-name="1c">
+          <Menu width="auto" :style="{background: 'rgb(14, 14, 14)',overflow: 'hidden'}" theme="dark" :active-name="`${$route.name}`">
 
-            <Tooltip content="หน้าหลัก" placement="right" class="tooltip-sider">
-              <MenuItem name="1c" to="/dashboard" :style="{padding: '14px 18px' }" replace>
+            <Tooltip content="หน้าหลัก" placement="right" class="tooltip-sider" transfer>
+              <MenuItem name="หน้าหลัก" to="/dashboard" :style="{padding: '14px 18px' }" replace>
               <Icon type="ios-speedometer" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
 
-            <Tooltip content="เจ้าหน้าที่ระบบ" placement="right" class="tooltip-sider">
-              <MenuItem name="2c" to="/member" :style="{padding: '14px 18px' }" replace>
+            <Tooltip content="เจ้าหน้าที่ระบบ" placement="right" class="tooltip-sider" transfer>
+              <MenuItem name="เจ้าหน้าที่ดูแลระบบ" to="/member" :style="{padding: '14px 18px' }" replace>
               <Icon type="md-contact" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
 
-            <Tooltip content="เจ้าหน้าที่ที่เกี่ยวข้อง" placement="right" class="tooltip-sider">
-              <MenuItem name="3c" to="/people" :style="{padding: '14px 18px' }" replace>
+            <Tooltip content="เจ้าหน้าที่ที่เกี่ยวข้อง" placement="right" class="tooltip-sider" transfer>
+              <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/people" :style="{padding: '14px 18px' }" replace>
               <Icon type="md-people" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
 
-            <Tooltip content="สถานที่เก็๋บ" placement="right" class="tooltip-sider">
-              <MenuItem name="4c" to="/storage" :style="{padding: '14px 18px' }" replace>
+            <Tooltip content="สถานที่เก็บ" placement="right" class="tooltip-sider" transfer>
+              <MenuItem name="สถานที่เก็บของ" to="/storage" :style="{padding: '14px 18px' }" replace>
               <Icon type="ios-home" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
@@ -47,16 +47,16 @@
               </MenuItem>
               <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
                 <DropdownItem>
-                  <MenuItem name="5c-1" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
+                  <MenuItem name="ประเภทของ วัตถุดิบ" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="5c-2" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
+                  <MenuItem name="รายการวัตถุดิบคงเหลือ" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="5c-3" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+                  <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="5c-4" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
+                  <MenuItem name="สร้างฉลาก" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
                 </DropdownItem>
 
               </DropdownMenu>
@@ -67,19 +67,29 @@
               <Icon type="ios-paper" color="#fff" size="25" />
               </MenuItem>
               <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
-                <MenuItem name="6c-1" to="/product/category" replace>ประเภทรายการ</MenuItem>
-                <MenuItem name="6c-2" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
-                <MenuItem name="6c-3" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+                <DropdownItem>
+                  <MenuItem name="ประเภทของ ผลิตภัณฑ์" to="/product/category" replace>ประเภทรายการ</MenuItem>
+                </DropdownItem>
+                <DropdownItem>
+                  <MenuItem name="รายการผลิตภัณฑ์คงเหลือ" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
+                </DropdownItem>
+                <DropdownItem>
+                  <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก(ผลิตภัณฑ์)" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
 
-            <Dropdown placement="right-start" class="tooltip-sider" transfer trigger="hover">
+            <Dropdown placement="right-start" class="tooltip-sider" transfer>
               <MenuItem name="7c" :style="{padding: '14px 15px' }" replace>
               <Icon type="ios-folder-open" color="#fff" size="25" />
               </MenuItem>
               <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
-                <MenuItem name="7c-1" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
-                <MenuItem name="7c-2" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
+                <DropdownItem>
+                  <MenuItem name="สต็อกการ์ด-วัตถุดิบ" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
+                </DropdownItem>
+                <DropdownItem>
+                  <MenuItem name="สต็อกการ์ด-ผลิตภัณฑ์" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </Menu>
@@ -92,29 +102,29 @@
           </div>
 
           <Divider />
-          <router-link to="/profile" replace>
+          <router-link :to="`/profile/${this.authState.user_id}`" replace>
             <div class="demo-avatar">
-              <avatar  :src="`/images/users/${users.image}`" size="large" />
+              <avatar :src="`/images/users/${users.image}`" size="large" />
               <span class="name-avatar"> {{ users.firstname }} </span>
             </div>
           </router-link>
           <Divider />
 
-          <Menu active-name="1" theme="dark" width="auto" :style="{background: 'rgb(14, 14, 14)'}" class="menuitemClasses">
+          <Menu :active-name="`${$route.name}`" theme="dark" width="auto" :style="{background: 'rgb(14, 14, 14)'}" class="menuitemClasses">
 
-            <MenuItem name="1" to="/dashboard" replace>
+            <MenuItem name="หน้าหลัก" to="/dashboard" replace>
             <Icon type="ios-speedometer"></Icon>
             <span>หน้าหลัก</span>
             </MenuItem>
-            <MenuItem name="2" to="/member" replace>
+            <MenuItem name="เจ้าหน้าที่ดูแลระบบ" to="/member" replace>
             <Icon type="md-contact"></Icon>
             <span>เจ้าหน้าที่ระบบ</span>
             </MenuItem>
-            <MenuItem name="3" to="/people" replace>
+            <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/people" replace>
             <Icon type="md-people"></Icon>
             <span>เจ้าหน้าที่ที่เกี่ยวข้อง</span>
             </MenuItem>
-            <MenuItem name="4" to="/storage" replace>
+            <MenuItem name="สถานที่เก็บของ" to="/storage" replace>
             <Icon type="ios-home"></Icon>
             <span>สถานที่เก็บ</span>
             </MenuItem>
@@ -122,25 +132,25 @@
               <template slot="title">
                 <Icon type="ios-paper" />วัตถุดิบ
               </template>
-              <MenuItem name="5c-1" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
-              <MenuItem name="5c-2" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
-              <MenuItem name="5c-3" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
-              <MenuItem name="5c-4" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
+              <MenuItem name="ประเภทของ วัตถุดิบ" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
+              <MenuItem name="รายการวัตถุดิบคงเหลือ" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
+              <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+              <MenuItem name="สร้างฉลาก" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
             </Submenu>
             <Submenu name="6" :style="{background: 'rgb(14, 14, 14)'}">
               <template slot="title">
                 <Icon type="ios-paper" />ผลิตภัณฑ์
               </template>
-              <MenuItem name="6c-1" to="/product/category" replace>ประเภทรายการ</MenuItem>
-              <MenuItem name="6c-2" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
-              <MenuItem name="6c-3" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+              <MenuItem name="ประเภทของ ผลิตภัณฑ์" to="/product/category" replace>ประเภทรายการ</MenuItem>
+              <MenuItem name="รายการผลิตภัณฑ์คงเหลือ" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
+              <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก(ผลิตภัณฑ์)" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
             </Submenu>
-            <Submenu name="7" :style="{background: 'rgb(14, 14, 14)'}">
+            <Submenu name="สต็อกการ์ด" :style="{background: 'rgb(14, 14, 14)'}">
               <template slot="title">
                 <Icon type="ios-folder-open" />สต็อกการ์ด
               </template>
-              <MenuItem name="7-1" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
-              <MenuItem name="7-2" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
+              <MenuItem name="สต็อกการ์ด-วัตถุดิบ" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
+              <MenuItem name="สต็อกการ์ด-ผลิตภัณฑ์" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
             </Submenu>
 
           </Menu>
@@ -181,24 +191,22 @@
 <script type="text/javascript">
 import Auth from "./store/auth";
 import Flash from "./helpers/flash";
-import { post, interceptors,get } from "./helpers/api";
+import { post, interceptors, get } from "./helpers/api";
 export default {
   data() {
     return {
       authState: Auth.state,
       flash: Flash.state,
-      users: {
-        
-      },
+      users: {},
       isCollapsed: false,
     };
   },
   created() {
-      get('/api/users/'+ localStorage.getItem('user_id'))
-              .then((res) => {
-                this.users = res.data.user
-                this.$Loading.finish();
-              });
+    get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
+      this.users = res.data.user;
+      this.$Loading.finish();
+      this.$forceUpdate();
+    });
     // global error http handler
     interceptors((err) => {
       if (err.response.status === 401) {
@@ -231,27 +239,26 @@ export default {
     },
     Layout() {
       return [
-        this.auth ? "" : "Layout-with-sider-hide", "Layout-with-sider", this.isCollapsed ? "Layout-with-sider-Collapsed" : "",
-        
+        this.auth ? "" : "Layout-with-sider-hide",
+        "Layout-with-sider",
+        this.isCollapsed ? "Layout-with-sider-Collapsed" : "",
       ];
     },
     HeaderMenu() {
       return ["HeaderMenu", this.isCollapsed ? "HeaderMenu-Collapsed" : ""];
     },
-    
   },
   methods: {
     logout() {
-      post("/api/logout").then((res) => {
+      post("/api-inv/logout").then((res) => {
         if (res.data.done) {
           // remove token
           Auth.remove();
           Flash.setSuccess("You have successfully logged out.");
           this.$Loading.finish();
-          window.location.href = '/login';
+          window.location.href = "/login";
         }
       });
-      
     },
     collapsedSider() {
       this.$refs.side1.toggleCollapse();
@@ -360,7 +367,7 @@ export default {
 }
 .rotate-icon {
   color: #fff;
-  transform: rotateZ(-90deg) translate(50%,50%);
+  transform: rotateZ(-90deg) translate(50%, 50%);
 }
 
 .collapsed-menu span {
@@ -417,5 +424,9 @@ export default {
 .name-avatar {
   color: #fff;
   margin-left: 15px;
+}
+
+.ivu-select-dropdown {
+  padding: 5px 0 !important;
 }
 </style>

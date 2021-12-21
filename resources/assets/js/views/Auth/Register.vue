@@ -54,7 +54,7 @@ import ImageUpload from '../../components/ImageUpload.vue'
             register() {
                 this.isProcessing = true
                 this.error = {}
-                post('api/register', this.form)
+                post('api-inv/register', this.form)
                     .then((res) => {
                         if(res.data.registered) {
                             Flash.setSuccess('Congratulations! You have now successfully registered.')

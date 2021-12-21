@@ -126,7 +126,7 @@ export default {
 
 
    created() {
-     get("/api/ingredients").then((res) => {
+     get("/api-inv/ingredients").then((res) => {
       this.datalist = res.data.list;
     });
    }

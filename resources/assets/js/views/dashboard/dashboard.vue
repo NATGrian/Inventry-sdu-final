@@ -7,12 +7,12 @@
     </Breadcrumb>
     <br>
     <Row type="flex" justify="space-around" align="middle">
-       <!-- <Col span="10"></Col> -->
+
       <Col  :md="5" :xs="22">
         <Card :bordered="false" to="/ingredients/list">
           <div style="text-align:center">
             <Icon type="md-cube" size="40"/>
-            <h2>10</h2>
+
             <h5>วัตถุดิบคงเหลือ</h5>
           </div>
         </Card>
@@ -22,7 +22,7 @@
         <Card :bordered="false" to="/product/list">
           <div style="text-align:center">
             <Icon type="md-cube" size="40"/>
-            <h2>10</h2>
+
             <h5>ผลิตภัณฑ์คงเหลือ</h5>
           </div>
         </Card>
@@ -32,7 +32,7 @@
         <Card :bordered="false" to="/member">
           <div style="text-align:center">
             <Icon type="md-contacts"  size="40"/>
-            <h2>10</h2>
+
             <h5>เจ้าหน้าที่ดูแลระบบ</h5>
           </div>
         </Card>
@@ -48,8 +48,8 @@
       </Col>
     </Row>
     <br>
-    <!--~~~~~~~ TABLE ONE ~~~~~~~~~-->
-    <div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
+
+    <!-- <div class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20">
       <p class="_title0">รายการที่ทำล่าสุด</p>
 
       <div class="_overflow _table_div">
@@ -57,7 +57,7 @@
 
       </div>
       <Page :total="40" size="small" show-elevator show-sizer />
-    </div>
+    </div> -->
 
   </div>
 
@@ -68,10 +68,6 @@ export default {
   data() {
     return {
       columns1: [
-        {
-          title: "RC / no",
-          key: "RC-no",
-        },
         {
           title: "รายการ",
           key: "name-item",

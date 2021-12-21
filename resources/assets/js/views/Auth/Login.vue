@@ -11,11 +11,11 @@
         <Row type="flex" justify="space-around" align="top">
           <Col span="16">
           <FormItem prop="email">
-            <Input type="email" prefix="ios-mail" size="large" v-model="form.email" placeholder="email">
+            <Input type="email" prefix="ios-mail" size="large" v-model="form.email" placeholder="email" @on-enter="login">
             </Input>
           </FormItem>
           <FormItem prop="password">
-            <Input type="password" prefix="ios-lock" size="large" v-model="form.password" placeholder="Password">
+            <Input type="password" prefix="ios-lock" size="large" v-model="form.password" placeholder="Password" @on-enter="login">
             </Input>
           </FormItem>
           </Col>
@@ -74,7 +74,7 @@ export default {
     login() {
       this.isProcessing = true;
         this.error = {}
-      post("api/login", this.form)
+      post("api-inv/login", this.form)
         .then((res) => {
           if (res.data.authenticated) {
             // set token

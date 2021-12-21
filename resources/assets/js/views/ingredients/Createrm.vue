@@ -162,18 +162,18 @@
 import { get, post, put } from "../../helpers/api";
 export default {
   created() {
-    get("/api/users/" + localStorage.getItem("user_id")).then((res) => {
+    get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
       this.users = res.data.user;
       this.formcreate.UID = res.data.user.firstname;
       this.id = res.data.user.id;
     });
-    get("/api/peoples").then((res) => {
+    get("/api-inv/peoples").then((res) => {
       this.peoples = res.data.peoples;
     });
-    get("/api/storages").then((res) => {
+    get("/api-inv/storages").then((res) => {
       this.storage = res.data.storages;
     });
-    get("/api/category").then((res) => {
+    get("/api-inv/category").then((res) => {
       this.categorys = res.data.category;
     });
   },
@@ -308,7 +308,7 @@ export default {
     handleSubmit() {
       this.formcreate.UID = this.id
       this.$Loading.start();
-      post("/api/ingredients", this.formcreate)
+      post("/api-inv/ingredients", this.formcreate)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.succeed) {
