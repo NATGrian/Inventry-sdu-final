@@ -29,10 +29,10 @@ class ProductsController extends Controller
     {
         $recordproduct = DB::table('import_product_items')
             ->join('users', 'import_product_items.UID', '=', 'users.id')
-            ->join('Item_products', 'import_product_items.idproduct', '=', 'Item_products.id')
+            ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
             ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
             ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
-            ->select('import_product_items.*' , 'users.firstname as ufname', 'Item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
+            ->select('import_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
             ->orderBy('import_product_items.created_at', 'desc')
             ->get();
 
