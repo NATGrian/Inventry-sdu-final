@@ -20,3 +20,5 @@ mix.styles([
    'public/css/grid.min.css',
    'public/css/main.css',
 ], 'public/css/all.css');
+
+mix.options({legacyNodePolyfills: false})

@@ -848,29 +848,31 @@ p {
       width: 100%;
   }
   ._table tr{}
-  ._table tr:first-child {
-      background: #fcfcfc;
-      background: #fcfcfc;
+  ._table tr:first-child#_header-table {
+    background-color: #e8e8e8;
+      
+      /* background: #fcfcfc; */
   }
-  ._table tr:first-child:hover{
+  ._table tr th:hover{
       background: #b6b6b6;
   }
   ._table tr:hover, ._table tr:nth-child(even):hover {
       background: #ecf9ff;
   }
-  ._table tr:nth-child(even) {
-      background: #ececec8c;
+  ._table tr {
+    background-color: #fcfcfc;
   }
   ._table tr th {
-      border: 1px solid transparent;
-      text-align: left;
+      border: 1px solid #dcdee2;
+      text-align: center;
       padding: 8px 13px;
       color: rgb(0, 0, 0);
       font-size: 15px;
   }
   ._table tr td {
-      border: 1px solid #f3f3f3;
-      text-align: left;
+      border: 1px solid #dcdee2;
+      color: rgb(100, 100, 100);
+      text-align: center;
       padding: 8px 13px;
       min-width: 103px;
       font-size: 15px;

@@ -94,7 +94,7 @@
             <Col span="7" class="right-Formitem">
             <FormItem prop="import_at">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker v-model="formimport.import_at" @on-change="(value) => this.formimport.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker v-model="formimport.import_at" @on-change="(value) => this.formimport.import_at=value.toString()" size="small" type="date" :format="daterange" placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
           </Row>

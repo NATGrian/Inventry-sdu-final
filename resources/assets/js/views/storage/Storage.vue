@@ -9,13 +9,11 @@
 
       <Col>
       <Button type="primary" @click="addstorage = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มที่เก็บ</Button>
-      <Modal v-model="addstorage" title="เพิ่มที่เก็บ" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky z-index="2000">
+      <Modal v-model="addstorage" title="เพิ่มที่เก็บ" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มสถานที่</span>
-
         </p>
-
         <Row type="flex" justify="center" align="middle" :model="storages">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
@@ -36,36 +34,60 @@
       </Col>
 
       <Col span="9" offset="1">
-      <Input search placeholder="Enter something..." style="width: 350px" />
+      <Input search @on-search="tableItems" v-model="search" placeholder="ค้นหาตำแหน่งที่ต้องการ" style="width: 350px" />
       </Col>
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" />
+        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" />
-      </Tooltip>
-      </Col>
-
-      <Col>
-      <Tooltip content="สั่งปลิ้น" placement="top">
-        <Button shape="circle" icon="md-print" size="large" />
-      </Tooltip>
-      </Col>
-
-      <Col>
-      <Tooltip content="ลบตาราง" placement="top">
-        <Button shape="circle" icon="md-trash" size="large" />
+        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
     </Row>
     <br>
+    <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true" :paginate-elements-by-height="1100" :filename="filename" :pdf-quality="2" :manual-pagination="false" pdf-format="letter" pdf-content-width="100%" pdf-orientation="landscape" @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
+      <template slot="pdf-content">
+        <Row type="flex" justify="center" align="middle">
+          <Col>
+          <h1>รายการ สถานที่เก็บ</h1>
+          </Col>
+        </Row>
+        <br>
+        <Row type="flex" justify="center" align="middle">
+          <Col span="20">
+          <table class="_table" ref="selection">
+            <thead>
+              <tr id="_header-table">
+                <th>สถานที่เก็บ</th>
+                <th>เกี่ยวกับ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in storage" :key="s.id">
+                <td>{{s.name}}</td>
+                <td>{{s.description}}</td>
+              </tr>
+            </tbody>
+          </table>
+          </Col>
+        </Row>
+        <Row type="flex" justify="end" class="code-row-bg">
+          <Col>
+          <Divider>
+            <h6> {{filename}} </h6>
+          </Divider>
+
+          </Col>
+        </Row>
+      </template>
+    </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table width="653" height="400" max-height="450" border ref="selection" :columns="columns" :data="storage">
+      <Table width="653" height="400" max-height="450" border ref="selection" :columns="columns" :data="storage" size="small" :loading="loading">
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
@@ -77,23 +99,66 @@
       </Table>
 
     </Row>
+    <Modal v-model="modalshow" title="ข้อมูล สถานที่" footer-hide width="500" draggable>
+      <Row type="flex" justify="center" align="middle">
+        <Col>
+        <div style="width: 100%; "> <b style="color: #000;">ชื่อ เรียก:</b> {{ showdata.name }} </div>
+        </Col>
+      </Row>
+      <br />
+      <Row type="flex" justify="center" align="middle">
+        <Col>
+        <div> <b style="color: #000;">รายละเอียดย่อย:</b></div>
+        </Col>
+      </Row>
+      <Row type="flex" justify="center" align="middle">
+        <Col>
+        <div> {{ showdata.description }} </div>
+        </Col>
+      </Row>
+    </Modal>
 
+    <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
+      <p slot="header" style="color:#2E9AFE;text-align:center">
+        <Icon type="md-help-circle" />
+        <span style="color:#FF0000;">แน่ใจว่า ต้องการลบ</span>
+      </p>
+      <Row type="flex" justify="space-around" align="middle">
+        <Col span="10">
+        <Icon type="ios-trash" size="35" color="#FF0040" /> <span style="color:#482728; font-size: 20px; text-align: center;">ยืนยัน กดตกลง</span>
+        </Col>
+
+      </Row>
+
+    </Modal>
   </div>
 </template>
 
 
 <script>
-import { get, post, put } from "../../helpers/api";
+import VueHtml2pdf from "vue-html2pdf";
+import { get, post, del } from "../../helpers/api";
 export default {
+  components: {
+    VueHtml2pdf,
+  },
+  props: {
+    Zindex: {
+      type: Number,
+      default: 2000,
+    },
+  },
   data() {
     return {
+      loading: true,
       addstorage: false,
+      modalshow: false,      
+      modalConfirm: false,
+      filename: "",
+      search: "",
+      deletingIndex: "",
+      deletingID: "",
       columns: [
-        {
-          type: "selection",
-          width: 50,
-          align: "center",
-        },
         {
           title: "Name",
           key: "name",
@@ -117,20 +182,57 @@ export default {
       ],
       storage: [],
       storages: {
-        name: '',
-        description: ''
-      }
+        name: "",
+        description: "",
+      },
+      showdata: {
+        name: "",
+        description: "",
+      },
     };
   },
   methods: {
+    timestamp() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      const time =
+        today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+      const timestamps = "รายการสถานที่เก็บ " + date + " " + time;
+      this.filename = timestamps;
+    },
+    tableItems(value) {
+      const data = this.storage;
+      if (value.length > 0) {
+        if (data.filter((storage) => storage.name === this.search)) {
+          this.storage = data.filter(
+            (storage) => storage.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+          );
+        } else {
+          this.getstorages();
+        }
+      } else {
+        this.getstorages();
+      }
+    },
+    exportcsv() {
+      this.$refs.selection.exportCsv({
+        filename: this.filename,
+      });
+    },
+    exportpdf() {
+      this.$refs.html2Pdf.generatePdf();
+    },
     ok() {
       post("/api-inv/storages", this.storages)
         .then((res) => {
           if (res.data.succeed) {
-            
-            this.addstorage = false
-            this.storage.unshift(res.data.storage)
-            
+            this.addstorage = false;
+            this.storage.unshift(res.data.storage);
           }
           this.$Message.info("สำเร็จ");
         })
@@ -138,71 +240,53 @@ export default {
           if (err.response.status === 422) {
             this.error = err.response.data;
             this.$Message.error("เกิดข้อผิดพลาด");
-            
           }
-          
         });
     },
     cancel() {
-      this.$Message.info("ยกเลิกแล้ว");
+        this.storages.name = "",
+        this.storages.description = "",
+        this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
-      this.$Modal.info({
-        title: "User Info",
-        content: `Name：${this.data4[index].name}<br>Age：${this.data4[index].age}<br>Address：${this.data4[index].address}`,
+      this.modalshow = true;
+      this.showdata.name = this.storage[index].name;
+      this.showdata.description = this.storage[index].description;
+    },
+    confirm() {
+      del("/api-inv/storages/" + this.deletingID).then((res) => {
+        this.$Loading.finish();
+        this.storage.splice(this.deletingIndex, 1);
+        if (res.data.DELETE) {
+          this.modalConfirm = false;
+        }
+        this.$Message.info("สำเร็จ");
       });
     },
+    cancelcf() {
+      this.modalConfirm = false;
+    },
     remove(index) {
-      this.storage.splice(index, 1);
+      this.deletingIndex = index;
+      this.deletingID = this.storage[index].id;
+      this.modalConfirm = true;
+    },
+    getstorages() {
+      get("/api-inv/storages").then((res) => {
+        this.storage = res.data.storages;
+        this.loading = false;
+      });
     },
   },
   created() {
-    get("/api-inv/storages").then((res) => {
-      this.storage = res.data.storages;
-      this.loading = false;
-    });
+    this.getstorages();
+    setInterval(() => {
+      this.timestamp();
+    }, 1000);
   },
 };
 </script>
 
 <style>
-.demo-upload-list {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: rgb(123, 123, 123);
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-top: 3px;
-}
-.demo-upload-list img {
-  width: 100%;
-  height: 100%;
-}
-.demo-upload-list-cover {
-  display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.demo-upload-list:hover .demo-upload-list-cover {
-  display: block;
-}
-.demo-upload-list-cover i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0 2px;
-}
 </style>
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admins;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use DateTime;
 use App\User;
 
 use App\Models\Storages;
@@ -80,6 +80,19 @@ class IngredientsController extends Controller
             ]);
     }
 
+    public function getsearchLabelling ($id)
+    {
+        $Item = DB::table('import_ingredients_items')
+        ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
+        ->select('import_ingredients_items.*' , 'item_ingredients.itemname', 'item_ingredients.qty')
+        ->where('import_ingredients_items.id', $id)->first();
+
+        return response()
+            ->json([
+                'labelling' => $Item
+            ]);
+    }
+
     public function getrecord()
     {
         $record = DB::table('import_ingredients_items')
@@ -87,7 +100,7 @@ class IngredientsController extends Controller
             ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
             ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
             ->join('storages', 'import_ingredients_items.storageID', '=', 'storages.id')
-            ->select('import_ingredients_items.*' , 'users.firstname', 'item_ingredients.itemname', 'peoples.firstname', 'storages.name')
+            ->select('import_ingredients_items.*' , 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname', 'storages.name')
             ->orderBy('import_ingredients_items.created_at', 'desc')
             ->get();
 
@@ -95,7 +108,7 @@ class IngredientsController extends Controller
             ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
             ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
-            ->select('export_ingredients_items.*' , 'users.firstname', 'item_ingredients.itemname', 'peoples.firstname')
+            ->select('export_ingredients_items.*' , 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname')
             ->orderBy('export_ingredients_items.created_at', 'desc')
             ->get();
 
@@ -257,6 +270,101 @@ class IngredientsController extends Controller
 
     public function destroy($id)
     {
-        //
+        Item_ingredients::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function categorydestroy($id)
+    {
+        Categorys_ingredients::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function importdestroy($id)
+    {
+        Import_ingredients_items::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function exportdestroy($id)
+    {
+        Export_ingredients_items::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function reportsIngredients (Request $request) 
+    {
+        $startdate = new DateTime( $request->startdate);
+        $enddate = new DateTime($request->enddate);
+        $formatted_startdate = $startdate->format('Y-m-d');
+        $formatted_enddate = $enddate->format('Y-m-d');
+
+        $record = DB::table('import_ingredients_items')
+            ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
+            ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
+            ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_ingredients.itemname',
+                     'import_ingredients_items.qty_charge as im_qty_charge',
+                     'import_ingredients_items.qty_balance',
+                     'import_ingredients_items.rc_no',
+                     'import_ingredients_items.LOT_no',
+                     'import_ingredients_items.import_at as imex_at',
+                     'import_ingredients_items.MFG',
+                     'import_ingredients_items.EXP',
+                     'import_ingredients_items.invoice_no',
+                     'import_ingredients_items.created_at'
+            )
+            ->where('import_ingredients_items.import_at', ">=", $formatted_startdate)
+            ->where('import_ingredients_items.import_at', "<=", $formatted_enddate)
+            ->where('item_ingredients.itemname', $request->name_rm)
+            ->orderBy('import_ingredients_items.import_at', 'desc')
+            ->get();
+
+        $record1 = DB::table('export_ingredients_items')
+            ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
+            ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
+            ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_ingredients.itemname',
+                     'export_ingredients_items.qty_charge as ex_qty_charge',
+                     'export_ingredients_items.qty_balance',
+                     'export_ingredients_items.rc_no',
+                     'export_ingredients_items.LOT_no',
+                     'export_ingredients_items.export_at as imex_at',
+                     'export_ingredients_items.invoice_no',
+                     'export_ingredients_items.code_product',
+                     'export_ingredients_items.created_at'
+            )
+            ->where('export_ingredients_items.export_at', ">=", $formatted_startdate)
+            ->where('export_ingredients_items.export_at', "<=", $formatted_enddate)
+            ->where('item_ingredients.itemname', $request->name_rm)
+            ->orderBy('export_ingredients_items.export_at', 'desc')
+            ->get();
+            $mergeTbl = $record->merge($record1);
+
+        return response()
+            ->json([
+                'reportdata' => $mergeTbl,
+                'succeed' => true
+                // 'record1' => $record1
+            ]);
+       
     }
 }

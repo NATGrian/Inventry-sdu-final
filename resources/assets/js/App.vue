@@ -199,7 +199,7 @@ export default {
       flash: Flash.state,
       users: {},
       isCollapsed: false,
-    };
+    }; 
   },
   created() {
     get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {

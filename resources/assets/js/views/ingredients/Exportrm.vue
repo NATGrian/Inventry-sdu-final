@@ -85,7 +85,7 @@
                 </td>
                 <td>
                   <FormItem :label-width="0">
-                    <Input  v-model="formexport.rc_no" type="text" size="small" placeholder="" />
+                    <Input readonly v-model="formexport.rc_no" type="text" size="small" placeholder="" />
                   </FormItem>
                 </td>
                 <td>

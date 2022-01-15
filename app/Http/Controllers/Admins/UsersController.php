@@ -142,6 +142,19 @@ class UsersController extends Controller
 
     public function destroy($id)
     {
-        //
+        User::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function rolesdestroy($id)
+    {
+        Usertype::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
     }
 }

@@ -6,9 +6,15 @@
         <BreadcrumbItem to="/dashboard">หน้าหลัก</BreadcrumbItem>
     </Breadcrumb>
     <br>
+    <Row type="flex" justify="center" align="middle">
+      <Col>
+        <h1> ระบบคงคลังวัตถุดิบและผลิตภัณฑ์ สำหรับ คณะวิทยาศาสตร์เครื่องสําอาง</h1>
+      </Col>
+    </Row>
+    <br>
     <Row type="flex" justify="space-around" align="middle">
 
-      <Col  :md="5" :xs="22">
+      <Col :md="5" :xs="22">
         <Card :bordered="false" to="/ingredients/list">
           <div style="text-align:center">
             <Icon type="md-cube" size="40"/>

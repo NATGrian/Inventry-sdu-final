@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admins;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
-
+use DateTime;
 use App\Models\Storages;
 use App\Models\Peoples;
 use App\Models\Item_products;
@@ -32,7 +32,7 @@ class ProductsController extends Controller
             ->join('Item_products', 'import_product_items.idproduct', '=', 'Item_products.id')
             ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
             ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
-            ->select('import_product_items.*' , 'users.firstname', 'Item_products.itemname', 'peoples.firstname', 'storages.name')
+            ->select('import_product_items.*' , 'users.firstname as ufname', 'Item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
             ->orderBy('import_product_items.created_at', 'desc')
             ->get();
 
@@ -40,7 +40,7 @@ class ProductsController extends Controller
             ->join('users', 'export_product_items.UID', '=', 'users.id')
             ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
             ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
-            ->select('export_product_items.*' , 'users.firstname', 'item_products.itemname', 'peoples.firstname')
+            ->select('export_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname')
             ->orderBy('export_product_items.created_at', 'desc')
             ->get();
 
@@ -240,6 +240,94 @@ class ProductsController extends Controller
 
     public function destroy($id)
     {
-        //
+        Item_products::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
     }
+    public function categorydestroy($id)
+    {
+        Categorys_products::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function importdestroy($id)
+    {
+        Import_product_items::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function exportdestroy($id)
+    {
+        Export_product_items::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function reportsproduct (Request $request) 
+    {
+        $startdate = new DateTime( $request->startdate);
+        $enddate = new DateTime($request->enddate);
+        $formatted_startdate = $startdate->format('Y-m-d');
+        $formatted_enddate = $enddate->format('Y-m-d');
+
+        $record = DB::table('import_product_items')
+            ->join('users', 'import_product_items.UID', '=', 'users.id')
+            ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
+            ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_products.itemname',
+                     'import_product_items.qty_charge as im_qty_charge',
+                     'import_product_items.qty_balance',
+                     'import_product_items.Batch_no',
+                     'import_product_items.import_at as imex_at',
+                     'import_product_items.MFG',
+                     'import_product_items.EXP',
+                     'import_product_items.created_at'
+            )
+            ->where('import_product_items.import_at', ">=", $formatted_startdate)
+            ->where('import_product_items.import_at', "<=", $formatted_enddate)
+            ->where('item_products.itemname', $request->itemname)
+            ->orderBy('import_product_items.import_at', 'desc')
+            ->get();
+
+        $record1 = DB::table('export_product_items')
+            ->join('users', 'export_product_items.UID', '=', 'users.id')
+            ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
+            ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_products.itemname',
+                     'export_product_items.qty_charge as ex_qty_charge',
+                     'export_product_items.qty_balance',
+                     'export_product_items.order_no',
+                     'export_product_items.export_at as imex_at',
+                     'export_product_items.created_at'
+            )
+            ->where('export_product_items.export_at', ">=", $formatted_startdate)
+            ->where('export_product_items.export_at', "<=", $formatted_enddate)
+            ->where('item_products.itemname', $request->itemname)
+            ->orderBy('export_product_items.export_at', 'desc')
+            ->get();
+            $mergeTbl = $record->merge($record1);
+
+        return response()
+            ->json([
+                'reportdata' => $mergeTbl,
+                'succeed' => true
+                // 'record1' => $record1
+            ]);
+        }
 }

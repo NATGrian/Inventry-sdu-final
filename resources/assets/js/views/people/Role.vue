@@ -2,29 +2,29 @@
   <div class="container-fluid">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/member">เจ้าหน้าที่จัดการระบบ</BreadcrumbItem>
+      <BreadcrumbItem to="/people">เจ้าหน้าที่เกี่ยวข้อง</BreadcrumbItem>
       <BreadcrumbItem>ตำแหน่ง</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
 
       <Col>
-      <Button type="primary" @click="addrole = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
-      <Modal v-model="addrole" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
+      <Button type="primary" @click="addgroups = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
+      <Modal v-model="addgroups" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มตำแหน่ง</span>
         </p>
 
-        <Row :model="addroles" type="flex" justify="center" align="middle">
+        <Row ref="addgroups" :model="addgroup" type="flex" justify="center" align="middle">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input v-model="addroles.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
+          <Input v-model="addgroup.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input v-model="addroles.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
+          <Input v-model="addgroup.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
           </Col>
 
         </Row>
@@ -71,7 +71,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in roledata" :key="i.id">
+              <tr v-for="i in groups" :key="i.id">
                 <td>{{i.role}}</td>
                 <td>{{i.description}}</td>
               </tr>
@@ -90,7 +90,7 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table width="620" max-height="450" border ref="selection" :columns="columns" :data="roledata" size="small" :loading="loading">
+      <Table width="620" max-height="450" border ref="selection" :columns="columns" :data="groups" size="small" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       loading: true,
-      addrole: false,
+      addgroups: false,
       modalConfirm: false,
       filename: "",
       search: "",
@@ -182,8 +182,8 @@ export default {
           slot: "action",
         },
       ],
-      roledata: [],
-      addroles: {
+      groups: [],
+      addgroup: {
         role: "",
         description: "",
       },
@@ -204,21 +204,21 @@ export default {
         today.getDate();
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
-      const timestamps = "ตำแหน่งสำหรับเจ้าหน้าที่ดูแล " + date + " " + time;
+      const timestamps = "ตำแหน่งสำหรับเจ้าหน้าที่เกี่ยวข้อง " + date + " " + time;
       this.filename = timestamps;
     },
     tableItems(value) {
-      const data = this.roledata;
+      const data = this.groups;
       if (value.length > 0) {
         if (data.filter((role) => role.role === this.search)) {
-          this.roledata = data.filter(
+          this.groups = data.filter(
             (role) => role.role.toLowerCase().indexOf(value.toLowerCase()) > -1
           );
         } else {
-          this.getroles();
+          this.getgroups();
         }
       } else {
-        this.getroles();
+        this.getgroups();
       }
     },
     exportcsv() {
@@ -230,11 +230,11 @@ export default {
       this.$refs.html2Pdf.generatePdf();
     },
     ok() {
-      post("/api-inv/addroles", this.addroles)
+      post("/api-inv/addgroups", this.addgroups)
         .then((res) => {
           if (res.data.succeed) {
-            this.addrole = false;
-            this.roledata.unshift(res.data.roledata);
+            this.addgroups = false;
+            this.groups.unshift(res.data.groups);
           }
           this.$Message.info("สำเร็จ");
         })
@@ -246,18 +246,18 @@ export default {
         });
     },
     cancel() {
-      this.$refs.addroles.resetFields();
+      this.$refs.addgroups.resetFields();
       this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
       this.modalshow = true;
-      this.showdata.role = this.roledata[index].role;
-      this.showdata.description = this.roledata[index].description;
+      this.showdata.role = this.groups[index].role;
+      this.showdata.description = this.groups[index].description;
     },
     confirm() {
-      del("/api-inv/roles/" + this.deletingID).then((res) => {
+      del("/api-inv/groups/" + this.deletingID).then((res) => {
         this.$Loading.finish();
-        this.roledata.splice(this.deletingIndex, 1);
+        this.groups.splice(this.deletingIndex, 1);
         if (res.data.DELETE) {
           this.modalConfirm = false;
         }
@@ -269,18 +269,18 @@ export default {
     },
     remove(index) {
       this.deletingIndex = index;
-      this.deletingID = this.roledata[index].id;
+      this.deletingID = this.groups[index].id;
       this.modalConfirm = true;
     },
-    getroles() {
-      get("/api-inv/roles").then((res) => {
-        this.roledata = res.data.roles;
-        this.loading = false;
-      });
+    getgroups() {
+      get("/api-inv/groups").then((res) => {
+      this.groups = res.data.groups;
+      this.loading = false;
+    });
     },
   },
   created() {
-    this.getroles();
+    this.getgroups();
     setInterval(() => {
       this.timestamp();
     }, 1000);

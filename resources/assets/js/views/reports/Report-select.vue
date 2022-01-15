@@ -23,7 +23,7 @@
         </Col>
 
         <Col>
-        <Tooltip content="สั่งปลิ้น" placement="top">
+        <Tooltip content="print" placement="top">
           <Button shape="circle" icon="md-print" size="large" />
         </Tooltip>
         </Col>

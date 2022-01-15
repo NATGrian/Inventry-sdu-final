@@ -89,6 +89,19 @@ class PeopleController extends Controller
 
     public function destroy($id)
     {
-        //
+        Peoples::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
+    }
+
+    public function groupsdestroy($id)
+    {
+        People_groups::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
     }
 }

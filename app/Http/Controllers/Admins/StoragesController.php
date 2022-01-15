@@ -14,10 +14,10 @@ class StoragesController extends Controller
     {
         $storages = Storages::all();
 
-    	return response()
-    		->json([
-    			'storages' => $storages
-    		]);
+        return response()
+            ->json([
+                'storages' => $storages
+            ]);
     }
 
     public function create()
@@ -32,7 +32,7 @@ class StoragesController extends Controller
             'name' => 'required|max:255',
             'description' => 'required|max:255',
         ]);
-    
+
         $storage = new storages($request->all());
         $storage->save();
 
@@ -61,6 +61,10 @@ class StoragesController extends Controller
 
     public function destroy($id)
     {
-        //
+        Storages::where('id', $id)->delete();
+        return response()
+            ->json([
+                'DELETE' => true
+            ]);
     }
 }

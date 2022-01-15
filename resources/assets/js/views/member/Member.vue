@@ -8,7 +8,7 @@
     <Row type="flex" justify="center" align="middle">
       <Col>
       <Button type="primary" @click="addmember = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
-      <Modal v-model="addmember" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="zindex" width="auto">
+      <Modal v-model="addmember" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="700">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ</span>
@@ -91,51 +91,81 @@
 
       <Col>
       <Button type="primary" to="/member/roles" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
-
       </Col>
 
       <Col span="9" offset="1">
-      <Input search placeholder="Enter something..." style="width: 350px" />
+      <Input search @on-search="tableItems" v-model="search" placeholder="ค้นหาชื่อที่ต้องการ" style="width: 350px" />
       </Col>
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" />
+        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" />
+        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
 
-      <Col>
-      <Tooltip content="print" placement="top">
-        <Button shape="circle" icon="md-print" size="large" />
-      </Tooltip>
-      </Col>
-
-      <Col>
-      <Tooltip content="ลบตาราง" placement="top">
-        <Button shape="circle" icon="md-trash" size="large" />
-      </Tooltip>
-      </Col>
     </Row>
     <br>
+    <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true" :paginate-elements-by-height="1100" :filename="filename" :pdf-quality="2" :manual-pagination="false" pdf-format="letter" pdf-content-width="100%" pdf-orientation="landscape" @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
+      <template slot="pdf-content">
+        <Row type="flex" justify="center" align="middle">
+          <Col>
+          <h1>รายชื่อ เจ้าที่หน้าดูแลระบบ</h1>
+          </Col>
+        </Row>
+        <br>
+        <Row type="flex" justify="center" align="middle">
+          <Col span="20">
+          <table class="_table" ref="selection">
+            <thead>
+              <tr id="_header-table">
+                <th>ชื่อ-นามสกุล</th>
+                <th>อีเมล์</th>
+                <th>เบอร์โทร</th>
+                <th>ตำแหน่ง</th>
+                <th>วันที่ เพิ่มเข้าระบบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="user in users" :key="user.id">
+                <td>{{user.firstname}} {{user.lastname}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.role}}</td>
+                <td>{{user.created_at}}</td>
+              </tr>
+            </tbody>
+          </table>
+          </Col>
+        </Row>
+        <Row type="flex" justify="end" class="code-row-bg">
+          <Col>
+          <Divider>
+            <h6> {{filename}} </h6>
+          </Divider>
+
+          </Col>
+        </Row>
+      </template>
+    </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table size="small" :loading="loading" width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
+      <Table size="small" :loading="loading" width="860" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
         <template slot-scope="{ index }" slot="action">
-          <Button type="primary" size="small" style="margin-right: 3px" @click="show( index)">View</Button>
+          <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
+          <Page :total="1" size="small" show-elevator show-sizer />
         </template>
       </Table>
 
     </Row>
-    <Modal v-model="modalshow" title="ข้อมูล เจ้าหน้าที่ดูแลระบบ" footer-hide width="700" draggable >
+    <Modal v-model="modalshow" title="ข้อมูล เจ้าหน้าที่ดูแลระบบ" footer-hide width="700" draggable>
       <Row type="flex" justify="space-around" align="middle">
         <Col span="11">
         <p> <b style="color: #000;">ชื่อ - นามสกุล:</b> {{ showdata.firstname }} {{ showdata.lastname }} </p>
@@ -149,42 +179,44 @@
       </Row>
 
     </Modal>
+
+    <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
+      <p slot="header" style="color:#2E9AFE;text-align:center">
+        <Icon type="md-help-circle" />
+        <span style="color:#FF0000;">แน่ใจว่า ต้องการลบ</span>
+      </p>
+      <Row type="flex" justify="space-around" align="middle">
+        <Col span="10">
+        <Icon type="ios-trash" size="35" color="#FF0040" /> <span style="color:#482728; font-size: 20px; text-align: center;">ยืนยัน กดตกลง</span>
+        </Col>
+
+      </Row>
+
+    </Modal>
   </div>
 </template>
 
 
 <script>
-import ImageModal from "../../components/Members/ImageUpload-u.vue";
-import { get, post, put } from "../../helpers/api";
+import VueHtml2pdf from "vue-html2pdf";
+import { get, post, del } from "../../helpers/api";
+
 export default {
   components: {
-    ImageModal,
+    VueHtml2pdf,
   },
   props: {
-    zIndex: {
+    Zindex: {
       type: Number,
+      default: 2000,
     },
   },
   data() {
     return {
-      loading: true,
-      zindex: 2000,
-      formcreateUser: {
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        password: "",
-        role_id: null,
-      },
-      isAdding: false,
-      addmember: false,
+      modalConfirm: false,
+      filename: "",
+      search: "",
       columns: [
-        {
-          type: "selection",
-          width: 50,
-          align: "center",
-        },
         {
           title: "Name",
           key: "firstname",
@@ -195,7 +227,7 @@ export default {
         {
           title: "Mail",
           key: "email",
-          width: 219,
+          width: 250,
           align: "center",
         },
         {
@@ -271,9 +303,18 @@ export default {
           },
         ],
       },
+      loading: true,
+      formcreateUser: {
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        password: "",
+        role_id: null,
+      },
+      addmember: false,
       users: [],
       roledata: [],
-      editIndex: -1,
       error: {},
       showdata: {
         firstname: "",
@@ -283,11 +324,49 @@ export default {
         phone: "",
         lastname: "",
       },
-
       modalshow: false,
+      deletingIndex: "",
+      deletingID: "",
     };
   },
   methods: {
+    timestamp() {
+      const today = new Date();
+      const date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      const time =
+        today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
+      const timestamps = "เจ้าหน้าที่ดูแลระบบ " + date + " " + time;
+      this.filename = timestamps;
+    },
+    tableItems(value) {
+      const data = this.users;
+      if (value.length > 0) {
+        if (data.filter((users) => users.firstname === this.search)) {
+          this.users = data.filter(
+            (users) =>
+              users.firstname.toLowerCase().indexOf(value.toLowerCase()) > -1
+          );
+        } else {
+          this.getusers();
+        }
+      } else {
+        this.getusers();
+      }
+    },
+
+    exportcsv() {
+      this.$refs.selection.exportCsv({
+        filename: this.filename,
+      });
+    },
+    exportpdf() {
+      this.$refs.html2Pdf.generatePdf();
+    },
     addusers() {
       this.$Loading.start();
 
@@ -299,8 +378,7 @@ export default {
             this.users.unshift(res.data.user);
             this.$forceUpdate();
           }
-          
-          
+
           this.$Message.info("สำเร็จ");
         })
         .catch((err) => {
@@ -313,12 +391,7 @@ export default {
     },
 
     cancel() {
-      this.formcreateUser.firstname = "";
-      this.formcreateUser.lastname = "";
-      this.formcreateUser.email = "";
-      this.formcreateUser.phone = "";
-      this.formcreateUser.password = "";
-      this.formcreateUser.role_id = null;
+      this.$refs.formcreateUser.resetFields();
       this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
@@ -330,62 +403,54 @@ export default {
       this.showdata.image = this.users[index].image;
       this.showdata.role = this.users[index].role;
     },
+    confirm() {
+      del("api-inv/users/" + this.deletingID).then((res) => {
+        this.$Loading.finish();
+        this.users.splice(this.deletingIndex, 1);
+        if (res.data.DELETE) {
+          this.modalConfirm = false;
+        }
+        this.$Message.info("สำเร็จ");
+      });
+    },
+    cancelcf() {
+      this.modalConfirm = false;
+    },
     remove(index) {
-      this.users.splice(index, 1);
+      this.deletingIndex = index;
+      this.deletingID = this.users[index].id;
+      this.modalConfirm = true;
+    },
+    getusers() {
+      get("/api-inv/users").then((res) => {
+        this.users = res.data.users;
+        this.loading = false;
+      });
+    },
+    getroles() {
+      get("/api-inv/roles").then((res) => {
+        this.roledata = res.data.roles;
+        this.loading = false;
+      });
     },
   },
 
   created() {
-    get("/api-inv/users").then((res) => {
-      this.users = res.data.users;
-      this.loading = false;
-    });
-    get("/api-inv/roles").then((res) => {
-      this.roledata = res.data.roles;
-      this.loading = false;
-    });
+    this.getusers();
+    this.getroles();
+    setInterval(() => {
+      this.timestamp();
+    }, 1000);
   },
 };
 </script>
 
 <style>
-.demo-upload-list {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 60px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  overflow: hidden;
-  background: rgb(123, 123, 123);
-  position: relative;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  margin-top: 3px;
+.ivu-table td {
+  font-family: helvetica, Arial, sans-serif;
 }
-.demo-upload-list img {
-  width: 100%;
-  height: 100%;
-}
-.demo-upload-list-cover {
-  display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.6);
-}
-.demo-upload-list:hover .demo-upload-list-cover {
-  display: block;
-}
-.demo-upload-list-cover i {
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  margin: 0 2px;
+.ivu-table th {
+  font-family: helvetica, Arial, sans-serif;
 }
 </style>
 

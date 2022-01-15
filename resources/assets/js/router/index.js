@@ -13,6 +13,7 @@ import member from '../views/member/Member.vue'
 import roles from '../views/member/Role.vue'
 
 import people from '../views/people/People.vue'
+import rolesp from '../views/people/Role.vue'
 import storage from '../views/storage/Storage.vue'
 
 import categoryingredients from '../views/ingredients/Categoryrm.vue'
@@ -45,7 +46,7 @@ const router = new VueRouter({
 		{
 			path: '/',
 			component: dashboard,
-			name: 'หน้าหลัก',
+			name: 'หน้าหลัก1',
 			meta: {
 				requiresAuth: true,
 				title: 'ระบบคงคลังออนไลน์ | หน้าหลัก'
@@ -113,6 +114,15 @@ const router = new VueRouter({
 			meta: {
 				requiresAuth: true,
 				title: 'ระบบคงคลังออนไลน์ | เจ้าหน้าที่ที่เกี่ยวข้อง'
+			}
+		},
+		{
+			path: '/people/roles',
+			component: rolesp,
+			name: 'ตำแหน่งเจ้าหน้าที่เกี่ยวข้อง',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ตำแหน่งสำหรับเจ้าหน้าที่เกี่ยวข้อง'
 			}
 		},
 
