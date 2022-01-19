@@ -41,13 +41,13 @@
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
+        <Button id="btn-exportpdf" shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
+        <Button id="btn-exportcsv" shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
     </Row>

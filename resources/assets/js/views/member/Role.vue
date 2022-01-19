@@ -9,8 +9,8 @@
     <Row type="flex" justify="center" align="middle">
 
       <Col>
-      <Button type="primary" @click="addrole = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
-      <Modal v-model="addrole" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
+      <Button id="btn-addrole" type="primary" @click="addrole = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
+      <Modal id="addrole" v-model="addrole" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มตำแหน่ง</span>
@@ -36,18 +36,18 @@
       </Col>
 
       <Col span="9" offset="1">
-      <Input search @on-search="tableItems" v-model="search" placeholder="ค้นหาตำแหน่งที่ต้องการ" style="width: 350px" />
+      <Input element-id="search" search @on-search="tableItems" v-model="search" placeholder="ค้นหาตำแหน่งที่ต้องการ" style="width: 350px" />
       </Col>
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
+        <Button id="btn-exportpdf" shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
+        <Button id="btn-exportcsv" shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
 
@@ -101,7 +101,7 @@
       </Table>
 
     </Row>
-    <Modal v-model="modalshow" title="ข้อมูล ตำแหน่งในระบบ" footer-hide width="500" draggable>
+    <Modal id="modalshow" v-model="modalshow" title="ข้อมูล ตำแหน่งในระบบ" footer-hide width="500" draggable>
       <Row type="flex" justify="center" align="middle">
         <Col>
         <div style="width: 100%; "> <b style="color: #000;">ชื่อ ตำแหน่ง:</b> {{ showdata.role }} </div>
@@ -120,7 +120,7 @@
       </Row>
 
     </Modal>
-    <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
+    <Modal id="modalconfirm" v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
       <p slot="header" style="color:#2E9AFE;text-align:center">
         <Icon type="md-help-circle" />
         <span style="color:#FF0000;">แน่ใจว่า ต้องการลบ</span>

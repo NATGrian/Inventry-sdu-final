@@ -12,21 +12,21 @@
       <Header class="Header-c">
         <span style="font-weight: bold;">profile information</span>
         <Divider type="vertical" style="background-color: rgb(119, 119, 119);" /> <span>ข้อมูลส่วนตัว</span>
-        <Button @click="save" type="success" shape="circle" label="small" icon="md-checkmark" style="position: absolute; right: 3px; top:8px;height: 25px;">save</Button>
+        <Button id="btn-saveform" @click="save" type="success" shape="circle" label="small" icon="md-checkmark" style="position: absolute; right: 3px; top:8px;height: 25px;">save</Button>
       </Header>
       <br>
       <Content class="Content-profile">
-        <Form ref="formedit" :model="formedit" label-position="top">
+        <Form id="formedit" ref="formedit" :model="formedit" label-position="top">
           <Row type="flex" justify="space-around">
             <Col :md="8" :sm="12" class="profile-input">
             <FormItem label="ชื่อจริง">
-              <Input prefix="ios-contact" v-model="formedit.firstname" placeholder="Enter your name"></Input>
+              <Input element-id="formedit-firstname" prefix="ios-contact" v-model="formedit.firstname" placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
             <br>
             <Col :md="8" :sm="12" class="profile-input">
             <FormItem label="นามสกุล">
-              <Input prefix="ios-contact" v-model="formedit.lastname" placeholder="Enter your name"></Input>
+              <Input element-id="formedit-lastname" prefix="ios-contact" v-model="formedit.lastname" placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
           </Row>
@@ -35,13 +35,13 @@
             <Col :md="8" :sm="12" class="profile-input">
             
             <FormItem label="เบอร์ติดต่อ">
-              <Input prefix="md-closed-captioning" v-model="formedit.phone" placeholder="Enter your name"></Input>
+              <Input element-id="formedit-phone" prefix="md-closed-captioning" v-model="formedit.phone" placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
             <br>
             <Col :md="8" :sm="12" class="profile-input">
             <FormItem label="Email">
-              <Input prefix="ios-mail" type="email" v-model="formedit.email" placeholder="Enter your name"></Input>
+              <Input element-id="formedit-email" prefix="ios-mail" type="email" v-model="formedit.email" placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
           </Row>
@@ -49,13 +49,13 @@
           <Row type="flex" justify="space-around">
             <Col :md="8" :sm="12" class="profile-input">
             <FormItem label="รหัสผ่านไหม่">
-              <Input prefix="ios-lock" v-model="formedit.newpassword" type="password" password placeholder="Enter your name"></Input>
+              <Input element-id="formedit-newpassword" prefix="ios-lock" v-model="formedit.newpassword" type="password" password placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
             <br>
             <Col :md="8" :sm="12" class="profile-input">
             <FormItem label="รหัสผ่านปัจจุบัน">
-              <Input prefix="ios-lock" v-model="formedit.passwordold" type="password" password placeholder="Enter your name"></Input>
+              <Input element-id="formedit-passwordold" prefix="ios-lock" v-model="formedit.passwordold" type="password" password placeholder="Enter your name"></Input>
             </FormItem>
             </Col>
           </Row>
@@ -64,7 +64,7 @@
             <Col :md="8" :sm="12" class="profile-input">
             <div class="input-role">
               <h5>ตำแหน่ง</h5>
-              <Input v-model="formedit.role" readonly type="text" size="small" style="width: auto; display: inline-block;" />
+              <Input  v-model="formedit.role" readonly type="text" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>

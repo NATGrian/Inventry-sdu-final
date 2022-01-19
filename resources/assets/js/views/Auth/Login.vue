@@ -3,7 +3,7 @@
   <div class="container-fluid" id="Login-container">
     <Row type="flex" justify="center" align="middle" class="formlogin">
       <Col span="9">
-      <Form ref="form" :model="form" :rules="ruleInline">
+      <Form id="form-login" ref="form" :model="form" :rules="ruleInline">
         <Row type="flex" justify="start" align="middle">
             <Col><Icon type="md-log-in" size="34" style="color: #000;"/> </Col>
             <Col><h1> เข้าสู่ระบบ</h1></Col>
@@ -11,11 +11,11 @@
         <Row type="flex" justify="space-around" align="top">
           <Col span="16">
           <FormItem prop="email">
-            <Input type="email" prefix="ios-mail" size="large" v-model="form.email" placeholder="email" @on-enter="login">
+            <Input element-id="login-email" type="email" prefix="ios-mail" size="large" v-model="form.email" placeholder="email" @on-enter="login">
             </Input>
           </FormItem>
           <FormItem prop="password">
-            <Input type="password" prefix="ios-lock" size="large" v-model="form.password" placeholder="Password" @on-enter="login">
+            <Input element-id="login-password" type="password" prefix="ios-lock" size="large" v-model="form.password" placeholder="Password" @on-enter="login">
             </Input>
           </FormItem>
           </Col>

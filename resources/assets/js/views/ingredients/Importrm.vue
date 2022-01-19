@@ -7,7 +7,7 @@
     </Breadcrumb>
     <br>
 
-    <Form ref="formimport" :model="formimport" :rules="ruleCustom">
+    <Form id="formimport" ref="formimport" :model="formimport" :rules="ruleCustom">
       <Row type="flex" justify="space-around" align="middle">
 
         <Col span="15">

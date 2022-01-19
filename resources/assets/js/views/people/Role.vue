@@ -9,8 +9,8 @@
     <Row type="flex" justify="center" align="middle">
 
       <Col>
-      <Button type="primary" @click="addgroups = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
-      <Modal v-model="addgroups" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
+      <Button id="btn-addgroups" type="primary" @click="addgroups = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
+      <Modal id="addgroups" v-model="addgroups" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มตำแหน่ง</span>
@@ -36,18 +36,18 @@
       </Col>
 
       <Col span="9" offset="1">
-      <Input search @on-search="tableItems" v-model="search" placeholder="ค้นหาตำแหน่งที่ต้องการ" style="width: 350px" />
+      <Input element-id="search" search @on-search="tableItems" v-model="search" placeholder="ค้นหาตำแหน่งที่ต้องการ" style="width: 350px" />
       </Col>
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
+        <Button id="btn-exportpdf" shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
+        <Button id="btn-exportcsv" shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
 

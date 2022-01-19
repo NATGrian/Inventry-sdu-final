@@ -7,8 +7,8 @@
     <br>
     <Row type="flex" justify="center" align="middle">
       <Col>
-      <Button type="primary" @click="addmember = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
-      <Modal v-model="addmember" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="700">
+      <Button id="btn_addmember" type="primary" @click="addmember = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
+      <Modal v-model="addmember" id="addmember" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="700">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ</span>
@@ -90,22 +90,22 @@
       </Col>
 
       <Col>
-      <Button type="primary" to="/member/roles" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
+      <Button id="btn_to-roles" type="primary" to="/member/roles" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
       </Col>
 
       <Col span="9" offset="1">
-      <Input search @on-search="tableItems" v-model="search" placeholder="ค้นหาชื่อที่ต้องการ" style="width: 350px" />
+      <Input element-id="search" search @on-search="tableItems" v-model="search" placeholder="ค้นหาชื่อที่ต้องการ" style="width: 350px" />
       </Col>
 
       <Col>
       <Tooltip content="export to PDF" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportpdf" />
+        <Button id="btn_exportpdf" shape="circle" icon="md-archive" size="large" @click="exportpdf" />
       </Tooltip>
       </Col>
 
       <Col>
       <Tooltip content="export to csv" placement="top">
-        <Button shape="circle" icon="md-archive" size="large" @click="exportcsv" />
+        <Button id="btn_exportcsv" shape="circle" icon="md-archive" size="large" @click="exportcsv" />
       </Tooltip>
       </Col>
 
@@ -165,7 +165,7 @@
       </Table>
 
     </Row>
-    <Modal v-model="modalshow" title="ข้อมูล เจ้าหน้าที่ดูแลระบบ" footer-hide width="700" draggable>
+    <Modal id="modalshow" v-model="modalshow" title="ข้อมูล เจ้าหน้าที่ดูแลระบบ" footer-hide width="700" draggable>
       <Row type="flex" justify="space-around" align="middle">
         <Col span="11">
         <p> <b style="color: #000;">ชื่อ - นามสกุล:</b> {{ showdata.firstname }} {{ showdata.lastname }} </p>
@@ -180,7 +180,7 @@
 
     </Modal>
 
-    <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
+    <Modal id="modalconfirm" v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
       <p slot="header" style="color:#2E9AFE;text-align:center">
         <Icon type="md-help-circle" />
         <span style="color:#FF0000;">แน่ใจว่า ต้องการลบ</span>

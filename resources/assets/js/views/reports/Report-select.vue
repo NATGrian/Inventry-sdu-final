@@ -22,17 +22,6 @@
         </Tooltip>
         </Col>
 
-        <Col>
-        <Tooltip content="print" placement="top">
-          <Button shape="circle" icon="md-print" size="large" />
-        </Tooltip>
-        </Col>
-
-        <Col>
-        <Tooltip content="ลบตาราง" placement="top">
-          <Button shape="circle" icon="md-trash" size="large" />
-        </Tooltip>
-        </Col>
       </Row>
       </Col>
     </Row>
@@ -46,13 +35,13 @@
           <Col span="10">
           <div class="stockcard-labal">สร้างสต็อกการ์ดสำหรับ</div>
           <Dropdown trigger="click">
-            <Button type="primary" size="small">
+            <Button id="btn-dropdown" type="primary" size="small">
               เลือกประเภท
               <Icon type="ios-arrow-down"></Icon>
             </Button>
             <DropdownMenu slot="list">
-              <DropdownItem><Button to="/report/ingredients" long size="small" type="text" ghost style="color: #000;">วัตถุดิบ</Button></DropdownItem>
-              <DropdownItem><Button to="/report/products" long size="small" type="text" ghost style="color: #000;">ผลิตภัณฑ์</Button></DropdownItem>
+              <DropdownItem><Button id="btn-report-ingredients" to="/report/ingredients" long size="small" type="text" ghost style="color: #000;">วัตถุดิบ</Button></DropdownItem>
+              <DropdownItem><Button id="btn-report-products" to="/report/products" long size="small" type="text" ghost style="color: #000;">ผลิตภัณฑ์</Button></DropdownItem>
             </DropdownMenu>
           </Dropdown>
           </Col>
@@ -60,7 +49,7 @@
         <br>
         <Row type="flex" justify="center" align="middle">
           <Col span="20">
-          <Form ref="formstockcard" :model="formstockcard">
+          <Form id="formstockcard-select" ref="formstockcard" :model="formstockcard">
             <Row type="flex" justify="center" align="middle">
               <Col span="12">
               <FormItem :label-width="133">

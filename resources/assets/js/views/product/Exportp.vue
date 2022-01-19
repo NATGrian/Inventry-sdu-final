@@ -20,7 +20,7 @@
           </Col>
         </Row>
         <br>
-        <Form ref="formexportp" :model="formexportp" :rules="ruleCustom">
+        <Form id="formexport" ref="formexportp" :model="formexportp" :rules="ruleCustom">
           <Row type="flex" justify="center" align="middle">
             <Col span="10">
             <FormItem :label-width="133">

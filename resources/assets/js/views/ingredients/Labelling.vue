@@ -264,7 +264,7 @@
     <br>
     <Row type="flex" justify="center" align="middle">
       <Col span="8">
-      <Button long @click="exportpdf" type="primary" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">generate PDF</Button>
+      <Button long id="btn-exportpdf" @click="exportpdf" type="primary" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">generate PDF</Button>
       </Col>
     </Row>
   </div>

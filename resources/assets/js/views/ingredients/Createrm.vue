@@ -7,7 +7,7 @@
     </Breadcrumb>
     <br>
 
-    <Form ref="formcreate" :model="formcreate" :rules="ruleCustom">
+    <Form id="formcreate" ref="formcreate" :model="formcreate" :rules="ruleCustom">
       <Row type="flex" justify="space-around" align="middle">
         <Col span="15">
         <div class="Createfrom1-rm">
