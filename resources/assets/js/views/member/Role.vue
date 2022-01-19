@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="userroles-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/member">เจ้าหน้าที่จัดการระบบ</BreadcrumbItem>
@@ -19,12 +19,12 @@
         <Row :model="addroles" type="flex" justify="center" align="middle">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input v-model="addroles.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
+          <Input element-id="addroles-role" v-model="addroles.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input v-model="addroles.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
+          <Input element-id="addroles-description" v-model="addroles.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
           </Col>
 
         </Row>

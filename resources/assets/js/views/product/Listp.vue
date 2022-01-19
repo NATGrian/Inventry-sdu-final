@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="listproduct-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>รายการผลิตภัณฑ์คงเหลือ</BreadcrumbItem>

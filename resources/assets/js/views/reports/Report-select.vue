@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="reports-container">
     <Row type="flex" justify="space-between" align="middle">
       <Col>
       <Breadcrumb>

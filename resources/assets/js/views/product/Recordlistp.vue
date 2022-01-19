@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="recordlistproduct-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/product/list">ผลิตภัณฑ์</BreadcrumbItem>

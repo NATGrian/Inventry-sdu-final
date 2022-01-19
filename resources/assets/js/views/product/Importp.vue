@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="importproduct-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/product/list">ผลิตภัณฑ์</BreadcrumbItem>
@@ -27,14 +27,14 @@
             <Col span="11" class="left-Formitem">
             <FormItem prop="Batch_no" >
               <span slot="label" style="width: 10%;">เลขที่ครังที่ผลิต:</span>
-              <Input type="text" v-model="formimportp.Batch_no" style="width: 50%;" placeholder="" size="small" />
+              <Input type="text" element-id="formimport-Batch_no" v-model="formimportp.Batch_no" style="width: 50%;" placeholder="" size="small" />
 
             </FormItem>
             </Col>
             <Col span="11" class="right-Formitem">
             <FormItem prop="itemname">
               <span slot="label" style="width: 10%;">รายการ:</span>
-              <Select v-model="formimportp.itemname" @on-select="select" placeholder="ค้นหา ผลิตภัณฑ์" style="width: 50%;" size="small" filterable>
+              <Select element-id="formimport-itemname" v-model="formimportp.itemname" @on-select="select" placeholder="ค้นหา ผลิตภัณฑ์" style="width: 50%;" size="small" filterable>
                 <Option v-for="i in itempro" :value="i.id" :key="i.id">{{ i.itemname }}</Option>
               </Select>
 
@@ -45,13 +45,13 @@
             <Col span="11" class="left-Formitem">
             <FormItem prop="import_at" >
               <span slot="label" style="word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker v-model="formimportp.import_at" @on-change="(value) => this.formimportp.import_at=value.toString()" size="small" type="date" placeholder="Select date" style="width: 50%;" />
+              <DatePicker element-id="formimport-import_at" v-model="formimportp.import_at" @on-change="(value) => this.formimportp.import_at=value.toString()" size="small" type="date" placeholder="Select date" style="width: 50%;" />
             </FormItem>
             </Col>
             <Col span="11" class="right-Formitem">
             <FormItem prop="qty_charge">
               <span slot="label" style="width: 10%;">จำนวน:</span>
-              <InputNumber size="small" v-model="formimportp.qty_charge" @on-change="focusOut" controls-outside />
+              <InputNumber element-id="formimport-qty_charge" size="small" v-model="formimportp.qty_charge" @on-change="focusOut" controls-outside />
             </FormItem>
             </Col>
           </Row>
@@ -59,7 +59,7 @@
             <Col span="11" class="left-Formitem">
             <FormItem prop="storageID">
               <span slot="label">สถานที่จัดเก็บ</span>
-              <Select v-model="formimportp.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
+              <Select element-id="formimport-storage" v-model="formimportp.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
                 <Option v-for="s in storage" :value="s.id" :key="s.id">{{ s.name }}</Option>
               </Select>
 
@@ -68,7 +68,7 @@
             <Col span="11" class="right-Formitem">
             <FormItem prop="PID">
               <span slot="label" style="width: 10%;">ผู้ส่ง:</span>
-              <Select v-model="formimportp.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
+              <Select element-id="formimport-PID" v-model="formimportp.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
                 <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
               </Select>
 
@@ -80,14 +80,14 @@
             <Col span="11" class="left-Formitem">
             <FormItem prop="MFG">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป ที่ผลิต (FG.):</span>
-              <DatePicker v-model="formimportp.MFG" size="small" @on-change="(value) => this.formimportp.MFG=value.toString()" type="date" placeholder="Select date" style="width: 90%;" />
+              <DatePicker element-id="formimport-MFG" v-model="formimportp.MFG" size="small" @on-change="(value) => this.formimportp.MFG=value.toString()" type="date" placeholder="Select date" style="width: 90%;" />
 
             </FormItem>
             </Col>
             <Col span="11" class="right-Formitem">
             <FormItem prop="EXP">
               <span slot="label" style="width: 10px;word-wrap: break-word;">ว-ด-ป หมดอายุ (EXP.):</span>
-              <DatePicker v-model="formimportp.EXP" size="small" @on-change="(value) => this.formimportp.EXP=value.toString()" type="date" placeholder="Select date" style="width: 90%;" />
+              <DatePicker element-id="formimport-EXP" v-model="formimportp.EXP" size="small" @on-change="(value) => this.formimportp.EXP=value.toString()" type="date" placeholder="Select date" style="width: 90%;" />
             </FormItem>
             </Col>
 
@@ -104,7 +104,7 @@
             <Col span="24">
             <div class="input-role">
               <span style="display: inline-block;">รายละเอียดย่อย</span>
-              <Input v-model="formimportp.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
+              <Input element-id="formimport-description" v-model="formimportp.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>

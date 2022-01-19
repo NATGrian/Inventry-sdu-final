@@ -2,7 +2,7 @@
   <div class="layout">
     <Layout>
       <Sider ref="side1" hide-trigger collapsible :collapsed-width="60" v-model="isCollapsed" breakpoint="sm" v-if="this.authState.api_token">
-        <div v-if="isCollapsed">
+        <div id="Sider-layout" v-if="isCollapsed">
 
           <div class="demo-Logo-Collapsed">
             <avatar src="/images/Logo.png" size="large" shape="square" />
@@ -18,7 +18,7 @@
           <Menu width="auto" :style="{background: 'rgb(14, 14, 14)',overflow: 'hidden'}" theme="dark" :active-name="`${$route.name}`">
 
             <Tooltip content="หน้าหลัก" placement="right" class="tooltip-sider" transfer>
-              <MenuItem name="หน้าหลัก" to="/dashboard" :style="{padding: '14px 18px' }" replace>
+              <MenuItem name="หน้าหลัก"  to="/dashboard" :style="{padding: '14px 18px' }" replace>
               <Icon type="ios-speedometer" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
@@ -96,7 +96,7 @@
 
         </div>
 
-        <div v-else>
+        <div id="Sider-layout-notcollapsed" v-else>
           <div class="demo-Logo">
             <img src="/images/Logo-1.png" style="height:60px;">
           </div>
@@ -160,7 +160,7 @@
       <Layout :class="Layout">
         <Row v-if="this.authState.api_token">
           <Col span="12">
-          <Header class="Header">
+          <Header class="Header" id="Header-layout">
             <Menu mode="horizontal" theme="light" :class="HeaderMenu">
               <div class="Icon-Collapsed">
                 <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{ color:' #000',cursor: 'pointer'}" type="md-list" size="24"></Icon>

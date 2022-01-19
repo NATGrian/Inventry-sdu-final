@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="peopleroles-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/people">เจ้าหน้าที่เกี่ยวข้อง</BreadcrumbItem>
@@ -19,12 +19,12 @@
         <Row ref="addgroups" :model="addgroup" type="flex" justify="center" align="middle">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input v-model="addgroup.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
+          <Input element-id="addgroup-role" v-model="addgroup.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input v-model="addgroup.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
+          <Input element-id="addgroup-description" v-model="addgroup.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ตำแหน่งคนในองกรณ์" />
           </Col>
 
         </Row>

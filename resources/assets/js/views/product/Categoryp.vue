@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="categoryproduct-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>ประเภทผลิตภัณฑ์</BreadcrumbItem>
@@ -18,12 +18,12 @@
         <Row type="flex" justify="center" align="middle" :model="categorys">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input v-model="categorys.name" placeholder="เช่น กึ่งสำเร็จรูป" clearable />
+          <Input element-id="categorys-name" v-model="categorys.name" placeholder="เช่น กึ่งสำเร็จรูป" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input v-model="categorys.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับ ผลิตภัณฑ์" />
+          <Input element-id="categorys-description" v-model="categorys.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับ ผลิตภัณฑ์" />
           </Col>
 
         </Row>

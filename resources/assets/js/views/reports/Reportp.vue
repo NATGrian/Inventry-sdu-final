@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="reportproduct-container">
     <Row type="flex" justify="space-between" align="middle">
       <Col>
       <Breadcrumb>
@@ -45,7 +45,7 @@
               <Col span="6">
               <FormItem :label-width="65">
                 <span slot="label">ผลิตภัณฑ์:</span>
-                <Select v-model="formstockcard.itemname" filterable placeholder="ค้นหาผลิตภัณฑ์" style="width: 100%;">
+                <Select element-id="formstockcard-itemname" v-model="formstockcard.itemname" filterable placeholder="ค้นหาผลิตภัณฑ์" style="width: 100%;">
                   <Option v-for="i in datalist" :value="i.itemname" :key="i.id">{{i.itemname}}</Option>
                 </Select>
               </FormItem>
@@ -53,13 +53,13 @@
               <Col span="6">
               <FormItem :label-width="100">
                 <span slot="label" >ขนาดบรรจุ</span>
-                <Input v-model="formstockcard.packing"  style="width: 100%" />
+                <Input element-id="formstockcard-packing" v-model="formstockcard.packing"  style="width: 100%" />
               </FormItem>
               </Col>
               <Col span="6">
               <FormItem :label-width="60">
                 <span slot="label" >หน่วย</span>
-                <Input v-model="formstockcard.unit"  style="width: 100%" />
+                <Input element-id="formstockcard-unit" v-model="formstockcard.unit"  style="width: 100%" />
               </FormItem>
               </Col>
               <Col span="5">
@@ -74,7 +74,7 @@
               <Col span="12">
               <FormItem :label-width="120">
                 <span slot="label">ตั้งค่าช่วงเวลา</span>
-                <DatePicker confirm type="daterange" format="yyyy-MM-dd" @on-change="daterange" show-week-numbers v-model="formstockcard.dates" placeholder="Select date" style="width: 75%;"></DatePicker>
+                <DatePicker element-id="formstockcard-date" confirm type="daterange" format="yyyy-MM-dd" @on-change="daterange" show-week-numbers v-model="formstockcard.dates" placeholder="Select date" style="width: 75%;"></DatePicker>
               </FormItem>
               </Col>
             </Row>

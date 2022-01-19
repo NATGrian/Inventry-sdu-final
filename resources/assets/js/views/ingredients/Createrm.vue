@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="Createingredients-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/ingredients/list">วัตถุดิบ</BreadcrumbItem>
@@ -27,14 +27,14 @@
             <Col span="10" class="left-Formitem">
             <FormItem prop="rc_no">
               <span slot="label" style="width: 10%;">RC / NO:</span>
-              <Input type="text" v-model="formcreate.rc_no" placeholder="" style="width: 65%;" size="small" />
+              <Input type="text" element-id="formcreate-rc_no" v-model="formcreate.rc_no" placeholder="" style="width: 65%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="10" class="right-Formitem">
             <FormItem prop="itemname">
               <span slot="label" style="width: 10%;">รายการ:</span>
-              <Input type="text" v-model="formcreate.itemname" placeholder="" style="width: 65%;" size="small" />
+              <Input type="text" element-id="formcreate-itemname" v-model="formcreate.itemname" placeholder="" style="width: 65%;" size="small" />
 
             </FormItem>
             </Col>
@@ -43,14 +43,14 @@
             <Col span="10" class="left-Formitem">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">เลขที่ใบส่งของ:</span>
-              <Input type="text" v-model="formcreate.invoice_no" placeholder="" style="width: 50%;" size="small" />
+              <Input type="text" element-id="formcreate-invoice_no" v-model="formcreate.invoice_no" placeholder="" style="width: 50%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="10" class="right-Formitem">
             <FormItem prop="qty">
               <span slot="label" style="width: 10%;">จำนวน:</span>
-              <InputNumber size="small" v-model="formcreate.qty" @on-blur="focusOut" controls-outside />
+              <InputNumber size="small" element-id="formcreate-qty" v-model="formcreate.qty" @on-blur="focusOut" controls-outside />
             </FormItem>
             </Col>
           </Row>
@@ -58,14 +58,14 @@
             <Col span="9" class="left-Formitem">
             <FormItem prop="LOT_no">
               <span slot="label" style="width: 10%;">Lot No:</span>
-              <Input type="text" v-model="formcreate.LOT_no" placeholder="" style="width: 55%;" size="small" />
+              <Input type="text" element-id="formcreate-LOT_no" v-model="formcreate.LOT_no" placeholder="" style="width: 55%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="13" class="right-Formitem">
             <FormItem prop="PID">
               <span slot="label" style="width: 10%;">ผู้ผลิต/ผู้จัดจำหน่าย:</span>
-              <Select v-model="formcreate.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
+              <Select element-id="formcreate-peoples" v-model="formcreate.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
                 <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
               </Select>
 
@@ -77,20 +77,20 @@
             <Col span="7" class="left-Formitem">
             <FormItem prop="MFG">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป ที่ผลิต (MFG.):</span>
-              <DatePicker v-model="formcreate.MFG"  @on-change="(value) => this.formcreate.MFG=value.toString()"  size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-MFG" v-model="formcreate.MFG"  @on-change="(value) => this.formcreate.MFG=value.toString()"  size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
 
             </FormItem>
             </Col>
             <Col span="7">
             <FormItem prop="EXP">
               <span slot="label" style="width: 10px;word-wrap: break-word;">ว-ด-ป หมดอายุ (EXP.):</span>
-              <DatePicker v-model="formcreate.EXP"  @on-change="(value) => this.formcreate.EXP=value.toString()"  size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-EXP" v-model="formcreate.EXP"  @on-change="(value) => this.formcreate.EXP=value.toString()"  size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
             <Col span="7" class="right-Formitem">
             <FormItem prop="import_at">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker v-model="formcreate.import_at" @on-change="(value) => this.formcreate.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-import_at" v-model="formcreate.import_at" @on-change="(value) => this.formcreate.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
           </Row>
@@ -98,7 +98,7 @@
             <Col span="11">
             <FormItem prop="storageID">
               <span slot="label" style="width: 10%;">สถานที่จัดเก็บ</span>
-              <Select v-model="formcreate.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
+              <Select element-id="formcreate-storage" v-model="formcreate.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
                 <Option v-for="s in storage" :value="s.id" :key="s.id">{{ s.name }}</Option>
               </Select>
 
@@ -107,7 +107,7 @@
             <Col span="11">
             <FormItem prop="CID">
               <span slot="label" style="width: 10%;">ประเภทของสิ่งของ</span>
-              <Select v-model="formcreate.CID" placeholder="ค้นหา ประเภท" style="width: 50%;" size="small">
+              <Select element-id="formcreate-categorys" v-model="formcreate.CID" placeholder="ค้นหา ประเภท" style="width: 50%;" size="small">
                 <Option v-for="c in categorys" :value="c.id" :key="c.id">{{ c.name }}</Option>
               </Select>
 
@@ -125,7 +125,7 @@
             <Col span="24">
             <div class="input-role">
               <span style="display: inline-block;">รายละเอียดย่อย</span>
-              <Input v-model="formcreate.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
+              <Input element-id="formcreate-name" v-model="formcreate.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>

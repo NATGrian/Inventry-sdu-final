@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="exportproduct-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem to="/product/list">ผลิตภัณฑ์</BreadcrumbItem>
@@ -32,7 +32,7 @@
             <Col span="10" offset="1">
             <FormItem prop="PID">
               <span slot="label">ผู้เบิก</span>
-              <Select v-model="formexportp.PID" placeholder="ค้นหา ผู้เบิก" style="width: 80%;" size="small">
+              <Select element-id="formexport-peoples" v-model="formexportp.PID" placeholder="ค้นหา ผู้เบิก" style="width: 80%;" size="small">
                 <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
               </Select>
             </FormItem>
@@ -42,14 +42,14 @@
             <Col span="8">
             <FormItem prop="export_at">
               <span slot="label">ว-ด-ป นำออก:</span>
-              <DatePicker v-model="formexportp.export_at" @on-change="(value) => this.formexportp.export_at=value.toString()" size="small" type="date" placeholder="Select date" style="width: 50%;" />
+              <DatePicker element-id="formexport-export_at" v-model="formexportp.export_at" @on-change="(value) => this.formexportp.export_at=value.toString()" size="small" type="date" placeholder="Select date" style="width: 50%;" />
 
             </FormItem>
             </Col>
             <Col span="9">
             <FormItem prop="order_no" :label-width="133">
               <span slot="label" style="text-align: center;">เลขที่ใบสังงาน</span>
-              <Input v-model="formexportp.order_no" type="text" placeholder="" style="width: 60%;" />
+              <Input element-id="formexport-order_no" v-model="formexportp.order_no" type="text" placeholder="" style="width: 60%;" />
             </FormItem>
             </Col>
           </Row>
@@ -57,7 +57,7 @@
             <Col span="20">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">ค้นหารายการ:</span>
-              <Select v-model="formexportp.search"  @on-select="select" filterable prefix="md-barcode" style="width: 80%;">
+              <Select element-id="formexport-search" v-model="formexportp.search"  @on-select="select" filterable prefix="md-barcode" style="width: 80%;">
                 <Option v-for="g in getsearch" :value="g.id" :key="g.id">{{ g.itemname }} - {{ g.Batch_no }}</Option>
             </Select>
 
@@ -82,7 +82,7 @@
 
                 <td>
                   <FormItem prop="qty_charge" :label-width="0">
-                    <InputNumber v-model="formexportp.qty_charge" size="small" @on-change="focusOut" controls-outside />
+                    <InputNumber element-id="formexport-qty_charge" v-model="formexportp.qty_charge" size="small" @on-change="focusOut" controls-outside />
                   </FormItem>
                 </td>
                 <td>
@@ -101,7 +101,7 @@
             <Col span="20">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">หมายเหตุ:</span>
-              <Input v-model="formexportp.description" type="textarea" placeholder="" style="width: 80%;" />
+              <Input element-id="formexport-description" v-model="formexportp.description" type="textarea" placeholder="" style="width: 80%;" />
             </FormItem>
             </Col>
 

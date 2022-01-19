@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="users-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>เจ้าหน้าที่จัดการระบบ</BreadcrumbItem>
@@ -19,14 +19,14 @@
             <Row type="flex" justify="center">
               <Col span="11" class="profile-input">
               <FormItem label="ชื่อจริง" prop="firstname">
-                <Input v-model="formcreateUser.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
+                <Input element-id="formcreateUser-firstname" v-model="formcreateUser.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
               </FormItem>
 
               </Col>
               <br>
               <Col span="11" class="profile-input" offset="1">
               <FormItem label="นามสกุล" prop="lastname">
-                <Input v-model="formcreateUser.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
+                <Input element-id="formcreateUser-lastname" v-model="formcreateUser.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
               </FormItem>
 
               </Col>
@@ -35,13 +35,13 @@
             <Row type="flex" justify="center">
               <Col span="11" class="profile-input">
               <FormItem label="Email" prop="email">
-                <Input v-model="formcreateUser.email" prefix="ios-mail" style="width: auto" type="email" clearable />
+                <Input element-id="formcreateUser-email" v-model="formcreateUser.email" prefix="ios-mail" style="width: auto" type="email" clearable />
               </FormItem>
               </Col>
               <br>
               <Col span="11" class="profile-input" offset="1">
               <FormItem label="เบอร์ติดต่อ" prop="phone">
-                <Input v-model="formcreateUser.phone" prefix="md-closed-captioning" style="width: auto" type="tel" clearable />
+                <Input element-id="formcreateUser-phone" v-model="formcreateUser.phone" prefix="md-closed-captioning" style="width: auto" type="tel" clearable />
               </FormItem>
 
               </Col>
@@ -50,7 +50,7 @@
             <Row type="flex" justify="center">
               <Col span="11" class="profile-input">
               <FormItem label="รหัสผ่าน" prop="password">
-                <Input v-model="formcreateUser.password" prefix="ios-lock" style="width: auto" type="password" password />
+                <Input element-id="formcreateUser-password" v-model="formcreateUser.password" prefix="ios-lock" style="width: auto" type="password" password />
               </FormItem>
               </Col>
               <br>
@@ -71,7 +71,7 @@
 
               <Col :md="16" :sm="22" class="profile-input">
               <FormItem label="ตำแหน่ง" prop="name">
-                <Select v-model="formcreateUser.role_id" filterable>
+                <Select element-id="formcreateUser-role" v-model="formcreateUser.role_id" filterable>
                   <Option v-for="item in roledata" :value="item.id" :key="item.id">{{ item.role }}</Option>
                 </Select>
               </FormItem>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="reportingredients-container">
     <Row type="flex" justify="space-between" align="middle">
       <Col>
       <Breadcrumb>
@@ -45,13 +45,13 @@
               <Col span="10">
               <FormItem :label-width="120">
                 <span slot="label">ตั้งค่าช่วงเวลา</span>
-                <DatePicker confirm type="daterange" format="yyyy-MM-dd" @on-change="daterange" show-week-numbers  v-model="formstockcard.dates" placeholder="Select date" style="width: 95%;"></DatePicker>
+                <DatePicker element-id="formstockcard-date" confirm type="daterange" format="yyyy-MM-dd" @on-change="daterange" show-week-numbers  v-model="formstockcard.dates" placeholder="Select date" style="width: 95%;"></DatePicker>
               </FormItem>
               </Col>
               <Col span="6">
               <FormItem :label-width="60">
                 <span slot="label">รายการ:</span>
-                <Select v-model="formstockcard.name_rm" filterable placeholder="ค้นหาวัตถุดิบ" style="width: 100%;">
+                <Select element-id="formstockcard-itemname" v-model="formstockcard.name_rm" filterable placeholder="ค้นหาวัตถุดิบ" style="width: 100%;">
                   <Option v-for="i in itemname" :value="i.itemname" :key="i.id">{{i.itemname}}</Option>
                 </Select>
               </FormItem>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="people-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>เจ้าหน้าที่ที่เกี่ยวข้อง</BreadcrumbItem>
@@ -20,12 +20,12 @@
           <Row type="flex" justify="center" ref="addpeoples">
             <Col :md="8" :sm="12" class="profile-input">
             <span style="width: 100%;">ชื่อจริง</span>
-            <Input v-model="addpeoples.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
+            <Input element-id="addpeoples-firstname" v-model="addpeoples.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
             </Col>
             <br>
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">นามสกุล</span>
-            <Input v-model="addpeoples.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
+            <Input element-id="addpeoples-lastname" v-model="addpeoples.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
             </Col>
           </Row>
 
@@ -33,7 +33,7 @@
           <Row type="flex" justify="center">
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">ตำแหน่ง</span>
-            <Select v-model="addpeoples.GID" filterable>
+            <Select element-id="addpeoples-groups" v-model="addpeoples.GID" filterable>
               <Option v-for="g in groups" :value="g.id" :key="g.id">{{ g.role }}</Option>
             </Select>
             </Col>
@@ -42,7 +42,7 @@
           <Row type="flex" justify="center">
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">รายละเอียด</span>
-            <Input v-model="addpeoples.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="......" />
+            <Input element-id="addpeoples-description" v-model="addpeoples.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="......" />
             </Col>
           </Row>
           </Col>

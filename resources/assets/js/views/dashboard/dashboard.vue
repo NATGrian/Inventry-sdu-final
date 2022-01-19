@@ -1,6 +1,6 @@
 <template>
 
-  <div class="container-fluid">
+  <div class="container-fluid" id="dashboard-container">
     <Breadcrumb>
         <BreadcrumbItem to="/dashboard">Dashboard</BreadcrumbItem>
         <BreadcrumbItem to="/dashboard">หน้าหลัก</BreadcrumbItem>

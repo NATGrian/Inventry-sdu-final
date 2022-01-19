@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" id="storage-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>สถานที่เก็บ</BreadcrumbItem>
@@ -17,12 +17,12 @@
         <Row type="flex" justify="center" align="middle" :model="storages">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input v-model="storages.name" placeholder="เช่น สถานที่เก็บ1" clearable />
+          <Input element-id="storages-name" v-model="storages.name" placeholder="เช่น สถานที่เก็บ1" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input v-model="storages.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับเก็บ วัตถุดิบ" />
+          <Input element-id="storages-description" v-model="storages.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับเก็บ วัตถุดิบ" />
           </Col>
 
         </Row>
