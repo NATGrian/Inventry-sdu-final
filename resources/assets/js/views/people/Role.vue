@@ -10,13 +10,13 @@
 
       <Col>
       <Button id="btn-addgroups" type="primary" @click="addgroups = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
-      <Modal id="addgroups" v-model="addgroups" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
+      <Modal id="addgroups-modal" v-model="addgroups" title="เพิ่มตำแหน่ง" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มตำแหน่ง</span>
         </p>
 
-        <Row ref="addgroups" :model="addgroup" type="flex" justify="center" align="middle">
+        <Row ref="addgroup" :model="addgroup" type="flex" justify="center" align="middle">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
           <Input element-id="addgroup-role" v-model="addgroup.role" placeholder="เช่น ผู้ปฎิบัติงาน" clearable />
@@ -230,11 +230,11 @@ export default {
       this.$refs.html2Pdf.generatePdf();
     },
     ok() {
-      post("/api-inv/addgroups", this.addgroups)
+      post("/api-inv/addgroups", this.addgroup)
         .then((res) => {
           if (res.data.succeed) {
             this.addgroups = false;
-            this.groups.unshift(res.data.groups);
+            this.groups.unshift(res.data.group);
           }
           this.$Message.info("สำเร็จ");
         })
@@ -246,7 +246,7 @@ export default {
         });
     },
     cancel() {
-      this.$refs.addgroups.resetFields();
+
       this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {

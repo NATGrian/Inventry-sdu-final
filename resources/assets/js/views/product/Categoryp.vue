@@ -164,14 +164,9 @@ export default {
       },
       columns: [
         {
-          type: "selection",
-          width: 50,
-          align: "center",
-        },
-        {
           title: "Name",
           key: "name",
-          width: 200,
+          width: 250,
           align: "center",
         },
         {

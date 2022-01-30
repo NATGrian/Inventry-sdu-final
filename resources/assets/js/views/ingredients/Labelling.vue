@@ -329,7 +329,7 @@ export default {
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
       const timestamps =
-        "ภาพรวมการบันทึก นำเข้า - จ่ายออก (วัตถุดิบ)" + date + " " + time;
+        "บันทึกการรับวัตถุดิบและบรรจุภัณฑ์ (ฉลากปิด)" + date + " " + time;
       this.filename = timestamps;
     },
     exportpdf() {

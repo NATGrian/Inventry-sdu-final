@@ -8,7 +8,7 @@
     <Row type="flex" justify="center" align="middle">
       <Col>
       <Button id="btn_addmember" type="primary" @click="addmember = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
-      <Modal v-model="addmember" id="addmember" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="700">
+      <Modal v-model="addmember" id="addmember-modal" title="เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ" @on-ok="addusers" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="700">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มเจ้าหน้าที่ เข้าสู่ระบบ</span>
