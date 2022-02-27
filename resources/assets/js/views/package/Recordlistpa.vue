@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid" id="recordlistproduct-container">
+  <div class="container-fluid" id="recordlistingredients-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/product/list">ผลิตภัณฑ์</BreadcrumbItem>
+      <BreadcrumbItem to="/package/list">บรรจุุภัณฑ์</BreadcrumbItem>
       <BreadcrumbItem>ภาพรวมการบันทึก นำเข้า - จ่ายออก</BreadcrumbItem>
     </Breadcrumb>
     <br>
@@ -11,14 +11,14 @@
       <Dropdown>
         <Button type="primary" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;"> บันทึก </Button>
         <DropdownMenu slot="list">
-          <DropdownItem><Button to="/product/import" long size="small" type="text" icon="md-add" ghost style="color: #000;">บันทึก - นำเข้า</Button></DropdownItem>
-          <DropdownItem><Button to="/product/export" long size="small" type="text" icon="md-add" ghost style="color: #000;">บันทึก - จ่ายออก</Button></DropdownItem>
+          <DropdownItem><Button to="/package/import" long size="small" type="text" icon="md-add" ghost style="color: #000;">บันทึก - นำเข้า</Button></DropdownItem>
+          <DropdownItem><Button to="/package/export" long size="small" type="text" icon="md-add" ghost style="color: #000;">บันทึก - จ่ายออก</Button></DropdownItem>
         </DropdownMenu>
       </Dropdown>
       </Col>
 
       <Col>
-      <Button type="primary" to="/report/products" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">สต็อกการ์ด</Button>
+      <Button type="primary" to="/report/package" icon="md-checkmark-circle-outline" style="background-color: rgb(0, 0, 0); border-color: white;">สต็อกการ์ด</Button>
 
       </Col>
 
@@ -43,8 +43,8 @@
       <template slot="pdf-content">
         <Row type="flex" justify="center" align="middle">
           <Col>
-          <h3 v-if="this.switch111">บันทึกการรับผลิตภัณฑ์กึ่งสำเร็จรูปและสำเร็จรูปเข้าคลังสินค้า</h3>
-          <h3 v-else>บันทึกการจ่ายออกผลิตภัณฑ์กึ่งสำเร็จรูปและสำเร็จรูป</h3>
+          <h3 v-if="this.switch111">บันทึกการรับบรรจุุภัณฑ์ (PACKAGING RECEIVING LOGBOOK)</h3>
+          <h3 v-else>บันทึกการจ่ายบรรจุุภัณฑ์ (PACKAGING RECEIVING LOGBOOK)</h3>
           </Col>
         </Row>
         <br>
@@ -52,26 +52,33 @@
           <Col span="24">
           <table class="_table" ref="selection">
             <thead>
-              <tr id="_header-table">
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">วันที่รับ</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">รายการ</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">เลขที่ครั้งที่ผลิต</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">วันที่ผลิต</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">วันหมดอายุ</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">จำนวน</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ผู้ส่ง</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ผู้ตรวจรับ</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">สถานที่จัดเก็บ</th>
-                <th style="font-size: 10px;padding: 8px 1px;min-width: 80px;">หมายเหตุ</th>
+              <tr>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">R/C No.</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">รายการ</th>
+                <th colspan="3" rowspan="1" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ว-ด-ป</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">เลขที่ใบส่งของ</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">รุ่นที่ผลิต (Lot No.)</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">จำนวนที่รับ</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ผู้ผลิต/ผู้จัดจำหน่าย</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ชื่อผู้ตรวจรับ</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">สถานที่จัดเก็บ</th>
+                <th colspan="1" rowspan="2" scope="colgroup" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">หมายเหตุ</th>
+              </tr>
+              <tr style="background-color: transparent;">
+                <th scope="col" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">รับเข้า</th>
+                <th scope="col" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">ผลิต</th>
+                <th scope="col" style="font-size: 10px;padding: 8px 1px;min-width: 80px;">หมดอายุ</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="im in datarecord" :key="im.id">
-                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.import_at}}</td>
+                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.rc_no}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.itemname}}</td>
-                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.Batch_no}}</td>
+                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.import_at}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.MFG}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.EXP}}</td>
+                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.invoice_no}}</td>
+                <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.LOT_no}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.qty_charge}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.pfname}}</td>
                 <td style="font-size: 10px;padding: 8px 1px;min-width: 80px;width: 80px;">{{im.ufname}}</td>
@@ -88,9 +95,11 @@
             <thead>
               <tr id="_header-table">
                 <th style="font-size: 10px;">ว-ด-ป นำออก</th>
+                <th style="font-size: 10px;">R/C No.</th>
                 <th style="font-size: 10px;min-width: 80px;width: 80px;">รายการ</th>
-                <th style="font-size: 10px;">เลขที่ใบสั่งงาน</th>
                 <th style="font-size: 10px;">จำนวนที่จ่ายออก</th>
+                <th style="font-size: 10px;">ใช้สำหรับผลิต (รหัสผลิตภัณฑ์)</th>
+                <th style="font-size: 10px;">Lot No.</th>
                 <th style="font-size: 10px;">ผู้เบิก</th>
                 <th style="font-size: 10px;">ผู้ปฏิบัติ</th>
                 <th style="font-size: 10px;">หมายเหตุ</th>
@@ -99,9 +108,11 @@
             <tbody>
               <tr v-for="ie in datarecord1" :key="ie.id">
                 <td style="font-size: 10px;">{{ie.export_at}}</td>
+                <td style="font-size: 10px;">{{ie.rc_no}}</td>
                 <td style="font-size: 10px;min-width: 80px;width: 80px;">{{ie.itemname}}</td>
-                <td style="font-size: 10px;">{{ie.order_no}}</td>
                 <td style="font-size: 10px;">{{ie.qty_charge}}</td>
+                <td style="font-size: 10px;">{{ie.code_product}}</td>
+                <td style="font-size: 10px;">{{ie.LOT_no}}</td>
                 <td style="font-size: 10px;">{{ie.pfname}}</td>
                 <td style="font-size: 10px;">{{ie.ufname}}</td>
                 <td style="font-size: 10px;">{{ie.description}}</td>
@@ -134,7 +145,7 @@
     </Row>
     <br>
     <Row type="flex" justify="center">
-      <Table height="500" border ref="selection" :columns="columns" :data="datarecord" size="small" :loading="loading" v-if="this.switch111">
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="this.switch111" size="small" :loading="loading">
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
@@ -144,14 +155,14 @@
           <Page :current="recordtotal.current_page" :total="recordtotal.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal.per_page"/>
         </template>
       </Table>
-      <Table height="500" border ref="selection" :columns="columns1" :data="datarecord1" size="small" :loading="loading" v-else>
+      <Table height="400" max-height="450" border ref="selection" :columns="columns1" :data="datarecord1" size="small" :loading="loading" v-else>
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show1(index)">View</Button>
           <Button type="error" size="small" @click="remove1(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :current="recordtotal1.current_page" :total="recordtotal1.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal1.per_page"/>
+          <Page :current="recordtotal1.current_page" :total="recordtotal1.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal1.per_page"	/>
         </template>
       </Table>
     </Row>
@@ -161,11 +172,15 @@
         <span>ข้อมูล นำเข้าของ: {{ showdataim.itemname }}</span>
       </p>
       <Row type="flex" justify="center" align="middle" :gutter="16">
-
         <Col>
-        <span> <b style="color: #000;">เลขที่ครั้งที่ผลิต :</b> {{ showdataim.Batch_no }} </span>
+        <span> <b style="color: #000;">RC no :</b> {{ showdataim.rc_no }} </span>
         </Col>
-
+        <Col>
+        <span> <b style="color: #000;">เลขที่ ใบส่งของ :</b> {{ showdataim.invoice_no }} </span>
+        </Col>
+        <Col>
+        <span> <b style="color: #000;">รุ่นที่ผลิต (Lot No.) :</b> {{ showdataim.LOT_no }} </span>
+        </Col>
       </Row>
       <Row type="flex" justify="space-around" align="middle">
         <Col span="12">
@@ -199,18 +214,18 @@
           </Col>
         </Row>
         </Col>
-        <Divider />
+        <Divider/>
         <Row type="flex" justify="center" align="middle" :gutter="16">
-          <Col>
-          <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataim.pfname }} </span>
-          </Col>
-          <Col>
-          <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataim.ufname }} </span>
-          </Col>
-          <Col>
-          <span> <b style="color: #000;">สถานที่จัดเก็บ :</b> {{ showdataim.name }} </span>
-          </Col>
-        </Row>
+        <Col>
+        <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataim.pfname }} </span>
+        </Col>
+        <Col>
+        <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataim.ufname }} </span>
+        </Col>
+        <Col>
+        <span> <b style="color: #000;">สถานที่จัดเก็บ :</b> {{ showdataim.name }} </span>
+        </Col>
+      </Row>
       </Row>
 
     </Modal>
@@ -221,21 +236,21 @@
       </p>
       <Row type="flex" justify="center" align="middle" :gutter="16">
         <Col>
-        <span> <b style="color: #000;">เลขที่ใบสั่งงาน :</b> {{ showdataex.order_no }} </span>
+        <span> <b style="color: #000;">RC no :</b> {{ showdataex.rc_no }} </span>
         </Col>
         <Col>
-        <span> <b style="color: #000;">วันที่จ่ายออก :</b> {{ showdataex.export_at }} </span>
+        <span> <b style="color: #000;">ใช้สำหรับผลิต (รหัสผลิตภัณฑ์) :</b> {{ showdataex.code_product }} </span>
+        </Col>
+        <Col>
+        <span> <b style="color: #000;">รุ่นที่ผลิต (Lot No.) :</b> {{ showdataex.LOT_no }} </span>
         </Col>
       </Row>
       <Row type="flex" justify="space-around" align="middle">
         <Col span="12">
-        <Divider>เจ้าหน้าที่</Divider>
-        <Row type="flex" justify="center" align="middle" :gutter="16">
+        <Divider>ว / ด / ป</Divider>
+        <Row type="flex" justify="center" align="middle">
           <Col>
-          <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataex.pfname }} </span>
-          </Col>
-          <Col>
-          <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataex.ufname }} </span>
+          <span> <b style="color: #000;">วันที่จ่ายออก :</b> {{ showdataex.export_at }} </span>
           </Col>
         </Row>
         </Col>
@@ -252,7 +267,15 @@
           </Col>
         </Row>
         </Col>
-
+        <Divider/>
+        <Row type="flex" justify="center" align="middle" :gutter="16">
+        <Col>
+        <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataex.pfname }} </span>
+        </Col>
+        <Col>
+        <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataex.ufname }} </span>
+        </Col>
+      </Row>
       </Row>
     </Modal>
     <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
@@ -271,7 +294,6 @@
   </div>
 </template>
 
-
 <script>
 import VueHtml2pdf from "vue-html2pdf";
 import { get, del } from "../../helpers/api";
@@ -288,39 +310,47 @@ export default {
       filename: "",
       search: "",
       deletingIndex: "",
-      switch111: true,
       deletingform: {
-        deletingID: "",
+        deletingID: 1,
         checkstatus: "",
-        idproduct: 1,
         deqty_charge: 0,
+        idpack: 1,
       },
-      showdataex: {
-
-      },
-      showdataim: {
-
-      },
+      switch111: true,
+      showdataex: {},
+      showdataim: {},
       columns: [
         {
           title: "ว / ด / ป",
           key: "import_at",
           width: 100,
           align: "center",
+          sortable: true,
+        },
+        {
+          title: "เลขที่ ใบส่งของ",
+          key: "invoice_no",
+          width: 100,
+          align: "center",
+        },
+        {
+          title: "RC / no",
+          key: "rc_no",
+          width: 100,
+          align: "center",
         },
         {
           title: "รายการ",
           key: "itemname",
-          width: 200,
+          width: 140,
           align: "center",
         },
         {
-          title: "เลขที่การผลิต",
-          key: "Batch_no",
-          width: 100,
+          title: "Lot No.",
+          key: "LOT_no",
+          width: 80,
           align: "center",
         },
-
         {
           title: "จำนวน",
           key: "qty_charge",
@@ -330,24 +360,25 @@ export default {
         {
           title: "จำนวนคงเหลือ",
           key: "qty_balance",
-          width: 100,
+          width: 90,
           align: "center",
         },
         {
           title: "สถานะ",
           key: "status",
-          width: 100,
+          width: 75,
           align: "center",
         },
         {
           title: "ผู้ปฎิบัติ",
           key: "ufname",
-          width: 170,
+          width: 100,
           align: "center",
         },
         {
           title: "ตัวเลือก",
           key: "action",
+          // fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -359,18 +390,30 @@ export default {
           key: "export_at",
           width: 100,
           align: "center",
+          sortable: true,
         },
-
         {
-          title: "เลขที่ใบสั่งงาน",
-          key: "order_no",
-          width: 150,
+          title: "ใช้สำหรับผลิต (รหัสผลิตภัณฑ์)",
+          key: "code_product",
+          width: 125,
+          align: "center",
+        },
+        {
+          title: "RC / no",
+          key: "rc_no",
+          width: 100,
           align: "center",
         },
         {
           title: "รายการ",
           key: "itemname",
-          width: 150,
+          width: 120,
+          align: "center",
+        },
+        {
+          title: "Lot No.",
+          key: "LOT_no",
+          width: 80,
           align: "center",
         },
         {
@@ -388,13 +431,13 @@ export default {
         {
           title: "สถานะ",
           key: "status",
-          width: 100,
+          width: 75,
           align: "center",
         },
         {
           title: "ผู้ปฎิบัติ",
           key: "ufname",
-          width: 150,
+          width: 100,
           align: "center",
         },
         {
@@ -423,7 +466,6 @@ export default {
       this.getrecordpackagings();
     },
     timestamp() {
-      
       const today = new Date();
       const date =
         today.getFullYear() +
@@ -434,7 +476,7 @@ export default {
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
       const timestamps =
-        "ภาพรวมการบันทึก นำเข้า - จ่ายออก (ผลิตภัณฑ์) " + date + " " + time;
+        "ภาพรวมการบันทึก นำเข้า - จ่ายออก (บรรจุุภัณฑ์)" + date + " " + time;
       this.filename = timestamps;
     },
     tableItems(value) {
@@ -454,10 +496,10 @@ export default {
               list1.itemname.toLowerCase().indexOf(value.toLowerCase()) > -1
           );
         } else {
-          this.getrecordproduct();
+          this.getrecordpackagings();
         }
       } else {
-        this.getrecordproduct();
+        this.getrecordpackagings();
       }
     },
     exportcsv() {
@@ -472,34 +514,41 @@ export default {
       this.modalshowecord = true;
       this.showdataim.EXP = this.datarecord[index].EXP;
       this.showdataim.MFG = this.datarecord[index].MFG;
+      this.showdataim.LOT_no = this.datarecord[index].LOT_no;
+      this.showdataim.name = this.datarecord[index].name;
       this.showdataim.created_at = this.datarecord[index].created_at;
       this.showdataim.description = this.datarecord[index].description;
       this.showdataim.import_at = this.datarecord[index].import_at;
-      this.showdataim.Batch_no = this.datarecord[index].Batch_no;
+      this.showdataim.invoice_no = this.datarecord[index].invoice_no;
       this.showdataim.itemname = this.datarecord[index].itemname;
-      this.showdataim.name = this.datarecord[index].name;
       this.showdataim.pfname = this.datarecord[index].pfname;
       this.showdataim.qty_balance = this.datarecord[index].qty_balance;
       this.showdataim.qty_charge = this.datarecord[index].qty_charge;
+      this.showdataim.rc_no = this.datarecord[index].rc_no;
       this.showdataim.status = this.datarecord[index].status;
       this.showdataim.ufname = this.datarecord[index].ufname;
+      this.showdataim.updated_at = this.datarecord[index].updated_at;
     },
     show1(index) {
       this.modalshowecord1 = true;
+      this.showdataex.LOT_no = this.datarecord1[index].LOT_no;
+      this.showdataex.code_product = this.datarecord1[index].code_product;
       this.showdataex.created_at = this.datarecord1[index].created_at;
       this.showdataex.description = this.datarecord1[index].description;
       this.showdataex.export_at = this.datarecord1[index].export_at;
-      this.showdataex.order_no = this.datarecord1[index].order_no;
+      this.showdataex.invoice_no = this.datarecord1[index].invoice_no;
       this.showdataex.itemname = this.datarecord1[index].itemname;
       this.showdataex.pfname = this.datarecord1[index].pfname;
       this.showdataex.qty_balance = this.datarecord1[index].qty_balance;
       this.showdataex.qty_charge = this.datarecord1[index].qty_charge;
+      this.showdataex.rc_no = this.datarecord1[index].rc_no;
       this.showdataex.status = this.datarecord1[index].status;
       this.showdataex.ufname = this.datarecord1[index].ufname;
+      this.showdataex.updated_at = this.datarecord1[index].updated_at;
     },
     confirm() {
       if (this.deletingform.checkstatus === "นำเข้า") {
-        del("/api-inv/importdeleting-p", this.deletingform).then((res) => {
+        del("/api-inv/importdeleting-pp", this.deletingform).then((res) => {
           this.$Loading.finish();
           this.datarecord.splice(this.deletingIndex, 1);
           if (res.data.DELETE) {
@@ -509,7 +558,7 @@ export default {
         });
       }
       if (this.deletingform.checkstatus === "นำออก") {
-        del("/api-inv/exportdeleting-p", this.deletingform).then((res) => {
+        del("/api-inv/exportdeleting-pp", this.deletingform).then((res) => {
           this.$Loading.finish();
           this.datarecord1.splice(this.deletingIndex, 1);
           if (res.data.DELETE) {
@@ -526,7 +575,7 @@ export default {
       this.deletingIndex = index;
       this.deletingform.deletingID = this.datarecord[index].id;
       this.deletingform.deqty_charge = this.datarecord[index].qty_charge;
-      this.deletingform.idproduct = this.datarecord[index].idproduct;
+      this.deletingform.idpack = this.datarecord[index].idpack;
       this.deletingform.checkstatus = this.datarecord[index].status;
       this.modalConfirm = true;
     },
@@ -534,23 +583,24 @@ export default {
       this.deletingIndex = index;
       this.deletingform.deletingID = this.datarecord1[index].id;
       this.deletingform.deqty_charge = this.datarecord1[index].qty_charge;
-      this.deletingform.idproduct = this.datarecord1[index].idproduct;
+      this.deletingform.idpack = this.datarecord1[index].idpack;
       this.deletingform.checkstatus = this.datarecord1[index].status;
       this.modalConfirm = true;
     },
-    getrecordproduct() {
-      let dataFetchUrl = `/api-inv/recordproduct?page=${this.currentPage}`;
+    getrecordpackagings() {
+      let dataFetchUrl = `/api-inv/recordpackagings?page=${this.currentPage}`;
       get(dataFetchUrl).then((res) => {
-        this.datarecord = res.data.recordproduct.data;
-        this.datarecord1 = res.data.recordproduct1.data;
-        this.recordtotal = res.data.recordproduct;
-        this.recordtotal1 = res.data.recordproduct1;
+        this.datarecord = res.data.record.data;
+        this.datarecord1 = res.data.record1.data;
+        this.recordtotal = res.data.record;
+        this.recordtotal1 = res.data.record1;
         this.loading = false;
       });
     },
   },
+
   created() {
-    this.getrecordproduct();
+    this.getrecordpackagings();
     setInterval(() => {
       this.timestamp();
     }, 1000);

@@ -32,15 +32,26 @@ export function put(url, payload) {
     })
 }
 // delete is reserved keyword
-export function del(url) {
+export function del(url, payload) {
     return axios({
         method: 'DELETE',
         url: url,
+        data: payload,
         headers: {
             'Authorization': `Bearer ${Auth.state.api_token}`
         }
     })
 }
+// export function del1(url, payload) {
+//     return axios({
+//         method: 'DELETE',
+//         url: url,
+//         data: payload,
+//         headers: {
+//             'Authorization': `Bearer ${Auth.state.api_token}`
+//         }
+//     })
+// }
 
 export function interceptors(cb) {
     axios.interceptors.response.use((res) => {

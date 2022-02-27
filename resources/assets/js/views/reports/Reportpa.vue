@@ -5,7 +5,7 @@
       <Breadcrumb>
         <BreadcrumbItem to="/dashboard">Dashboard</BreadcrumbItem>
         <BreadcrumbItem to="/report">สต็อกการ์ด</BreadcrumbItem>
-        <BreadcrumbItem>สต็อกการ์ดสำหรับ วัตถุดิบ</BreadcrumbItem>
+        <BreadcrumbItem>สต็อกการ์ดสำหรับ บรรจุภัณฑ์</BreadcrumbItem>
       </Breadcrumb>
       </Col>
 
@@ -32,8 +32,8 @@
         <br>
         <Row type="flex" justify="center" align="middle">
 
-          <Col span="10">
-          <div class="stockcard-labal">สร้างสต็อกการ์ดสำหรับ วัตถุดิบ</div>
+          <Col span="12">
+          <div class="stockcard-labal">สร้างสต็อกการ์ดสำหรับ บรรจุภัณฑ์</div>
 
           </Col>
         </Row>
@@ -43,10 +43,10 @@
           <Form ref="formstockcard" :model="formstockcard">
             <Row type="flex" justify="center" align="middle">
 
-              <Col span="10">
+              <Col span="12">
               <FormItem :label-width="60">
                 <span slot="label">รายการ:</span>
-                <Select element-id="formstockcard-itemname" v-model="formstockcard.name_rm" filterable placeholder="ค้นหาวัตถุดิบ" style="width: 100%;">
+                <Select element-id="formstockcard-itemname" v-model="formstockcard.name_pack" filterable placeholder="ค้นหาบรรจุภัณฑ์" style="width: 100%;">
                   <Option v-for="i in itemname" :value="i.itemname" :key="i.id">{{i.itemname}}</Option>
                 </Select>
               </FormItem>
@@ -74,7 +74,7 @@
       <Col span="24">
       <Table height="600" :columns="columns" :data="reportdata" size="small" ref="selection" :loading="loading">
         <template slot="footer">
-          <Page :current="recordtotal.current_page" :total="recordtotal.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal.per_page"/>
+          <Page :current="recordtotal.current_page" :total="recordtotal.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal.per_page" />
         </template>
       </Table>
       </Col>
@@ -87,17 +87,17 @@
             <br>
             <Row type="flex" justify="center" align="middle">
               <Col span="12">
-              <div class="stockcard-labal">สต๊อกการ์ดสำหรับวัตถุดิบ</div>
+              <div class="stockcard-labal">สต๊อกการ์ดสำหรับบรรจุภัณฑ์</div>
               </Col>
             </Row>
             <br>
             <Row type="flex" justify="center" align="middle">
               <Col style="font-size: 20px;color: #000;">
-              <div style="height: 45px;">ชื่อวัตถุดิบ </div>
+              <div style="height: 45px;">ชื่อบรรจุภัณฑ์ </div>
               </Col>
-              
+
               <Col span="11" offset="1" style="color: #000;font-size: 20px;">
-              <div style="border-bottom: 1px dotted #000;height: 45px;"> : {{formstockcard.name_rm}}</div>
+              <div style="border-bottom: 1px dotted #000;height: 45px;"> : {{formstockcard.name_pack}}</div>
               </Col>
 
             </Row>
@@ -107,7 +107,7 @@
           </div>
           </Col>
         </Row>
-        <br>
+
         <Row type="flex" justify="center">
           <Col span="24">
           <table class="_table">
@@ -127,7 +127,7 @@
                 <th scope="col">จ่ายออก</th>
                 <th scope="col">คงเหลือ</th>
               </tr>
-              <tr v-for="ri in reportdata" :key="ri.id" id="content__table" >
+              <tr v-for="ri in reportdata" :key="ri.id" id="content__table">
                 <td>{{ ri.imex_at }}</td>
                 <td>{{ ri.invoice_no }}</td>
                 <td>{{ ri.rc_no }}</td>
@@ -161,7 +161,7 @@ export default {
       filename: "",
       itemname: [],
       formstockcard: {
-        name_rm: "",
+        name_pack: "",
       },
       columns: [
         {
@@ -258,14 +258,13 @@ export default {
         today.getDate();
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
-      const timestamps =
-        "สต๊อคการ์ดสำหรับวัตถุดิบ" + date + " " + time;
+      const timestamps = "สต๊อคการ์ดสำหรับบรรจุภัณฑ์" + date + " " + time;
       this.filename = timestamps;
     },
     Submit() {
       this.$Loading.start();
 
-      post("/api-inv/reports/ingredients", this.formstockcard)
+      post("/api-inv/reports/packagings", this.formstockcard)
         .then((res) => {
           this.$Loading.finish();
           this.loading = true;
@@ -284,7 +283,7 @@ export default {
         });
     },
     getreports() {
-      let dataFetchUrl = `/api-inv/reports/getingredients?page=${this.currentPage}`;
+      let dataFetchUrl = `/api-inv/reports/getpackagings?page=${this.currentPage}`;
 
       get(dataFetchUrl).then((res) => {
         if (res.data.succeed) {
@@ -304,7 +303,7 @@ export default {
       this.$refs.html2Pdf.generatePdf();
     },
     getingredients() {
-      get("/api-inv/ingredients").then((res) => {
+      get("/api-inv/packagings").then((res) => {
         this.itemname = res.data.list;
         this.loading = false;
       });
@@ -326,7 +325,7 @@ export default {
 }
 .stockcardform {
   background-color: rgb(255, 255, 255);
-  min-height: 100px;
+  min-height: 150px;
 }
 .stockcard-labal {
   display: inline-block;

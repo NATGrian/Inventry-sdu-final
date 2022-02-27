@@ -152,7 +152,7 @@ export default {
     get("/api-inv/peoples").then((res) => {
       this.peoples = res.data.peoples;
     });
-    get("/api-inv/recordingredients").then((res) => {
+    get("/api-inv/getexport").then((res) => {
       this.getsearch = res.data.record;
     });
   },

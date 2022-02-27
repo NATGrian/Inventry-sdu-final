@@ -2,7 +2,7 @@
   <div class="container-fluid" id="listingredients-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem>รายการวัตถุดิบคงเหลือ</BreadcrumbItem>
+      <BreadcrumbItem>รายการวัตถุดิบ</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
@@ -76,13 +76,14 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datalist" size="small" :loading="loading">
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" :data="datalist" size="small" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
+
         </template>
         <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
+          <Page :current="recorddata.current_page" :total="recorddata.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recorddata.per_page" />
         </template>
       </Table>
 
@@ -135,7 +136,7 @@ export default {
       filename: "",
       search: "",
       deletingIndex: "",
-      deletingID: "",
+      deletingID: 1,
       columns: [
         {
           title: "ชื่อวัตถุดิบ",
@@ -146,13 +147,13 @@ export default {
         {
           title: "จำนวนคงเหลือ",
           key: "qty",
-          width: 100,
+          width: 120,
           align: "center",
         },
         {
           title: "ประเภท",
           key: "name",
-          width: 150,
+          width: 130,
           align: "center",
         },
         {
@@ -164,7 +165,6 @@ export default {
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -178,9 +178,19 @@ export default {
         created_at: "",
         image: "",
       },
+      recorddata: {},
+      currentPage: 1,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getingredients();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getingredients();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -245,8 +255,10 @@ export default {
       this.modalConfirm = true;
     },
     getingredients() {
-      get("/api-inv/ingredients").then((res) => {
-        this.datalist = res.data.list;
+      let dataFetchUrl = `/api-inv/getingredients?page=${this.currentPage}`;
+      get(dataFetchUrl).then((res) => {
+        this.datalist = res.data.list.data;
+        this.recorddata = res.data.list;
         this.loading = false;
       });
     },

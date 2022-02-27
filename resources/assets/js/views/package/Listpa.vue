@@ -1,36 +1,21 @@
 <template>
-  <div class="container-fluid" id="storage-container">
+  <div class="container-fluid" id="listpackagings-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem>สถานที่เก็บ</BreadcrumbItem>
+      <BreadcrumbItem>รายการบรรจุุภัณฑ์</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
+      <Col>
+      <Tooltip content="ไปยังหน้าการบันทึก" placement="top">
+        <Button to="/package/recordlist" type="primary" icon="ios-link" style="background-color: rgb(0, 0, 0); border-color: white;">บันทึก</Button>
+      </Tooltip>
+      </Col>
 
       <Col>
-      <Button type="primary" @click="addstorage = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มที่เก็บ</Button>
-      <Modal v-model="addstorage" title="เพิ่มที่เก็บ" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
-        <p slot="header" style="color:#0040FF;text-align:center">
-          <Icon type="md-add"></Icon>
-          <span>เพิ่มสถานที่</span>
-        </p>
-        <Row type="flex" justify="center" align="middle" :model="storages">
-          <Col span="18">
-          <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input element-id="storages-name" v-model="storages.name" placeholder="เช่น สถานที่เก็บ1" clearable />
-          </Col>
-
-          <Col span="18">
-          <span style="width: 100%;">รายละเอียด</span>
-          <Input element-id="storages-description" v-model="storages.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับเก็บ วัตถุดิบ" />
-          </Col>
-
-        </Row>
-
-        <div slot="footer" style="text-align:center">
-          <Button icon="md-checkmark" size="large" style="color:#000;text-align:center border: #000 solid 2px; background-color: rgb(255, 255, 255);" @click="ok">ยืนยันการเพิ่ม</Button>
-        </div>
-      </Modal>
+      <Tooltip content="ใช้สำหรับเพิ่มบรรจุุภัณฑ์ใหม่" placement="top">
+        <Button to="/package/create" type="primary" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มบรรจุุภัณฑ์ใหม่</Button>
+      </Tooltip>
       </Col>
 
       <Col span="9" offset="1">
@@ -54,7 +39,7 @@
       <template slot="pdf-content">
         <Row type="flex" justify="center" align="middle">
           <Col>
-          <h1>รายการ สถานที่เก็บ</h1>
+          <h1>รายการ คงเหลือบรรจุุภัณฑ์</h1>
           </Col>
         </Row>
         <br>
@@ -63,14 +48,18 @@
           <table class="_table" ref="selection">
             <thead>
               <tr id="_header-table">
-                <th>สถานที่เก็บ</th>
-                <th>เกี่ยวกับ</th>
+                <th>ชื่อบรรจุุภัณฑ์</th>
+                <th>จำนวนคงเหลือ</th>
+                <th>ประเภท</th>
+                <th>ว-ด-ป เข้าระบบ</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="s in storage" :key="s.id">
-                <td>{{s.name}}</td>
-                <td>{{s.description}}</td>
+              <tr v-for="ic in datalist" :key="ic.id">
+                <td>{{ic.itemname}}</td>
+                <td>{{ic.qty}}</td>
+                <td>{{ic.name}}</td>
+                <td>{{ic.created_at}}</td>
               </tr>
             </tbody>
           </table>
@@ -87,33 +76,30 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table  height="300" max-height="500" border ref="selection" :columns="columns" :data="storage" size="small" :loading="loading">
-
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" :data="datalist" size="small" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
-
+        <template slot="footer">
+          <Page :current="recorddata.current_page" :total="recorddata.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recorddata.per_page" />
+        </template>
       </Table>
 
     </Row>
-    <Modal v-model="modalshow" title="ข้อมูล สถานที่" footer-hide width="500" draggable>
-      <Row type="flex" justify="center" align="middle">
-        <Col>
-        <div style="width: 100%; "> <b style="color: #000;">ชื่อ เรียก:</b> {{ showdata.name }} </div>
+    <Modal v-model="modalshow" title="ข้อมูล บรรจุุภัณฑ์" footer-hide width="700" draggable>
+      <Row type="flex" justify="space-around" align="middle">
+        <Col span="11">
+        <p> <b style="color: #000;">ชื่อบรรจุุภัณฑ์:</b> {{ showdata.itemname }} </p>
+        <p> <b style="color: #000;">จำนวนคงเหลือ:</b> {{ showdata.qty }} </p>
+        <p> <b style="color: #000;">ประเภท:</b> {{ showdata.name }} </p>
+        <p> <b style="color: #000;">ว-ด-ป เข้าระบบ:</b> {{ showdata.created_at }} </p>
+        </Col>
+        <Col span="11">
+        <img :src="`/images/packagings/${showdata.image}`" alt="">
         </Col>
       </Row>
-      <br />
-      <Row type="flex" justify="center" align="middle">
-        <Col>
-        <div> <b style="color: #000;">รายละเอียดย่อย:</b></div>
-        </Col>
-      </Row>
-      <Row type="flex" justify="center" align="middle">
-        <Col>
-        <div> {{ showdata.description }} </div>
-        </Col>
-      </Row>
+
     </Modal>
 
     <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
@@ -135,22 +121,16 @@
 
 <script>
 import VueHtml2pdf from "vue-html2pdf";
-import { get, post, del } from "../../helpers/api";
+import { get, del } from "../../helpers/api";
 export default {
   components: {
     VueHtml2pdf,
   },
-  props: {
-    Zindex: {
-      type: Number,
-      default: 2000,
-    },
-  },
+  
   data() {
     return {
       loading: true,
-      addstorage: false,
-      modalshow: false,      
+      modalshow: false,
       modalConfirm: false,
       filename: "",
       search: "",
@@ -158,15 +138,27 @@ export default {
       deletingID: "",
       columns: [
         {
-          title: "Name",
-          key: "name",
+          title: "ชื่อบรรจุุภัณฑ์",
+          key: "itemname",
           width: 200,
           align: "center",
         },
         {
-          title: "เกี่ยวกับ",
-          key: "description",
-          width: 250,
+          title: "จำนวนคงเหลือ",
+          key: "qty",
+          width: 100,
+          align: "center",
+        },
+        {
+          title: "ประเภท",
+          key: "name",
+          width: 150,
+          align: "center",
+        },
+        {
+          title: "ว-ด-ป เข้าระบบ",
+          key: "created_at",
+          width: 230,
           align: "center",
         },
         {
@@ -177,18 +169,27 @@ export default {
           slot: "action",
         },
       ],
-      storage: [],
-      storages: {
-        name: "",
-        description: "",
-      },
+      datalist: [],
       showdata: {
+        itemname: "",
+        qty: "",
         name: "",
-        description: "",
+        created_at: "",
+        image: "",
       },
+      recorddata: {},
+      currentPage: 1,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getpackagings();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getpackagings();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -199,21 +200,22 @@ export default {
         today.getDate();
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
-      const timestamps = "รายการสถานที่เก็บ " + date + " " + time;
+      const timestamps = "รายการคงเหลือ บรรจุุภัณฑ์ " + date + " " + time;
       this.filename = timestamps;
     },
     tableItems(value) {
-      const data = this.storage;
+      const data = this.datalist;
       if (value.length > 0) {
-        if (data.filter((storage) => storage.name === this.search)) {
-          this.storage = data.filter(
-            (storage) => storage.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+        if (data.filter((list) => list.itemname === this.search)) {
+          this.datalist = data.filter(
+            (list) =>
+              list.itemname.toLowerCase().indexOf(value.toLowerCase()) > -1
           );
         } else {
-          this.getstorages();
+          this.getpackagings();
         }
       } else {
-        this.getstorages();
+        this.getpackagings();
       }
     },
     exportcsv() {
@@ -224,36 +226,19 @@ export default {
     exportpdf() {
       this.$refs.html2Pdf.generatePdf();
     },
-    ok() {
-      post("/api-inv/storages", this.storages)
-        .then((res) => {
-          if (res.data.succeed) {
-            this.addstorage = false;
-            this.storage.unshift(res.data.storage);
-          }
-          this.$Message.info("สำเร็จ");
-        })
-        .catch((err) => {
-          if (err.response.status === 422) {
-            this.error = err.response.data;
-            this.$Message.error("เกิดข้อผิดพลาด");
-          }
-        });
-    },
-    cancel() {
-        this.storages.name = "",
-        this.storages.description = "",
-        this.$Message.info("ยกเลิกแล้ว");
-    },
+
     show(index) {
       this.modalshow = true;
-      this.showdata.name = this.storage[index].name;
-      this.showdata.description = this.storage[index].description;
+      this.showdata.itemname = this.datalist[index].itemname;
+      this.showdata.qty = this.datalist[index].qty;
+      this.showdata.name = this.datalist[index].name;
+      this.showdata.created_at = this.datalist[index].created_at;
+      this.showdata.image = this.datalist[index].image;
     },
     confirm() {
-      del("/api-inv/storages/" + this.deletingID).then((res) => {
+      del("/api-inv/packagings/" + this.deletingID).then((res) => {
         this.$Loading.finish();
-        this.storage.splice(this.deletingIndex, 1);
+        this.datalist.splice(this.deletingIndex, 1);
         if (res.data.DELETE) {
           this.modalConfirm = false;
         }
@@ -265,18 +250,21 @@ export default {
     },
     remove(index) {
       this.deletingIndex = index;
-      this.deletingID = this.storage[index].id;
+      this.deletingID = this.datalist[index].id;
       this.modalConfirm = true;
     },
-    getstorages() {
-      get("/api-inv/storages").then((res) => {
-        this.storage = res.data.storages;
+    getpackagings() {
+      let dataFetchUrl = `/api-inv/getpackagings?page=${this.currentPage}`;
+      get(dataFetchUrl).then((res) => {
+        this.datalist = res.data.list.data;
+        this.recorddata = res.data.list;
         this.loading = false;
       });
     },
   },
+
   created() {
-    this.getstorages();
+    this.getpackagings();
     setInterval(() => {
       this.timestamp();
     }, 1000);
@@ -285,5 +273,6 @@ export default {
 </script>
 
 <style>
+
 </style>
 

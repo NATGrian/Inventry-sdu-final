@@ -2,55 +2,58 @@
 
   <div class="container-fluid" id="dashboard-container">
     <Breadcrumb>
-        <BreadcrumbItem to="/dashboard">Dashboard</BreadcrumbItem>
-        <BreadcrumbItem to="/dashboard">หน้าหลัก</BreadcrumbItem>
+      <BreadcrumbItem to="/dashboard">Dashboard</BreadcrumbItem>
+      <BreadcrumbItem to="/dashboard">หน้าหลัก</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
       <Col>
-        <h1> ระบบคงคลังวัตถุดิบและผลิตภัณฑ์ สำหรับ คณะวิทยาศาสตร์เครื่องสําอาง</h1>
+      <h1> ระบบคงคลังวัตถุดิบและผลิตภัณฑ์ สำหรับห้องปฎิบัติการผลิตเครื่องสำอาง</h1>
+      </Col>
+      <Col>
+      <h3> คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยสวนดุสิต </h3>
       </Col>
     </Row>
     <br>
     <Row type="flex" justify="space-around" align="middle">
 
       <Col :md="5" :xs="22">
-        <Card :bordered="false" to="/ingredients/list">
-          <div style="text-align:center">
-            <Icon type="md-cube" size="40"/>
+      <Card :bordered="false" to="/ingredients/list">
+        <div style="text-align:center">
+          <Icon type="md-cube" size="40" />
 
-            <h5>วัตถุดิบคงเหลือ</h5>
-          </div>
-        </Card>
+          <h5>รายการวัตถุดิบ</h5>
+        </div>
+      </Card>
       </Col>
 
       <Col :md="5" :xs="22">
-        <Card :bordered="false" to="/product/list">
-          <div style="text-align:center">
-            <Icon type="md-cube" size="40"/>
+      <Card :bordered="false" to="/product/list">
+        <div style="text-align:center">
+          <Icon type="md-cube" size="40" />
 
-            <h5>ผลิตภัณฑ์คงเหลือ</h5>
-          </div>
-        </Card>
+          <h5>รายการผลิตภัณฑ์</h5>
+        </div>
+      </Card>
       </Col>
 
-      <Col  :md="5" :xs="22">
-        <Card :bordered="false" to="/member">
-          <div style="text-align:center">
-            <Icon type="md-contacts"  size="40"/>
+      <Col :md="5" :xs="22">
+      <Card :bordered="false" to="/member">
+        <div style="text-align:center">
+          <Icon type="md-contacts" size="40" />
 
-            <h5>เจ้าหน้าที่ดูแลระบบ</h5>
-          </div>
-        </Card>
+          <h5>เจ้าหน้าที่ดูแลระบบ</h5>
+        </div>
+      </Card>
       </Col>
 
-      <Col  :md="5" :xs="22">
-        <Card :bordered="false" to="/report">
-          <div style="text-align:center">
-            <Icon type="ios-paper" size="40" />
-            <h5>สต็อกการ์ด</h5>
-          </div>
-        </Card>
+      <Col :md="5" :xs="22">
+      <Card :bordered="false" to="/report">
+        <div style="text-align:center">
+          <Icon type="ios-paper" size="40" />
+          <h5>สต็อกการ์ด</h5>
+        </div>
+      </Card>
       </Col>
     </Row>
     <br>

@@ -1,9 +1,9 @@
 <template>
-  <div class="container-fluid" id="importingredients-container">
+  <div class="container-fluid" id="importpackagings-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/ingredients/list">วัตถุดิบ</BreadcrumbItem>
-      <BreadcrumbItem>บันทึกการนำเข้าวัตถุดิบ</BreadcrumbItem>
+      <BreadcrumbItem to="/package/list">บรรจุุภัณฑ์</BreadcrumbItem>
+      <BreadcrumbItem>บันทึกการนำเข้าบรรจุุภัณฑ์</BreadcrumbItem>
     </Breadcrumb>
     <br>
 
@@ -16,7 +16,7 @@
           <Row>
             <Col span="24">
             <div class="title-from1-rm">
-              บันทึกการนำเข้าวัตถุดิบ
+              บันทึกการนำเข้าบรรจุุภัณฑ์
             </div>
             </Col>
             <Col span="24" class="sub-title1-rm">
@@ -36,7 +36,7 @@
             <Col span="10" class="right-Formitem">
             <FormItem prop="itemname">
               <span slot="label" style="width: 10%;">รายการ:</span>
-              <Select element-id="formimport-itemname" v-model="formimport.itemname" @on-select="select" placeholder="ค้นหา วัตถุดิบ" style="width: 50%;" size="small" filterable>
+              <Select element-id="formimport-itemname" v-model="formimport.itemname" @on-select="select" placeholder="ค้นหา บรรจุุภัณฑ์" style="width: 50%;" size="small" filterable>
                 <Option v-for="i in itemrm" :value="i.id" :key="i.id">{{ i.itemname }}</Option>
               </Select>
 
@@ -94,7 +94,7 @@
             <Col span="7" class="right-Formitem">
             <FormItem prop="import_at">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker element-id="formimport-import_at" v-model="formimport.import_at" @on-change="(value) => this.formimport.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formimport-import_at" v-model="formimport.import_at" @on-change="(value) => this.formimport.import_at=value.toString()" size="small" type="date" :format="daterange" placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
           </Row>
@@ -168,7 +168,7 @@ export default {
     get("/api-inv/storages").then((res) => {
       this.storage = res.data.storages;
     });
-    get("/api-inv/ingredients").then((res) => {
+    get("/api-inv/packagings").then((res) => {
       this.itemrm = res.data.list;
     });
   },
@@ -292,27 +292,23 @@ export default {
   methods: {
     select(data) {
 
-      get("/api-inv/import/" + data.value).then((res) => {
+      get("/api-inv/import-pp/" + data.value).then((res) => {
         this.formimport.qtyimport = res.data.itemimport.qty;
         
       });
     },
     focusOut() {
-      this.formimport.qty_charge = parseFloat(
-        `${this.formimport.qty_charge.toFixed(2)}`
-      );
-      this.formimport.qty =
-        parseFloat(`${this.formimport.qtyimport.toFixed(2)}`) +
-        parseFloat(`${this.formimport.qty_charge.toFixed(2)}`);
+      this.formimport.qty_charge = parseFloat(`${this.formimport.qty_charge.toFixed(2)}`);
+      this.formimport.qty = parseFloat(`${this.formimport.qtyimport.toFixed(2)}`) + parseFloat(`${this.formimport.qty_charge.toFixed(2)}`);
     },
     handleSubmit() {
       this.formimport.UID = this.id
       this.$Loading.start();
-      post("/api-inv/ingredients/import", this.formimport)
+      post("/api-inv/packagings/import", this.formimport)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.succeed) {
-            this.$router.push("/ingredients/recordlist");
+            this.$router.push("/package/recordlist");
           }
           
         })

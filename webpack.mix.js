@@ -21,4 +21,6 @@ mix.styles([
    'public/css/main.css',
 ], 'public/css/all.css');
 
-mix.options({legacyNodePolyfills: false})
+mix.options({
+   legacyNodePolyfills: false
+})

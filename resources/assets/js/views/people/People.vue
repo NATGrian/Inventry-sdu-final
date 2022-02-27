@@ -114,13 +114,13 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table width="652" height="400" max-height="450" border ref="selection" :columns="columns" size="small" :data="datapeople" :loading="loading">
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" size="small" :data="datapeople" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
+          <Page :current="peoplespages.current_page" :total="peoplespages.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="peoplespages.per_page"/>
         </template>
       </Table>
     </Row>
@@ -204,7 +204,6 @@ export default {
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -218,9 +217,20 @@ export default {
         role: "",
         image: "",
       },
+      peoplespages: {},
+      currentPage: 1,
+      perPage: 10,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getpeople();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getpeople();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -305,8 +315,10 @@ export default {
       this.modalConfirm = true;
     },
     getpeople() {
-      get("/api-inv/peoples").then((res) => {
-        this.datapeople = res.data.peoples;
+      let dataFetchUrl = `/api-inv/getpeoples?page=${this.currentPage}`;
+      get(dataFetchUrl).then((res) => {
+        this.datapeople = res.data.peoples.data;
+        this.peoplespages = res.data.peoples;
         this.loading = false;
       });
     },

@@ -24,6 +24,14 @@ import importingredients from '../views/ingredients/Importrm.vue'
 import exportingredients from '../views/ingredients/Exportrm.vue'
 import labellingingredients from '../views/ingredients/Labelling.vue'
 
+import categorypackage from '../views/package/Categorypa.vue'
+import listpackage from '../views/package/Listpa.vue'
+import recordlistpackage from '../views/package/Recordlistpa.vue'
+import createpackage from '../views/package/Createpa.vue'
+import importpackage from '../views/package/Importpa.vue'
+import exportpackage from '../views/package/Exportpa.vue'
+import labellingpackage from '../views/package/Labellingpa.vue'
+
 import categoryproduct from '../views/product/Categoryp.vue'
 import listproduct from '../views/product/Listp.vue'
 import recordlistproduct from '../views/product/Recordlistp.vue'
@@ -33,6 +41,7 @@ import exportproduct from '../views/product/Exportp.vue'
 
 import report from '../views/reports/Report-select.vue'
 import reportingredients from '../views/reports/Reportrm.vue'
+import reportpackage from '../views/reports/Reportpa.vue'
 import reportproduct from '../views/reports/Reportp.vue'
 
 import ViewUI from 'view-design';
@@ -73,6 +82,7 @@ const router = new VueRouter({
 			path: '*',
 			component: NotFound,
 			meta: {
+				requiresAuth: true,
 				title: 'ระบบคงคลังออนไลน์ | ไม่พบหน้านี้'
 			}
 		},
@@ -136,6 +146,8 @@ const router = new VueRouter({
 			}
 		},
 
+//*ddd
+
 		{
 			path: '/ingredients/category',
 			component: categoryingredients,
@@ -148,19 +160,19 @@ const router = new VueRouter({
 		{
 			path: '/ingredients/list',
 			component: listingredients,
-			name: 'รายการวัตถุดิบคงเหลือ',
+			name: 'รายการวัตถุดิบ',
 			meta: {
 				requiresAuth: true,
-				title: 'ระบบคงคลังออนไลน์ | รายการวัตถุดิบคงเหลือ'
+				title: 'ระบบคงคลังออนไลน์ | รายการวัตถุดิบ'
 			}
 		},
 		{
 			path: '/ingredients/recordlist',
 			component: recordlistingredients,
-			name: 'ภาพรวมการบันทึก นำเข้า - จ่ายออก',
+			name: 'ภาพรวมการบันทึก นำเข้า - จ่ายออกวัตถุดิบ',
 			meta: {
 				requiresAuth: true,
-				title: 'ระบบคงคลังออนไลน์ | ภาพรวมการบันทึก นำเข้า - จ่ายออก'
+				title: 'ระบบคงคลังออนไลน์ | ภาพรวมการบันทึก นำเข้า - จ่ายออกวัตถุดิบ'
 			}
 		},
 		{
@@ -193,7 +205,71 @@ const router = new VueRouter({
 		{
 			path: '/ingredients/create-labelling',
 			component: labellingingredients,
-			name: 'สร้างฉลาก',
+			name: 'สร้างฉลากวัตถุดิบ',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สร้างฉลาก'
+			}
+		},
+
+		{
+			path: '/package/category',
+			component: categorypackage,
+			name: 'ประเภทของ บรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ประเภทของ บรรจุุภัณฑ์'
+			}
+		},
+		{
+			path: '/package/list',
+			component: listpackage,
+			name: 'รายการบรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | รายการบรรจุุภัณฑ์'
+			}
+		},
+		{
+			path: '/package/recordlist',
+			component: recordlistpackage,
+			name: 'ภาพรวมการบันทึก นำเข้า - จ่ายออกบรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | ภาพรวมการบันทึก นำเข้า - จ่ายออก'
+			}
+		},
+		{
+			path: '/package/create',
+			component: createpackage,
+			name: 'สร้างบรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สร้างบรรจุุภัณฑ์'
+			}
+		},
+		{
+			path: '/package/import',
+			component: importpackage,
+			name: 'บันทึกการนำเข้า-บรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | บันทึกการนำเข้า-บรรจุุภัณฑ์'
+			}
+		},
+		{
+			path: '/package/export',
+			component: exportpackage,
+			name: 'บันทึกการจ่ายออก-บรรจุุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | บันทึกการจ่ายออก-บรรจุุภัณฑ์'
+			}
+		},
+		{
+			path: '/package/create-labelling',
+			component: labellingpackage,
+			name: 'สร้างฉลากบรรจุุภัณฑ์',
 			meta: {
 				requiresAuth: true,
 				title: 'ระบบคงคลังออนไลน์ | สร้างฉลาก'
@@ -213,10 +289,10 @@ const router = new VueRouter({
 		{
 			path: '/product/list',
 			component: listproduct,
-			name: 'รายการผลิตภัณฑ์คงเหลือ',
+			name: 'รายการผลิตภัณฑ์',
 			meta: {
 				requiresAuth: true,
-				title: 'ระบบคงคลังออนไลน์ | รายการผลิตภัณฑ์คงเหลือ'
+				title: 'ระบบคงคลังออนไลน์ | รายการผลิตภัณฑ์'
 			}
 		},
 		{
@@ -276,6 +352,15 @@ const router = new VueRouter({
 			}
 		},
 		{
+			path: '/report/package',
+			component: reportpackage,
+			name: 'สต็อกการ์ด-บรรจุภัณฑ์',
+			meta: {
+				requiresAuth: true,
+				title: 'ระบบคงคลังออนไลน์ | สต็อกการ์ด-บรรจุภัณฑ์'
+			}
+		},
+		{
 			path: '/report/products',
 			component: reportproduct,
 			name: 'สต็อกการ์ด-ผลิตภัณฑ์',
@@ -304,10 +389,7 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some(record => record.meta.requiresAuth)) {
 		if (localStorage.getItem('api_token') === null) {
 			next({
-				path: '/login',
-				query: {
-					redirect: to.fullPath
-				}
+				path: '/login'
 			})
 		} else {
 			next()

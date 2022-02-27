@@ -34,7 +34,7 @@ class ProductsController extends Controller
             ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
             ->select('import_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
             ->orderBy('import_product_items.created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         $recordproduct1 = DB::table('export_product_items')
             ->join('users', 'export_product_items.UID', '=', 'users.id')
@@ -42,7 +42,7 @@ class ProductsController extends Controller
             ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
             ->select('export_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname')
             ->orderBy('export_product_items.created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return response()
             ->json([
@@ -50,7 +50,17 @@ class ProductsController extends Controller
                 'recordproduct1' => $recordproduct1
             ]);
     }
+    public function getproducts() {
+        $list = DB::table('item_products')
+            ->join('categorys_products', 'item_products.CID', '=', 'categorys_products.id')
+            ->select('item_products.*', 'categorys_products.name')->orderBy('created_at', 'desc')
+            ->paginate(10);
 
+        return response()
+            ->json([
+                'list' => $list
+            ]);
+    }
     public function getimport($id)
     {
         $Item = Item_products::findOrFail($id);
@@ -58,6 +68,21 @@ class ProductsController extends Controller
         return response()
             ->json([
                 'itemimport' => $Item
+            ]);
+    }
+    public function getexport()
+    {
+        $record = DB::table('import_product_items')
+        ->join('users', 'import_product_items.UID', '=', 'users.id')
+        ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
+        ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+        ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
+        ->select('import_product_items.*', 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
+        ->orderBy('import_product_items.import_at', 'desc') ->get();
+
+        return response()
+            ->json([
+                'recordproduct' => $record
             ]);
     }
     public function getsearch($id)
@@ -255,18 +280,26 @@ class ProductsController extends Controller
             ]);
     }
 
-    public function importdestroy($id)
+    public function importdestroy(Request $request)
     {
-        Import_product_items::where('id', $id)->delete();
+        $del = Item_products::where('id', $request->idproduct)->first();
+        $change_qty = $del->qty - $request->deqty_charge;
+        Item_products::where('id', $request->idproduct)
+            ->update(['qty' => $change_qty]);
+        Import_product_items::where('id', $request->idproduct)->delete();
         return response()
             ->json([
                 'DELETE' => true
             ]);
     }
 
-    public function exportdestroy($id)
+    public function exportdestroy(Request $request)
     {
-        Export_product_items::where('id', $id)->delete();
+        $del = Item_products::where('id', $request->idproduct)->first();
+        $change_qty = $del->qty + $request->deqty_charge;
+        Item_products::where('id', $request->idproduct)
+            ->update(['qty' => $change_qty]);
+        Export_product_items::where('id', $request->idproduct)->delete();
         return response()
             ->json([
                 'DELETE' => true
@@ -275,10 +308,7 @@ class ProductsController extends Controller
 
     public function reportsproduct (Request $request) 
     {
-        $startdate = new DateTime( $request->startdate);
-        $enddate = new DateTime($request->enddate);
-        $formatted_startdate = $startdate->format('Y-m-d');
-        $formatted_enddate = $enddate->format('Y-m-d');
+
 
         $record = DB::table('import_product_items')
             ->join('users', 'import_product_items.UID', '=', 'users.id')
@@ -296,8 +326,6 @@ class ProductsController extends Controller
                      'import_product_items.EXP',
                      'import_product_items.created_at'
             )
-            ->where('import_product_items.import_at', ">=", $formatted_startdate)
-            ->where('import_product_items.import_at', "<=", $formatted_enddate)
             ->where('item_products.itemname', $request->itemname)
             ->orderBy('import_product_items.import_at', 'desc')
             ->get();
@@ -316,12 +344,58 @@ class ProductsController extends Controller
                      'export_product_items.export_at as imex_at',
                      'export_product_items.created_at'
             )
-            ->where('export_product_items.export_at', ">=", $formatted_startdate)
-            ->where('export_product_items.export_at', "<=", $formatted_enddate)
             ->where('item_products.itemname', $request->itemname)
             ->orderBy('export_product_items.export_at', 'desc')
             ->get();
-            $mergeTbl = $record->merge($record1);
+            $mergeTbl = $record->merge($record1)->sortByDesc('imex_at')->paginate(15);
+
+        return response()
+            ->json([
+                'reportdata' => $mergeTbl,
+                'succeed' => true
+                // 'record1' => $record1
+            ]);
+        }
+        public function getreportsproduct (Request $request) 
+    {
+
+
+        $record = DB::table('import_product_items')
+            ->join('users', 'import_product_items.UID', '=', 'users.id')
+            ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
+            ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_products.itemname',
+                     'import_product_items.qty_charge as im_qty_charge',
+                     'import_product_items.qty_balance',
+                     'import_product_items.Batch_no',
+                     'import_product_items.import_at as imex_at',
+                     'import_product_items.MFG',
+                     'import_product_items.EXP',
+                     'import_product_items.created_at'
+            )
+            ->orderBy('import_product_items.import_at', 'desc')
+            ->get();
+
+        $record1 = DB::table('export_product_items')
+            ->join('users', 'export_product_items.UID', '=', 'users.id')
+            ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
+            ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
+            ->select(
+                     'users.firstname as ufname', 
+                     'peoples.firstname as pfname',
+                     'item_products.itemname',
+                     'export_product_items.qty_charge as ex_qty_charge',
+                     'export_product_items.qty_balance',
+                     'export_product_items.order_no',
+                     'export_product_items.export_at as imex_at',
+                     'export_product_items.created_at'
+            )
+            ->orderBy('export_product_items.export_at', 'desc')
+            ->get();
+            $mergeTbl = $record->merge($record1)->sortByDesc('imex_at')->paginate(15);
 
         return response()
             ->json([

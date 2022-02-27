@@ -1,28 +1,30 @@
 <template>
-  <div class="container-fluid" id="storage-container">
+  <div class="container-fluid" id="categoryingredients-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem>สถานที่เก็บ</BreadcrumbItem>
+      <BreadcrumbItem to="/ingredients/list">วัตถุดิบ</BreadcrumbItem>
+      <BreadcrumbItem>ประเภท</BreadcrumbItem>
     </Breadcrumb>
     <br>
     <Row type="flex" justify="center" align="middle">
 
       <Col>
-      <Button type="primary" @click="addstorage = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มที่เก็บ</Button>
-      <Modal v-model="addstorage" title="เพิ่มที่เก็บ" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
+      <Button type="primary" @click="addcategory = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มประเภทวัตถุดิบ</Button>
+      <Modal v-model="addcategory" title="เพิ่มประเภทวัตถุดิบ" @on-ok="ok" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
-          <span>เพิ่มสถานที่</span>
+          <span>เพิ่มประเภทวัตถุดิบ</span>
         </p>
-        <Row type="flex" justify="center" align="middle" :model="storages">
+
+        <Row type="flex" justify="center" align="middle" :model="categorys">
           <Col span="18">
           <span style="width: 100%;">ระบุชื่อเรียก</span>
-          <Input element-id="storages-name" v-model="storages.name" placeholder="เช่น สถานที่เก็บ1" clearable />
+          <Input element-id="categorys-name" v-model="categorys.name" placeholder="เช่น กึ่งสำเร็จรูป" clearable />
           </Col>
 
           <Col span="18">
           <span style="width: 100%;">รายละเอียด</span>
-          <Input element-id="storages-description" v-model="storages.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับเก็บ วัตถุดิบ" />
+          <Input element-id="categorys-description" v-model="categorys.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="เช่น ใช้สำหรับ วัตถุดิบ" />
           </Col>
 
         </Row>
@@ -54,7 +56,7 @@
       <template slot="pdf-content">
         <Row type="flex" justify="center" align="middle">
           <Col>
-          <h1>รายการ สถานที่เก็บ</h1>
+          <h1>รายการ ประเภทของวัตถุดิบ</h1>
           </Col>
         </Row>
         <br>
@@ -63,14 +65,14 @@
           <table class="_table" ref="selection">
             <thead>
               <tr id="_header-table">
-                <th>สถานที่เก็บ</th>
+                <th>ประเภท</th>
                 <th>เกี่ยวกับ</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="s in storage" :key="s.id">
-                <td>{{s.name}}</td>
-                <td>{{s.description}}</td>
+              <tr v-for="c in category" :key="c.id">
+                <td>{{c.name}}</td>
+                <td>{{c.description}}</td>
               </tr>
             </tbody>
           </table>
@@ -87,17 +89,18 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table  height="300" max-height="500" border ref="selection" :columns="columns" :data="storage" size="small" :loading="loading">
-
+      <Table highlight-row width="653" height="400" max-height="450" border ref="selection" :columns="columns" :data="category" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
-
+        <template slot="footer">
+          <Page :total="40" size="small" show-elevator show-sizer />
+        </template>
       </Table>
 
     </Row>
-    <Modal v-model="modalshow" title="ข้อมูล สถานที่" footer-hide width="500" draggable>
+    <Modal v-model="modalshow" title="ข้อมูล ประเภทของวัตถุดิบ" footer-hide width="500" draggable>
       <Row type="flex" justify="center" align="middle">
         <Col>
         <div style="width: 100%; "> <b style="color: #000;">ชื่อ เรียก:</b> {{ showdata.name }} </div>
@@ -149,13 +152,17 @@ export default {
   data() {
     return {
       loading: true,
-      addstorage: false,
-      modalshow: false,      
+      modalshow: false,
       modalConfirm: false,
       filename: "",
       search: "",
       deletingIndex: "",
       deletingID: "",
+      addcategory: false,
+      categorys: {
+        name: "",
+        description: "",
+      },
       columns: [
         {
           title: "Name",
@@ -172,16 +179,13 @@ export default {
         {
           title: "ตัวเลือก",
           key: "action",
+          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
         },
       ],
-      storage: [],
-      storages: {
-        name: "",
-        description: "",
-      },
+      category: [],
       showdata: {
         name: "",
         description: "",
@@ -199,21 +203,22 @@ export default {
         today.getDate();
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
-      const timestamps = "รายการสถานที่เก็บ " + date + " " + time;
+      const timestamps = "รายการประเภทสำหรับวัตถุดิบ " + date + " " + time;
       this.filename = timestamps;
     },
     tableItems(value) {
-      const data = this.storage;
+      const data = this.category;
       if (value.length > 0) {
-        if (data.filter((storage) => storage.name === this.search)) {
-          this.storage = data.filter(
-            (storage) => storage.name.toLowerCase().indexOf(value.toLowerCase()) > -1
+        if (data.filter((category) => category.name === this.search)) {
+          this.category = data.filter(
+            (category) =>
+              category.name.toLowerCase().indexOf(value.toLowerCase()) > -1
           );
         } else {
-          this.getstorages();
+          this.getcategory();
         }
       } else {
-        this.getstorages();
+        this.getcategory();
       }
     },
     exportcsv() {
@@ -225,11 +230,11 @@ export default {
       this.$refs.html2Pdf.generatePdf();
     },
     ok() {
-      post("/api-inv/storages", this.storages)
+      post("/api-inv/category", this.categorys)
         .then((res) => {
           if (res.data.succeed) {
-            this.addstorage = false;
-            this.storage.unshift(res.data.storage);
+            this.addcategory = false;
+            this.category.unshift(res.data.categorys);
           }
           this.$Message.info("สำเร็จ");
         })
@@ -241,19 +246,19 @@ export default {
         });
     },
     cancel() {
-        this.storages.name = "",
-        this.storages.description = "",
+      (this.categorys.name = ""),
+        (this.categorys.description = ""),
         this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
       this.modalshow = true;
-      this.showdata.name = this.storage[index].name;
-      this.showdata.description = this.storage[index].description;
+      this.showdata.name = this.category[index].name;
+      this.showdata.description = this.category[index].description;
     },
     confirm() {
-      del("/api-inv/storages/" + this.deletingID).then((res) => {
+      del("/api-inv/category/" + this.deletingID).then((res) => {
         this.$Loading.finish();
-        this.storage.splice(this.deletingIndex, 1);
+        this.category.splice(this.deletingIndex, 1);
         if (res.data.DELETE) {
           this.modalConfirm = false;
         }
@@ -265,18 +270,18 @@ export default {
     },
     remove(index) {
       this.deletingIndex = index;
-      this.deletingID = this.storage[index].id;
+      this.deletingID = this.category[index].id;
       this.modalConfirm = true;
     },
-    getstorages() {
-      get("/api-inv/storages").then((res) => {
-        this.storage = res.data.storages;
+    getcategory() {
+      get("/api-inv/category").then((res) => {
+        this.category = res.data.category;
         this.loading = false;
       });
     },
   },
   created() {
-    this.getstorages();
+    this.getcategory();
     setInterval(() => {
       this.timestamp();
     }, 1000);

@@ -88,14 +88,12 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table width="653" height="400" max-height="450" border ref="selection" :columns="columns" :data="category" :loading="loading">
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" :data="category" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
-        <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
-        </template>
+
       </Table>
 
     </Row>
@@ -178,7 +176,6 @@ export default {
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",

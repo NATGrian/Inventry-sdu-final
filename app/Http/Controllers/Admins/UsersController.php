@@ -26,6 +26,18 @@ class UsersController extends Controller
                 'users' => $users
             ]);
     }
+    public function getusers()
+    {
+        $users = DB::table('users')
+            ->join('usertypes', 'users.role_id', '=', 'usertypes.id')
+            ->select('users.*', 'usertypes.role')->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return response()
+            ->json([
+                'users' => $users
+            ]);
+    }
 
     public function getrole()
     {

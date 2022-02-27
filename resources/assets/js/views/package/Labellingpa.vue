@@ -1,8 +1,8 @@
 <template>
-  <div class="container-fluid" id="Labelling-container">
+  <div class="container-fluid" id="Labelling-container-package">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/ingredients/list">วัตถุดิบ</BreadcrumbItem>
+      <BreadcrumbItem to="/package/list">บรรจุภัณฑ์</BreadcrumbItem>
       <BreadcrumbItem>สร้างฉลากปิด</BreadcrumbItem>
     </Breadcrumb>
     <br>
@@ -19,7 +19,7 @@
             <Col span="11" v-for="(item, index) in formDynamic.items" style="border: #000 solid 1.5px;margin-bottom: 5px;" :key="index">
             <Row type="flex" justify="space-around" align="middle">
               <Col span="24" style="padding-left: 10px; margin: 5px; color: #000;">
-              <h4 style="color: #000;">ฉลากปิดวัตถุดิบหลังชั่งน้ำหนัก</h4>
+              <h4 style="color: #000;">ฉลากปิดบรรจุภัณฑ์หลังชั่งน้ำหนัก</h4>
               </Col>
             </Row>
             <br>
@@ -56,7 +56,7 @@
 
               <Col span="11">
               <FormItem :prop="'items.' + index + '.rm'">
-                <span slot="label">วัตถุดิบ</span>
+                <span slot="label">บรรจุภัณฑ์</span>
                 <div style="margin-left: 70px;border-bottom: 1px dotted #000;padding-left: 10px;color: #000;">: {{item.itemname}}</div>
 
               </FormItem>
@@ -132,7 +132,7 @@
               </Col>
               <Col span="8">
               <FormItem :prop="'items.' + index + '.code'">
-                <span slot="label">(FM-WH-03 R00)</span>
+                <span slot="label">(FM-WH-09 R00)</span>
 
               </FormItem>
               </Col>
@@ -151,7 +151,7 @@
         <Col span="11" v-for="(item, index) in formDynamic.items" style="border: #000 solid 1.5px;" :key="index">
         <Row type="flex" justify="space-around" align="middle">
           <Col span="24" style="padding-left: 10px; margin: 5px; color: #000;">
-          <h4>ฉลากปิดวัตถุดิบหลังชั่งน้ำหนัก</h4>
+          <h4>ฉลากปิดบรรจุภัณฑ์หลังชั่งน้ำหนัก</h4>
           </Col>
           <Col span="11">
           <FormItem :prop="'items.' + index + '.RC_no'">
@@ -179,8 +179,8 @@
 
           <Col span="11">
           <FormItem :prop="'items.' + index + '.rm'">
-            <span slot="label" style="width: 10%;">วัตถุดิบ:</span>
-            <Input size="small" type="text" v-model="item.itemname" style="width: 65%;" />
+            <span slot="label" style="width: 10%;">บรรจุภัณฑ์:</span>
+            <Input size="small" type="text" v-model="item.itemname" style="width: 60%;" />
           </FormItem>
           </Col>
 
@@ -314,7 +314,7 @@ export default {
   },
   methods: {
     focusOut(index) {
-      
+
       this.formDynamic.items[index].qty1 = parseFloat(
         `${this.formDynamic.items[index].qty1.toFixed(2)}`
       );
@@ -333,14 +333,14 @@ export default {
       const time =
         today.getHours() + "." + today.getMinutes() + "." + today.getSeconds();
       const timestamps =
-        "บันทึกการรับวัตถุดิบ (ฉลากปิด)" + date + " " + time;
+        "บันทึกการรับบรรจุภัณฑ์ (ฉลากปิด)" + date + " " + time;
       this.filename = timestamps;
     },
     exportpdf() {
       this.$refs.html2Pdf.generatePdf();
     },
-    getrecordingredients() {
-      get("/api-inv/Labellingingredients").then((res) => {
+    getrecordpackagings() {
+      get("/api-inv/Labellingpackagings").then((res) => {
         this.datarecord = res.data.labelling;
       });
     },
@@ -363,9 +363,9 @@ export default {
       this.$refs[name].resetFields();
     },
     handleAdd() {
-      this.index++
-  if(this.index < 7) {
-    this.formDynamic.items.push({
+      this.index++;
+      if(this.index < 7) {
+      this.formDynamic.items.push({
         value1: "",
         value2: "",
         RC_no: "",
@@ -381,14 +381,11 @@ export default {
         index: this.index,
         status: 1,
       })
-  }
-        
-      
-      
+      }
     },
     select(data) {
-      // console.log(data.label);
-      get("/api-inv/Labelling/search/" + data.value).then((res) => {
+
+      get("/api-inv/Labelling-pp/search/" + data.value).then((res) => {
         this.formDynamic.items[data.tag].itemname = res.data.labelling.itemname;
         this.formDynamic.items[data.tag].LOT_no = res.data.labelling.LOT_no;
         this.formDynamic.items[data.tag].qty2 = res.data.labelling.qty_charge;
@@ -401,7 +398,7 @@ export default {
     },
   },
   created() {
-    this.getrecordingredients();
+    this.getrecordpackagings();
     this.getproducts();
     setInterval(() => {
       this.timestamp();

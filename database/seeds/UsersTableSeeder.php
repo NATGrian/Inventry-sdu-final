@@ -37,6 +37,14 @@ class UsersTableSeeder extends Seeder
         		'name' => 'คลังเก็บวัตถุดิบ',
                 'description' => 'ที่เก็บวัตถุดิบ'
         	]);
+            Storages::create([
+        		'name' => 'คลังเก็บผลิตภัณฑ์',
+                'description' => 'ที่เก็บผลิตภัณฑ์'
+        	]);
+            Storages::create([
+        		'name' => 'คลังเก็บบรรจุภัณฑ์',
+                'description' => 'ที่เก็บบรรจุภัณฑ์'
+        	]);
         
     }
 }

@@ -154,13 +154,13 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table size="small" :loading="loading" width="860" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
+      <Table size="small" :loading="loading" height="400" max-height="450" border ref="selection" :columns="columns" :data="users">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :total="1" size="small" show-elevator show-sizer />
+         <Page :current="userspages.current_page" :total="userspages.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="userspages.per_page"/>
         </template>
       </Table>
 
@@ -245,7 +245,6 @@ export default {
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -317,19 +316,24 @@ export default {
       roledata: [],
       error: {},
       showdata: {
-        firstname: "",
-        role: "",
-        image: "",
-        email: "",
-        phone: "",
-        lastname: "",
       },
       modalshow: false,
       deletingIndex: "",
       deletingID: "",
+      userspages: {},
+      currentPage: 1,
+      perPage: 10,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getusers();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getusers();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -422,8 +426,10 @@ export default {
       this.modalConfirm = true;
     },
     getusers() {
-      get("/api-inv/users").then((res) => {
-        this.users = res.data.users;
+      let dataFetchUrl = `/api-inv/getusers?page=${this.currentPage}`;
+      get(dataFetchUrl).then((res) => {
+        this.users = res.data.users.data;
+        this.userspages = res.data.users;
         this.loading = false;
       });
     },

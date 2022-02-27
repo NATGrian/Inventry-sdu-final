@@ -43,8 +43,8 @@
       <template slot="pdf-content">
         <Row type="flex" justify="center" align="middle">
           <Col>
-          <h3 v-if="this.switch111">บันทึกการรับวัตถุดิบและวัสดุบรรจุ (RAW MATERIALS AND PACKAGING RECEIVING LOGBOOK)</h3>
-          <h3 v-else>บันทึกการจ่ายวัตถุดิบและวัสดุบรรจุ (RAW MATERIALS AND PACKAGING RECEIVING LOGBOOK)</h3>
+          <h3 v-if="this.switch111">บันทึกการรับวัตถุดิบ (RAW MATERIALS RECEIVING LOGBOOK)</h3>
+          <h3 v-else>บันทึกการจ่ายวัตถุดิบ (RAW MATERIALS RECEIVING LOGBOOK)</h3>
           </Col>
         </Row>
         <br>
@@ -145,24 +145,24 @@
     </Row>
     <br>
     <Row type="flex" justify="center">
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns" :data="datarecord" v-if="this.switch111" size="small" :loading="loading">
+      <Table  height="520" border ref="selection" :columns="columns" :data="datarecord" v-if="this.switch111" size="small" :loading="loading">
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
+          <Page :current="recordtotal.current_page" :total="recordtotal.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal.per_page"/>
         </template>
       </Table>
-      <Table width="872" height="400" max-height="450" border ref="selection" :columns="columns1" :data="datarecord1" size="small" :loading="loading" v-else>
+      <Table  height="520" border ref="selection" :columns="columns1" :data="datarecord1" size="small" :loading="loading" v-else>
 
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show1(index)">View</Button>
           <Button type="error" size="small" @click="remove1(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :total="40" size="small" show-elevator show-sizer />
+          <Page :current="recordtotal1.current_page" :total="recordtotal1.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal1.per_page"	/>
         </template>
       </Table>
     </Row>
@@ -214,18 +214,18 @@
           </Col>
         </Row>
         </Col>
-        <Divider/>
+        <Divider />
         <Row type="flex" justify="center" align="middle" :gutter="16">
-        <Col>
-        <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataim.pfname }} </span>
-        </Col>
-        <Col>
-        <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataim.ufname }} </span>
-        </Col>
-        <Col>
-        <span> <b style="color: #000;">สถานที่จัดเก็บ :</b> {{ showdataim.name }} </span>
-        </Col>
-      </Row>
+          <Col>
+          <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataim.pfname }} </span>
+          </Col>
+          <Col>
+          <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataim.ufname }} </span>
+          </Col>
+          <Col>
+          <span> <b style="color: #000;">สถานที่จัดเก็บ :</b> {{ showdataim.name }} </span>
+          </Col>
+        </Row>
       </Row>
 
     </Modal>
@@ -267,15 +267,15 @@
           </Col>
         </Row>
         </Col>
-        <Divider/>
+        <Divider />
         <Row type="flex" justify="center" align="middle" :gutter="16">
-        <Col>
-        <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataex.pfname }} </span>
-        </Col>
-        <Col>
-        <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataex.ufname }} </span>
-        </Col>
-      </Row>
+          <Col>
+          <span> <b style="color: #000;">ผู้ผลิต/ผู้จัดจำหน่าย :</b> {{ showdataex.pfname }} </span>
+          </Col>
+          <Col>
+          <span> <b style="color: #000;">ชื่อผู้ตรวจรับ :</b> {{ showdataex.ufname }} </span>
+          </Col>
+        </Row>
       </Row>
     </Modal>
     <Modal v-model="modalConfirm" width="500" draggable @on-ok="confirm" @on-cancel="cancelcf">
@@ -310,102 +310,75 @@ export default {
       filename: "",
       search: "",
       deletingIndex: "",
-      deletingID: "",
-      checkstatus: "",
+      deletingform: {
+        deletingID: 1,
+        checkstatus: "",
+        deqty_charge: 0,
+        idrm: 1,
+      },
       switch111: true,
-      showdataex: {
-        LOT_no: "",
-        code_product: "",
-        created_at: "",
-        description: "",
-        export_at: "",
-        invoice_no: "",
-        itemname: "",
-        pfname: "",
-        qty_balance: "",
-        qty_charge: "",
-        rc_no: "",
-        status: "",
-        ufname: "",
-        updated_at: "",
-      },
-      showdataim: {
-        EXP: "",
-        LOT_no: "",
-        MFG: "",
-        created_at: "",
-        description: "",
-        import_at: "",
-        invoice_no: "",
-        itemname: "",
-        name: "",
-        pfname: "",
-        qty_balance: "",
-        qty_charge: "",
-        rc_no: "",
-        status: "",
-        ufname: "",
-        updated_at: "",
-      },
+      showdataex: {},
+      showdataim: {},
       columns: [
         {
           title: "ว / ด / ป",
           key: "import_at",
           width: 100,
           align: "center",
+          sortable: true,
         },
         {
           title: "เลขที่ ใบส่งของ",
           key: "invoice_no",
-          width: 150,
+          width: 100,
           align: "center",
         },
         {
           title: "RC / no",
           key: "rc_no",
-          width: 150,
+          width: 100,
           align: "center",
         },
         {
           title: "รายการ",
           key: "itemname",
-          width: 250,
+          width: 140,
           align: "center",
         },
         {
           title: "Lot No.",
           key: "LOT_no",
-          width: 150,
+          width: 80,
           align: "center",
         },
         {
           title: "จำนวน",
           key: "qty_charge",
-          width: 150,
+          width: 90,
           align: "center",
         },
         {
           title: "จำนวนคงเหลือ",
           key: "qty_balance",
-          width: 150,
+          width: 90,
           align: "center",
         },
         {
           title: "สถานะ",
           key: "status",
-          width: 150,
+          width: 75,
           align: "center",
         },
         {
           title: "ผู้ปฎิบัติ",
           key: "ufname",
-          width: 250,
+          width: 100,
           align: "center",
         },
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
+          // fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -417,6 +390,7 @@ export default {
           key: "export_at",
           width: 100,
           align: "center",
+          sortable: true,
         },
         {
           title: "ใช้สำหรับผลิต (รหัสผลิตภัณฑ์)",
@@ -427,49 +401,48 @@ export default {
         {
           title: "RC / no",
           key: "rc_no",
-          width: 150,
+          width: 100,
           align: "center",
         },
         {
           title: "รายการ",
           key: "itemname",
-          width: 200,
+          width: 120,
           align: "center",
         },
         {
           title: "Lot No.",
           key: "LOT_no",
-          width: 150,
+          width: 80,
           align: "center",
         },
         {
           title: "จำนวน",
           key: "qty_charge",
-          width: 150,
+          width: 90,
           align: "center",
         },
         {
           title: "จำนวนคงเหลือ",
           key: "qty_balance",
-          width: 150,
+          width: 90,
           align: "center",
         },
         {
           title: "สถานะ",
           key: "status",
-          width: 150,
+          width: 75,
           align: "center",
         },
         {
           title: "ผู้ปฎิบัติ",
           key: "ufname",
-          width: 250,
+          width: 100,
           align: "center",
         },
         {
           title: "ตัวเลือก",
           key: "action",
-          fixed: "right",
           width: 150,
           align: "center",
           slot: "action",
@@ -477,9 +450,21 @@ export default {
       ],
       datarecord: [],
       datarecord1: [],
+      recordtotal: {},
+      recordtotal1: {},
+      currentPage: 1,
+      perPage: 10,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getrecordingredients();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getrecordingredients();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -562,8 +547,8 @@ export default {
       this.showdataex.updated_at = this.datarecord1[index].updated_at;
     },
     confirm() {
-      if (this.checkstatus === "นำเข้า") {
-        del("/api-inv/import/" + this.deletingID).then((res) => {
+      if (this.deletingform.checkstatus === "นำเข้า") {
+        del("/api-inv/importdeleting", this.deletingform).then((res) => {
           this.$Loading.finish();
           this.datarecord.splice(this.deletingIndex, 1);
           if (res.data.DELETE) {
@@ -572,8 +557,8 @@ export default {
           this.$Message.info("สำเร็จ");
         });
       }
-      if (this.checkstatus === "นำออก") {
-        del("/api-inv/export/" + this.deletingID).then((res) => {
+      if (this.deletingform.checkstatus === "นำออก") {
+        del("/api-inv/exportdeleting", this.deletingform).then((res) => {
           this.$Loading.finish();
           this.datarecord1.splice(this.deletingIndex, 1);
           if (res.data.DELETE) {
@@ -588,20 +573,28 @@ export default {
     },
     remove(index) {
       this.deletingIndex = index;
-      this.deletingID = this.datarecord[index].id;
-      this.checkstatus = this.datarecord[index].status;
+      this.deletingform.deletingID = this.datarecord[index].id;
+      this.deletingform.deqty_charge = this.datarecord[index].qty_charge;
+      this.deletingform.idrm = this.datarecord[index].idrm;
+      this.deletingform.checkstatus = this.datarecord[index].status;
       this.modalConfirm = true;
     },
     remove1(index) {
       this.deletingIndex = index;
-      this.deletingID = this.datarecord1[index].id;
-      this.checkstatus = this.datarecord1[index].status;
+      this.deletingform.deletingID = this.datarecord1[index].id;
+      this.deletingform.deqty_charge = this.datarecord1[index].qty_charge;
+      this.deletingform.idrm = this.datarecord1[index].idrm;
+      this.deletingform.checkstatus = this.datarecord1[index].status;
       this.modalConfirm = true;
     },
     getrecordingredients() {
-      get("/api-inv/recordingredients").then((res) => {
-        this.datarecord = res.data.record;
-        this.datarecord1 = res.data.record1;
+      let dataFetchUrl = `/api-inv/recordingredients?page=${this.currentPage}`;
+      get(dataFetchUrl).then((res) => {
+        this.datarecord = res.data.record.data;
+        this.datarecord1 = res.data.record1.data;
+        this.recordtotal = res.data.record;
+        this.recordtotal1 = res.data.record1;
+
         this.loading = false;
       });
     },

@@ -23,6 +23,18 @@ class PeopleController extends Controller
     			'peoples' => $peoples
     		]);
     }
+    public function getpeoples()
+    {
+        $peoples = DB::table('peoples')
+        ->join('people_groups', 'peoples.GID', '=', 'people_groups.id')
+        ->select('peoples.*', 'people_groups.role')
+            ->paginate(10);
+
+            return response()
+    		->json([
+    			'peoples' => $peoples
+    		]);
+    }
     public function getgroups()
     {
         $groups = People_groups::all();

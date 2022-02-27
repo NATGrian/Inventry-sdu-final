@@ -42,7 +42,7 @@
           <Form ref="formstockcard" :model="formstockcard">
             <Row type="flex" justify="center" align="middle">
 
-              <Col span="6">
+              <Col span="8">
               <FormItem :label-width="65">
                 <span slot="label">ผลิตภัณฑ์:</span>
                 <Select element-id="formstockcard-itemname" v-model="formstockcard.itemname" filterable placeholder="ค้นหาผลิตภัณฑ์" style="width: 100%;">
@@ -50,13 +50,13 @@
                 </Select>
               </FormItem>
               </Col>
-              <Col span="6">
+              <Col span="5">
               <FormItem :label-width="100">
                 <span slot="label" >ขนาดบรรจุ</span>
                 <Input element-id="formstockcard-packing" v-model="formstockcard.packing"  style="width: 100%" />
               </FormItem>
               </Col>
-              <Col span="6">
+              <Col span="5">
               <FormItem :label-width="60">
                 <span slot="label" >หน่วย</span>
                 <Input element-id="formstockcard-unit" v-model="formstockcard.unit"  style="width: 100%" />
@@ -70,14 +70,7 @@
               </Col>
 
             </Row>
-            <Row type="flex" justify="center" align="middle">
-              <Col span="12">
-              <FormItem :label-width="120">
-                <span slot="label">ตั้งค่าช่วงเวลา</span>
-                <DatePicker element-id="formstockcard-date" confirm type="daterange" format="yyyy-MM-dd" @on-change="daterange" show-week-numbers v-model="formstockcard.dates" placeholder="Select date" style="width: 75%;"></DatePicker>
-              </FormItem>
-              </Col>
-            </Row>
+
           </Form>
           </Col>
 
@@ -91,7 +84,13 @@
     <br>
     <Row type="flex" justify="center">
       <Col span="24">
-      <Table height="600" :columns="columns" :data="reportdata" size="small" ref="selection" :loading="loading"></Table>
+      <Table height="600" :columns="columns" :data="reportdata" size="small" ref="selection" :loading="loading">
+
+        <template slot="footer">
+          <Page :current="recordtotal.current_page" :total="recordtotal.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="recordtotal.per_page"/>
+        </template>
+
+      </Table>
       </Col>
     </Row>
     <vue-html2pdf :show-layout="false" :float-layout="true" :enable-download="true" :preview-modal="true" :paginate-elements-by-height="1100" :filename="filename" :pdf-quality="2" :manual-pagination="false" pdf-format="letter" pdf-content-width="100%" pdf-orientation="landscape" @hasStartedGeneration="hasStartedGeneration()" @hasGenerated="hasGenerated($event)" ref="html2Pdf">
@@ -99,7 +98,7 @@
         <Row type="flex" justify="center" align="middle">
           <Col span="18">
           <div class="stockcardform">
-            <br>
+
             <Row type="flex" justify="center" align="middle">
               <Col span="12">
               <div class="stockcard-labal">สต็อกการ์ดผลิตภัณฑ์กึ่งสำเร็จรูปและสำเร็จรูป</div>
@@ -108,20 +107,14 @@
             <br>
             <Row type="flex" justify="center" align="middle">
               <Col>
-              <span style="font-size: 20px;color: #000;">ชื่อวัตถุดิบ: {{formstockcard.itemname}} ขนาดบรรจุ: {{formstockcard.packing}} หน่วย: {{formstockcard.unit}} </span>
+              <span style="font-size: 15px;color: #000;">ชื่อวัตถุดิบ: {{formstockcard.itemname}} ขนาดบรรจุ: {{formstockcard.packing}} หน่วย: {{formstockcard.unit}} </span>
               </Col>
             </Row>
-            <Row type="flex" justify="center" align="middle">
-              <Col>
-              <span>ช่วงเวลา: {{formstockcard.startdate}} ถึง {{formstockcard.enddate}}</span>
-              </Col>
-            </Row>
-            <Row>
-            </Row>
+
           </div>
           </Col>
         </Row>
-        <br>
+
         <Row type="flex" justify="center">
           <Col span="24">
           <table class="_table">
@@ -178,9 +171,6 @@ export default {
         itemname: "",
         unit: "",
         packing: "",
-        dates: "",
-        startdate: "",
-        enddate: "",
       },
       columns: [
         {
@@ -252,9 +242,20 @@ export default {
         },
       ],
       reportdata: [],
+      recordtotal: {},
+      currentPage: 1,
+      perPage: 2,
     };
   },
   methods: {
+    onnext(page) {
+      this.currentPage = page;
+      this.getreports();
+    },
+    onprev(page) {
+      this.currentPage = page;
+      this.getreports();
+    },
     timestamp() {
       const today = new Date();
       const date =
@@ -278,7 +279,8 @@ export default {
           this.loading = true;
           if (res.data.succeed) {
             this.loading = false;
-            this.reportdata = res.data.reportdata;
+            this.reportdata = res.data.reportdata.data;
+            this.recordtotal = res.data.reportdata;
           }
         })
         .catch((err) => {
@@ -289,6 +291,18 @@ export default {
           }
         });
     },
+    getreports() {
+      let dataFetchUrl = `/api-inv/reports/getproducts?page=${this.currentPage}`;
+
+      get(dataFetchUrl).then((res) => {
+        if (res.data.succeed) {
+          this.reportdata = res.data.reportdata.data;
+          this.recordtotal = res.data.reportdata;
+
+          this.loading = false;
+        }
+      });
+    },
     exportcsv() {
       this.$refs.selection.exportCsv({
         filename: this.filename,
@@ -297,12 +311,7 @@ export default {
     exportpdf() {
       this.$refs.html2Pdf.generatePdf();
     },
-    daterange(date) {
-      const startdate = date[0].toString();
-      const enddate = date[1].toString();
-      this.formstockcard.startdate = startdate;
-      this.formstockcard.enddate = enddate;
-    },
+
     getproducts() {
       get("/api-inv/products").then((res) => {
         this.datalist = res.data.list;
@@ -326,7 +335,7 @@ export default {
 }
 .stockcardform {
   background-color: rgb(255, 255, 255);
-  min-height: 150px;
+  min-height: 100px;
 }
 .stockcard-labal {
   display: inline-block;

@@ -18,7 +18,7 @@
           <Menu width="auto" :style="{background: 'rgb(14, 14, 14)',overflow: 'hidden'}" theme="dark" :active-name="`${$route.name}`">
 
             <Tooltip content="หน้าหลัก" placement="right" class="tooltip-sider" transfer>
-              <MenuItem name="หน้าหลัก"  to="/dashboard" :style="{padding: '14px 18px' }" replace>
+              <MenuItem name="หน้าหลัก" to="/dashboard" :style="{padding: '14px 18px' }" replace>
               <Icon type="ios-speedometer" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
@@ -46,17 +46,38 @@
               <Icon type="ios-paper" color="#fff" size="25" />
               </MenuItem>
               <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
-                <DropdownItem>
+                <!-- <DropdownItem>
                   <MenuItem name="ประเภทของ วัตถุดิบ" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
+                </DropdownItem> -->
+                <DropdownItem>
+                  <MenuItem name="รายการวัตถุดิบ" to="/ingredients/list" replace>รายการวัตถุดิบ</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="รายการวัตถุดิบคงเหลือ" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
+                  <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออกวัตถุดิบ" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+                  <MenuItem name="สร้างฉลากวัตถุดิบ" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
+                </DropdownItem>
+
+              </DropdownMenu>
+            </Dropdown>
+
+            <Dropdown placement="right-start" class="tooltip-sider" transfer>
+              <MenuItem name="5c" :style="{padding: '14px 18px' }" replace>
+              <Icon type="ios-paper" color="#fff" size="25" />
+              </MenuItem>
+              <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
+                <!-- <DropdownItem>
+                  <MenuItem name="ประเภทของ วัตถุดิบ" to="/package/category" replace>ประเภทรายการ</MenuItem>
+                </DropdownItem> -->
+                <DropdownItem>
+                  <MenuItem name="รายการบรรจุุภัณฑ์" to="/package/list" replace>รายการบรรจุุภัณฑ์</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="สร้างฉลาก" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
+                  <MenuItem name="รายการบันทึก นำเข้า-จ่ายออกบรรจุุภัณฑ์" to="/package/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+                </DropdownItem>
+                <DropdownItem>
+                  <MenuItem name="สร้างฉลากบรรจุุภัณฑ์" to="/package/create-labelling" replace>สร้างฉลากปิดบรรจุุภัณฑ์</MenuItem>
                 </DropdownItem>
 
               </DropdownMenu>
@@ -71,7 +92,7 @@
                   <MenuItem name="ประเภทของ ผลิตภัณฑ์" to="/product/category" replace>ประเภทรายการ</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
-                  <MenuItem name="รายการผลิตภัณฑ์คงเหลือ" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
+                  <MenuItem name="รายการผลิตภัณฑ์" to="/product/list" replace>รายการผลิตภัณฑ์</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
                   <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก(ผลิตภัณฑ์)" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
@@ -86,6 +107,9 @@
               <DropdownMenu slot="list" :style="{margin: '8px 15px', }">
                 <DropdownItem>
                   <MenuItem name="สต็อกการ์ด-วัตถุดิบ" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
+                </DropdownItem>
+                <DropdownItem>
+                  <MenuItem name="สต็อกการ์ด-ผลิตภัณฑ์" to="/report/package" replace>สต็อกการ์ด บรรจุุภัณฑ์</MenuItem>
                 </DropdownItem>
                 <DropdownItem>
                   <MenuItem name="สต็อกการ์ด-ผลิตภัณฑ์" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
@@ -132,24 +156,34 @@
               <template slot="title">
                 <Icon type="ios-paper" />วัตถุดิบ
               </template>
-              <MenuItem name="ประเภทของ วัตถุดิบ" to="/ingredients/category" replace>ประเภทรายการ</MenuItem>
-              <MenuItem name="รายการวัตถุดิบคงเหลือ" to="/ingredients/list" replace>รายการวัตถุดิบคงเหลือ</MenuItem>
-              <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
-              <MenuItem name="สร้างฉลาก" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
+              <!-- <MenuItem name="ประเภทของ วัตถุดิบ" to="/ingredients/category" replace>ประเภทรายการ</MenuItem> -->
+              <MenuItem name="รายการวัตถุดิบ" to="/ingredients/list" replace>รายการวัตถุดิบ</MenuItem>
+              <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออกวัตถุดิบ" to="/ingredients/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+              <MenuItem name="สร้างฉลากวัตถุดิบ" to="/ingredients/create-labelling" replace>สร้างฉลากปิดวัตถุดิบ</MenuItem>
             </Submenu>
             <Submenu name="6" :style="{background: 'rgb(14, 14, 14)'}">
+              <template slot="title">
+                <Icon type="ios-paper" />บรรจุุภัณฑ์
+              </template>
+              <!-- <MenuItem name="ประเภทของ บรรจุุภัณฑ์" to="/ingredients/category" replace>ประเภทรายการ</MenuItem> -->
+              <MenuItem name="รายการบรรจุุภัณฑ์" to="/package/list" replace>รายการบรรจุุภัณฑ์</MenuItem>
+              <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออกบรรจุุภัณฑ์" to="/package/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
+              <MenuItem name="สร้างฉลากบรรจุุภัณฑ์" to="/package/create-labelling" replace>สร้างฉลากปิดบรรจุุภัณฑ์</MenuItem>
+            </Submenu>
+            <Submenu name="7" :style="{background: 'rgb(14, 14, 14)'}">
               <template slot="title">
                 <Icon type="ios-paper" />ผลิตภัณฑ์
               </template>
               <MenuItem name="ประเภทของ ผลิตภัณฑ์" to="/product/category" replace>ประเภทรายการ</MenuItem>
-              <MenuItem name="รายการผลิตภัณฑ์คงเหลือ" to="/product/list" replace>รายการผลิตภัณฑ์คงเหลือ</MenuItem>
+              <MenuItem name="รายการผลิตภัณฑ์" to="/product/list" replace>รายการผลิตภัณฑ์</MenuItem>
               <MenuItem name="ภาพรวมการบันทึก นำเข้า - จ่ายออก(ผลิตภัณฑ์)" to="/product/recordlist" replace>รายการบันทึก นำเข้า-จ่ายออก</MenuItem>
             </Submenu>
             <Submenu name="สต็อกการ์ด" :style="{background: 'rgb(14, 14, 14)'}">
               <template slot="title">
                 <Icon type="ios-folder-open" />สต็อกการ์ด
               </template>
-              <MenuItem name="สต็อกการ์ด-วัตถุดิบ" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>
+              <MenuItem name="สต็อกการ์ด-วัตถุดิบ" to="/report/ingredients" replace>สต็อกการ์ด วัตถุดิบ</MenuItem>              
+              <MenuItem name="สต็อกการ์ด-บรรจุภัณฑ์" to="/report/package" replace>สต็อกการ์ด บรรจุุภัณฑ์</MenuItem>
               <MenuItem name="สต็อกการ์ด-ผลิตภัณฑ์" to="/report/products" replace>สต็อกการ์ด ผลิตภัณฑ์</MenuItem>
             </Submenu>
 
@@ -182,7 +216,7 @@
           <router-view />
 
         </Content>
-        <Footer class="layout-footer-center">&copy; ระบบคงคลัง 2021-2022 | Developed By ITsud-Dev</Footer>
+        <Footer class="layout-footer-center">&copy; ระบบคงคลัง 2021-2022 | Developed By IT - BTech 61 SDU</Footer>
       </Layout>
     </Layout>
   </div>
@@ -199,13 +233,16 @@ export default {
       flash: Flash.state,
       users: {},
       isCollapsed: false,
-    }; 
+    };
   },
   created() {
     get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
       this.users = res.data.user;
       this.$Loading.finish();
       this.$forceUpdate();
+    });
+    this.$Message.config({
+      duration: 3,
     });
     // global error http handler
     interceptors((err) => {
@@ -385,8 +422,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
   /* border-bottom: white 1px solid; */
   /* height: 60px; */
 }
@@ -401,10 +438,10 @@ export default {
   /* height: 60px; */
 }
 .ivu-divider-horizontal {
-  margin: 10px 0;
+  margin: 7px 0;
 }
 .demo-avatar {
-  margin: 10px;
+  margin: 7px;
   /* border-bottom: white 1px solid; */
 }
 

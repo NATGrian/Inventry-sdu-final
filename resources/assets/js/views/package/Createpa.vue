@@ -1,25 +1,23 @@
 <template>
-  <div class="container-fluid" id="importingredients-container">
+  <div class="container-fluid" id="Createpackagings-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/ingredients/list">วัตถุดิบ</BreadcrumbItem>
-      <BreadcrumbItem>บันทึกการนำเข้าวัตถุดิบ</BreadcrumbItem>
+      <BreadcrumbItem to="/package/list">บรรจุุภัณฑ์</BreadcrumbItem>
+      <BreadcrumbItem>เพิ่มบรรจุุภัณฑ์ใหม่</BreadcrumbItem>
     </Breadcrumb>
     <br>
 
-    <Form id="formimport" ref="formimport" :model="formimport" :rules="ruleCustom">
+    <Form id="formcreate" ref="formcreate" :model="formcreate" :rules="ruleCustom">
       <Row type="flex" justify="space-around" align="middle">
-
         <Col span="15">
-
-        <div class="Importfrom1-im">
+        <div class="Createfrom1-rm">
           <Row>
             <Col span="24">
-            <div class="title-from1-rm">
-              บันทึกการนำเข้าวัตถุดิบ
+            <div class="title-from1">
+              เพิ่มบรรจุุภัณฑ์ เข้าระบบครังแรก
             </div>
             </Col>
-            <Col span="24" class="sub-title1-rm">
+            <Col span="24" class="sub-title1">
             ช่องที่มี <span style="color: rgb(255, 0, 0);">*</span> เป็นช่องที่จำเป็นต้องกรอก
             </Col>
 
@@ -29,16 +27,14 @@
             <Col span="10" class="left-Formitem">
             <FormItem prop="rc_no">
               <span slot="label" style="width: 10%;">RC / NO:</span>
-              <Input type="text" element-id="formimport-rc_no" v-model="formimport.rc_no" placeholder="" style="width: 65%;" size="small" />
+              <Input type="text" element-id="formcreate-rc_no" v-model="formcreate.rc_no" placeholder="" style="width: 65%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="10" class="right-Formitem">
             <FormItem prop="itemname">
               <span slot="label" style="width: 10%;">รายการ:</span>
-              <Select element-id="formimport-itemname" v-model="formimport.itemname" @on-select="select" placeholder="ค้นหา วัตถุดิบ" style="width: 50%;" size="small" filterable>
-                <Option v-for="i in itemrm" :value="i.id" :key="i.id">{{ i.itemname }}</Option>
-              </Select>
+              <Input type="text" element-id="formcreate-itemname" v-model="formcreate.itemname" placeholder="" style="width: 65%;" size="small" />
 
             </FormItem>
             </Col>
@@ -47,14 +43,14 @@
             <Col span="10" class="left-Formitem">
             <FormItem prop="invoice_no">
               <span slot="label" style="width: 10%;">เลขที่ใบส่งของ:</span>
-              <Input type="text" element-id="formimport-invoice_no" v-model="formimport.invoice_no" placeholder="" style="width: 50%;" size="small" />
+              <Input type="text" element-id="formcreate-invoice_no" v-model="formcreate.invoice_no" placeholder="" style="width: 50%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="10" class="right-Formitem">
-            <FormItem prop="qty_charge">
+            <FormItem prop="qty">
               <span slot="label" style="width: 10%;">จำนวน:</span>
-              <InputNumber element-id="formimport-qty_charge" size="small" v-model="formimport.qty_charge" @on-change="focusOut" controls-outside />
+              <InputNumber size="small" element-id="formcreate-qty" v-model="formcreate.qty" @on-blur="focusOut" controls-outside />
             </FormItem>
             </Col>
           </Row>
@@ -62,14 +58,14 @@
             <Col span="9" class="left-Formitem">
             <FormItem prop="LOT_no">
               <span slot="label" style="width: 10%;">Lot No:</span>
-              <Input type="text" element-id="formimport-LOT_no" v-model="formimport.LOT_no" placeholder="" style="width: 55%;" size="small" />
+              <Input type="text" element-id="formcreate-LOT_no" v-model="formcreate.LOT_no" placeholder="" style="width: 55%;" size="small" />
 
             </FormItem>
             </Col>
             <Col span="13" class="right-Formitem">
             <FormItem prop="PID">
               <span slot="label" style="width: 10%;">ผู้ผลิต/ผู้จัดจำหน่าย:</span>
-              <Select element-id="formimport-peoples" v-model="formimport.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
+              <Select element-id="formcreate-peoples" v-model="formcreate.PID" placeholder="ค้นหา ผู้ผลิต/ผู้จัดจำหน่าย" style="width: 45%;" size="small">
                 <Option v-for="p in peoples" :value="p.id" :key="p.id">{{ p.firstname }}</Option>
               </Select>
 
@@ -81,46 +77,55 @@
             <Col span="7" class="left-Formitem">
             <FormItem prop="MFG">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป ที่ผลิต (MFG.):</span>
-              <DatePicker element-id="formimport-MFG" v-model="formimport.MFG" @on-change="(value) => this.formimport.MFG=value.toString()" size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-MFG" v-model="formcreate.MFG"  @on-change="(value) => this.formcreate.MFG=value.toString()"  size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
 
             </FormItem>
             </Col>
             <Col span="7">
             <FormItem prop="EXP">
               <span slot="label" style="width: 10px;word-wrap: break-word;">ว-ด-ป หมดอายุ (EXP.):</span>
-              <DatePicker element-id="formimport-EXP" v-model="formimport.EXP" @on-change="(value) => this.formimport.EXP=value.toString()" size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-EXP" v-model="formcreate.EXP"  @on-change="(value) => this.formcreate.EXP=value.toString()"  size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
             <Col span="7" class="right-Formitem">
             <FormItem prop="import_at">
               <span slot="label" style="width: 10%;word-wrap: break-word;">ว-ด-ป นำเข้า:</span>
-              <DatePicker element-id="formimport-import_at" v-model="formimport.import_at" @on-change="(value) => this.formimport.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd" placeholder="Select date" style="width: 80%;" />
+              <DatePicker element-id="formcreate-import_at" v-model="formcreate.import_at" @on-change="(value) => this.formcreate.import_at=value.toString()" size="small" type="date" format="yyyy-MM-dd"  placeholder="Select date" style="width: 80%;" />
             </FormItem>
             </Col>
           </Row>
           <Row type="flex" justify="center">
-            <Col span="12">
+            <Col span="11">
             <FormItem prop="storageID">
               <span slot="label" style="width: 10%;">สถานที่จัดเก็บ</span>
-              <Select element-id="formimport-storage" v-model="formimport.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
+              <Select element-id="formcreate-storage" v-model="formcreate.storageID" placeholder="ค้นหา ที่เก็บ" style="width: 50%;" size="small">
                 <Option v-for="s in storage" :value="s.id" :key="s.id">{{ s.name }}</Option>
               </Select>
 
             </FormItem>
             </Col>
-            
+            <Col span="11">
+            <FormItem prop="CID">
+              <span slot="label" style="width: 10%;">ประเภทของสิ่งของ</span>
+              <Select element-id="formcreate-categorys" v-model="formcreate.CID" placeholder="ค้นหา ประเภท" style="width: 50%;" size="small">
+                <Option v-for="c in categorys" :value="c.id" :key="c.id">{{ c.name }}</Option>
+              </Select>
+
+            </FormItem>
+            </Col>
           </Row>
         </div>
         </Col>
 
         <Col span="7">
-        <div class="Importfrom2-im">
+        
+        <div class="Createfrom2-rm">
           <br>
           <Row type="flex" justify="center">
             <Col span="24">
             <div class="input-role">
               <span style="display: inline-block;">รายละเอียดย่อย</span>
-              <Input element-id="formimport-description" v-model="formimport.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
+              <Input element-id="formcreate-name" v-model="formcreate.description" :autosize="{minRows: 2,maxRows: 5}" type="textarea" size="small" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>
@@ -129,7 +134,7 @@
             <Col span="24">
             <div class="input-role">
               <span style="display: inline-block;">ผู้ตรวจรับ</span>
-              <Input v-model="formimport.UID" readonly type="text" size="small" style="width: auto; display: inline-block;" />
+              <Input  readonly type="text" size="small" v-model="formcreate.UID" style="width: auto; display: inline-block;" />
             </div>
             </Col>
           </Row>
@@ -139,7 +144,7 @@
             <FormItem>
               <Row type="flex" justify="center">
                 <Button type="primary" @click="handleSubmit" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มรายการ</Button>
-                <Button @click="handleReset('formimport')" style="margin-left: 8px">Reset</Button>
+                <Button @click="handleReset('formcreate')" style="margin-left: 8px">Reset</Button>
               </Row>
             </FormItem>
             </Col>
@@ -159,7 +164,7 @@ export default {
   created() {
     get("/api-inv/users/" + localStorage.getItem("user_id")).then((res) => {
       this.users = res.data.user;
-      this.formimport.UID = res.data.user.firstname;
+      this.formcreate.UID = res.data.user.firstname;
       this.id = res.data.user.id;
     });
     get("/api-inv/peoples").then((res) => {
@@ -168,34 +173,33 @@ export default {
     get("/api-inv/storages").then((res) => {
       this.storage = res.data.storages;
     });
-    get("/api-inv/ingredients").then((res) => {
-      this.itemrm = res.data.list;
+    get("/api-inv/category-pp").then((res) => {
+      this.categorys = res.data.category;
     });
   },
   data() {
     return {
-      id: "",
-      itemrm: [],
+      id: '',
       users: [],
       peoples: [],
       storage: [],
-
-      formimport: {
-        rc_no: "",
-        UID: "",
-        itemname: "",
-        import_at: "",
-        EXP: "",
-        MFG: "",
-        qty: 0,
-        qtyimport: 0,
-        qty_charge: 0,
-        invoice_no: "",
-        description: "..",
-        LOT_no: "",
-        PID: "",
-        storageID: "",
+      categorys: [],
+      formcreate: {
+        rc_no: '',
+        UID: '',
+        itemname: '',
+        import_at: '',
+        EXP: '',
+        MFG: '',
+        qty: 1,
+        invoice_no: '',
+        description: '...',
+        LOT_no: '',
+        PID: '',
+        storageID: '',
+        CID:'',
       },
+
       ruleCustom: {
         rc_no: [
           {
@@ -225,7 +229,7 @@ export default {
             trigger: "blur",
           },
         ],
-        qty_charge: [
+        qty: [
           {
             required: true,
             message: "กรุณากรอกด้วย !!",
@@ -237,7 +241,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "ตั้งค่าเวลา !!",
+            message: "กรุณากรอกด้วย !!",
             trigger: "change",
           },
         ],
@@ -245,7 +249,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "ตั้งค่าเวลา !!",
+            message: "กรุณากรอกด้วย !!",
             trigger: "change",
           },
         ],
@@ -253,7 +257,7 @@ export default {
           {
             required: true,
             type: "date",
-            message: "ตั้งค่าเวลา !!",
+            message: "กรุณากรอกด้วย !!",
             trigger: "change",
           },
         ],
@@ -273,7 +277,15 @@ export default {
             type: "number",
           },
         ],
-        description: [
+        CID: [
+          {
+            required: true,
+            message: "กรุณาเลือกด้วย !!",
+            trigger: "change",
+            type: "number",
+          },
+        ],
+        desc: [
           {
             required: false,
             message: "Please enter a personal introduction",
@@ -290,29 +302,17 @@ export default {
     };
   },
   methods: {
-    select(data) {
-
-      get("/api-inv/import/" + data.value).then((res) => {
-        this.formimport.qtyimport = res.data.itemimport.qty;
-        
-      });
-    },
     focusOut() {
-      this.formimport.qty_charge = parseFloat(
-        `${this.formimport.qty_charge.toFixed(2)}`
-      );
-      this.formimport.qty =
-        parseFloat(`${this.formimport.qtyimport.toFixed(2)}`) +
-        parseFloat(`${this.formimport.qty_charge.toFixed(2)}`);
+        this.formcreate.qty =  parseFloat(`${this.formcreate.qty.toFixed(2)}`);
     },
     handleSubmit() {
-      this.formimport.UID = this.id
+      this.formcreate.UID = this.id
       this.$Loading.start();
-      post("/api-inv/ingredients/import", this.formimport)
+      post("/api-inv/packagings", this.formcreate)
         .then((res) => {
           this.$Loading.finish();
           if (res.data.succeed) {
-            this.$router.push("/ingredients/recordlist");
+            this.$router.push("/package/list");
           }
           
         })
@@ -323,6 +323,8 @@ export default {
             this.$Message.error("เกิดข้อผิดพลาด");
           }
         });
+
+      
     },
     handleReset(name) {
       this.$refs[name].resetFields();
@@ -333,19 +335,19 @@ export default {
 
 
 <style>
-.Importfrom1-im {
+.Createfrom1-rm {
   background-color: rgb(255, 255, 255);
-  height: 450px;
+  height: 420px;
 }
 
-.title-from1-rm {
+.title-from1 {
   margin: 20px 0 0 40px;
   font-size: 15px;
   font-weight: bold;
   color: #000;
-  text-shadow: 8px 4px 6px #959595a8;
+  text-shadow: 8px 4px 6px hsla(0, 0%, 58%, 0.659);
 }
-.sub-title1-rm {
+.sub-title1 {
   margin-left: 50px;
   font-size: 10px;
 }
@@ -355,9 +357,9 @@ export default {
 .right-Formitem {
   padding-right: 30px;
 }
-.Importfrom2-im {
+.Createfrom2-rm {
   background-color: rgb(255, 255, 255);
-  height: 350px;
+  height: 300px;
 }
 
 .ivu-form-item-error-tip {

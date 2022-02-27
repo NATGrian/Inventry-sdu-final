@@ -83,10 +83,10 @@ export default {
               res.data.user_id,
               res.data.authenticated
             );
-            this.$Message.success('เข้าสู่ระบบสำเร็จ!');
-            this.$Loading.finish();
             // this.$router.push('/dashboard')
             window.location.href = "/dashboard";
+            this.$Message.success('เข้าสู่ระบบสำเร็จ!');
+            this.$Loading.finish();
           }
           this.isProcessing = false;
         })
