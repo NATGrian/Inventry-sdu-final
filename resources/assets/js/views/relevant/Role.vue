@@ -2,7 +2,7 @@
   <div class="container-fluid" id="peopleroles-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
-      <BreadcrumbItem to="/people">เจ้าหน้าที่เกี่ยวข้อง</BreadcrumbItem>
+      <BreadcrumbItem to="/relevants">เจ้าหน้าที่เกี่ยวข้อง</BreadcrumbItem>
       <BreadcrumbItem>ตำแหน่ง</BreadcrumbItem>
     </Breadcrumb>
     <br>
@@ -105,7 +105,7 @@
         <div style="width: 100%; "> <b style="color: #000;">ชื่อ ตำแหน่ง:</b> {{ showdata.role }} </div>
         </Col>
       </Row>
-      <br />
+      <br/>
       <Row type="flex" justify="center" align="middle">
         <Col>
         <div> <b style="color: #000;">รายละเอียดย่อย:</b></div>

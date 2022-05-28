@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use DateTime;
 use App\Models\Storages;
-use App\Models\Peoples;
+use App\Models\Relevants;
 use App\Models\Item_products;
 use App\Models\Categorys_products;
 use App\Models\Export_product_items;
@@ -30,17 +30,17 @@ class ProductsController extends Controller
         $recordproduct = DB::table('import_product_items')
             ->join('users', 'import_product_items.UID', '=', 'users.id')
             ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_product_items.PID', '=', 'relevants.id')
             ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
-            ->select('import_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
+            ->select('import_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'relevants.firstname as pfname', 'storages.name')
             ->orderBy('import_product_items.created_at', 'desc')
             ->paginate(10);
 
         $recordproduct1 = DB::table('export_product_items')
             ->join('users', 'export_product_items.UID', '=', 'users.id')
             ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
-            ->select('export_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname')
+            ->join('relevants', 'export_product_items.PID', '=', 'relevants.id')
+            ->select('export_product_items.*' , 'users.firstname as ufname', 'item_products.itemname', 'relevants.firstname as pfname')
             ->orderBy('export_product_items.created_at', 'desc')
             ->paginate(10);
 
@@ -75,9 +75,9 @@ class ProductsController extends Controller
         $record = DB::table('import_product_items')
         ->join('users', 'import_product_items.UID', '=', 'users.id')
         ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
-        ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+        ->join('relevants', 'import_product_items.PID', '=', 'relevants.id')
         ->join('storages', 'import_product_items.storageID', '=', 'storages.id')
-        ->select('import_product_items.*', 'users.firstname as ufname', 'item_products.itemname', 'peoples.firstname as pfname', 'storages.name')
+        ->select('import_product_items.*', 'users.firstname as ufname', 'item_products.itemname', 'relevants.firstname as pfname', 'storages.name')
         ->orderBy('import_product_items.import_at', 'desc') ->get();
 
         return response()
@@ -108,9 +108,7 @@ class ProductsController extends Controller
 
         return response()
             ->json([
-                'succeed' => true,
-                'categorys' => $categorys
-
+                'succeed' => true
             ]);
     }
 
@@ -145,11 +143,11 @@ class ProductsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+       $Import->save();
 
         return response()
             ->json([
-                'import' => $seve,
+                // 'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -177,11 +175,11 @@ class ProductsController extends Controller
         $export->status = 'นำออก';
         $export->description = $request->description;
         $export->PID = $request->PID;
-        $seve = $export->save();
+        $export->save();
 
         return response()
             ->json([
-                'import' => $seve,
+                // 'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -238,12 +236,12 @@ class ProductsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+        $Import->save();
 
 
         return response()
             ->json([
-                'import' => $seve,
+
                 'succeed' => true
             ]);
     }
@@ -313,10 +311,10 @@ class ProductsController extends Controller
         $record = DB::table('import_product_items')
             ->join('users', 'import_product_items.UID', '=', 'users.id')
             ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_product_items.PID', '=', 'relevants.id')
             ->select(
                      'users.firstname as ufname', 
-                     'peoples.firstname as pfname',
+                     'relevants.firstname as pfname',
                      'item_products.itemname',
                      'import_product_items.qty_charge as im_qty_charge',
                      'import_product_items.qty_balance',
@@ -333,10 +331,10 @@ class ProductsController extends Controller
         $record1 = DB::table('export_product_items')
             ->join('users', 'export_product_items.UID', '=', 'users.id')
             ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_product_items.PID', '=', 'relevants.id')
             ->select(
                      'users.firstname as ufname', 
-                     'peoples.firstname as pfname',
+                     'relevants.firstname as pfname',
                      'item_products.itemname',
                      'export_product_items.qty_charge as ex_qty_charge',
                      'export_product_items.qty_balance',
@@ -363,10 +361,10 @@ class ProductsController extends Controller
         $record = DB::table('import_product_items')
             ->join('users', 'import_product_items.UID', '=', 'users.id')
             ->join('item_products', 'import_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'import_product_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_product_items.PID', '=', 'relevants.id')
             ->select(
                      'users.firstname as ufname', 
-                     'peoples.firstname as pfname',
+                     'relevants.firstname as pfname',
                      'item_products.itemname',
                      'import_product_items.qty_charge as im_qty_charge',
                      'import_product_items.qty_balance',
@@ -382,10 +380,10 @@ class ProductsController extends Controller
         $record1 = DB::table('export_product_items')
             ->join('users', 'export_product_items.UID', '=', 'users.id')
             ->join('item_products', 'export_product_items.idproduct', '=', 'item_products.id')
-            ->join('peoples', 'export_product_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_product_items.PID', '=', 'relevants.id')
             ->select(
                      'users.firstname as ufname', 
-                     'peoples.firstname as pfname',
+                     'relevants.firstname as pfname',
                      'item_products.itemname',
                      'export_product_items.qty_charge as ex_qty_charge',
                      'export_product_items.qty_balance',

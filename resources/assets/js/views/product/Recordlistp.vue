@@ -113,7 +113,7 @@
         <Row type="flex" justify="end" class="code-row-bg">
           <Col>
           <Divider>
-            <h6> {{filename}} </h6>
+            <h6> รหัสเอกสาร: FM-WH-04 R00</h6>
           </Divider>
 
           </Col>

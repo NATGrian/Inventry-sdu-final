@@ -15,11 +15,11 @@ Route::delete('roles/{id}', 'Admins\UsersController@rolesdestroy');
 
 
 //! ----------------- API MEMBER ---------------
-Route::resource('peoples', 'Admins\PeopleController');
-Route::get('getpeoples', 'Admins\PeopleController@getpeoples');
-Route::get('groups', 'Admins\PeopleController@getgroups');
-Route::post('addgroups', 'Admins\PeopleController@addgroups');
-Route::delete('groups/{id}', 'Admins\PeopleController@groupsdestroy');
+Route::resource('relevants', 'Admins\RelevantController');
+Route::get('getrelevants', 'Admins\RelevantController@getrelevants');
+Route::get('groups', 'Admins\RelevantController@getgroups');
+Route::post('addgroups', 'Admins\RelevantController@addgroups');
+Route::delete('groups/{id}', 'Admins\RelevantController@groupsdestroy');
 //! ----------------------------------------------------
 
 

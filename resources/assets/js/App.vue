@@ -5,13 +5,13 @@
         <div id="Sider-layout" v-if="isCollapsed">
 
           <div class="demo-Logo-Collapsed">
-            <avatar src="/images/Logo.png" size="large" shape="square" />
+            <avatar src="../images/Logo.png" size="large" shape="square" />
           </div>
 
           <Divider />
           <router-link :to="`/profile/${this.authState.user_id}`" replace>
             <div class="demo-avatar-Collapsed">
-              <avatar :src="`/images/users/${users.image}`" size="large" />
+              <avatar :src="`../images/users/${users.image}`" size="large" />
             </div>
           </router-link>
           <Divider />
@@ -30,7 +30,7 @@
             </Tooltip>
 
             <Tooltip content="เจ้าหน้าที่ที่เกี่ยวข้อง" placement="right" class="tooltip-sider" transfer>
-              <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/people" :style="{padding: '14px 18px' }" replace>
+              <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/relevants" :style="{padding: '14px 18px' }" replace>
               <Icon type="md-people" color="#fff" size="25" />
               </MenuItem>
             </Tooltip>
@@ -144,7 +144,7 @@
             <Icon type="md-contact"></Icon>
             <span>เจ้าหน้าที่ระบบ</span>
             </MenuItem>
-            <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/people" replace>
+            <MenuItem name="เจ้าหน้าที่ที่เกี่ยวข้อง" to="/relevants" replace>
             <Icon type="md-people"></Icon>
             <span>เจ้าหน้าที่ที่เกี่ยวข้อง</span>
             </MenuItem>

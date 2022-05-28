@@ -25,9 +25,9 @@ class Import_product_items extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Peoples()
+    public function Relevants()
     {
-        return $this->belongsTo(Peoples::class);
+        return $this->belongsTo(Relevants::class);
     }
 
     public function Storages()

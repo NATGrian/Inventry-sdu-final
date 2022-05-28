@@ -150,6 +150,14 @@
           </table>
           </Col>
         </Row>
+        <Row type="flex" justify="end" class="code-row-bg">
+          <Col>
+          <Divider>
+            <h6> รหัสเอกสาร: FM-WH-05 R00 </h6>
+          </Divider>
+
+          </Col>
+        </Row>
       </template>
     </vue-html2pdf>
   </div>

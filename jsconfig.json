@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6"
+    "target": "es6",
+    
+    "jsx": "preserve"
+  },
+  "vueCompilerOptions": {
+    "experimentalShamefullySupportOptionsApi": true,
   },
   "exclude": ["node_modules"]
  }

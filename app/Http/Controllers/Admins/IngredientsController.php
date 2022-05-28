@@ -8,7 +8,7 @@ use DateTime;
 use App\User;
 
 use App\Models\Storages;
-use App\Models\Peoples;
+use App\Models\Relevants;
 
 use App\Models\Item_ingredients;
 use App\Models\Import_ingredients_items;
@@ -20,6 +20,10 @@ use DB;
 
 class IngredientsController extends Controller
 {
+
+
+    // !getdata
+
     public function getcategory()
     {
         $category = Categorys_ingredients::all();
@@ -29,23 +33,8 @@ class IngredientsController extends Controller
                 'category' => $category
             ]);
     }
-    public function addcategory(Request $request)
+    public function getingredients()
     {
-        $this->validate($request, [
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-        ]);
-        $categorys = new Categorys_ingredients($request->all());
-        $categorys->save();
-
-        return response()
-            ->json([
-                'succeed' => true,
-                'categorys' => $categorys
-
-            ]);
-    }
-    public function getingredients() {
         $list = DB::table('item_ingredients')
             ->join('categorys_ingredients', 'item_ingredients.CID', '=', 'categorys_ingredients.id')
             ->select('item_ingredients.*', 'categorys_ingredients.name')->orderBy('created_at', 'desc')
@@ -94,11 +83,11 @@ class IngredientsController extends Controller
     public function getLabelling()
     {
         $Item = DB::table('export_ingredients_items')
-        ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
-        ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
-        ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
-        ->select('export_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname')
-        ->orderBy('export_ingredients_items.export_at', 'desc') ->get();
+            ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
+            ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
+            ->join('relevants', 'export_ingredients_items.PID', '=', 'relevants.id')
+            ->select('export_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'relevants.firstname as pfname')
+            ->orderBy('export_ingredients_items.export_at', 'desc')->get();
 
         return response()
             ->json([
@@ -108,12 +97,12 @@ class IngredientsController extends Controller
     public function getexport()
     {
         $record = DB::table('import_ingredients_items')
-        ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
-        ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
-        ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
-        ->join('storages', 'import_ingredients_items.storageID', '=', 'storages.id')
-        ->select('import_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname', 'storages.name')
-        ->orderBy('import_ingredients_items.import_at', 'desc') ->get();
+            ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
+            ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
+            ->join('relevants', 'import_ingredients_items.PID', '=', 'relevants.id')
+            ->join('storages', 'import_ingredients_items.storageID', '=', 'storages.id')
+            ->select('import_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'relevants.firstname as pfname', 'storages.name')
+            ->orderBy('import_ingredients_items.import_at', 'desc')->get();
 
         return response()
             ->json([
@@ -126,17 +115,17 @@ class IngredientsController extends Controller
         $record = DB::table('import_ingredients_items')
             ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_ingredients_items.PID', '=', 'relevants.id')
             ->join('storages', 'import_ingredients_items.storageID', '=', 'storages.id')
-            ->select('import_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname', 'storages.name')
-            ->orderBy('import_ingredients_items.import_at', 'desc') ->paginate(10);
+            ->select('import_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'relevants.firstname as pfname', 'storages.name')
+            ->orderBy('import_ingredients_items.import_at', 'desc')->paginate(10);
 
         $record1 = DB::table('export_ingredients_items')
             ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
-            ->select('export_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'peoples.firstname as pfname')
-            ->orderBy('export_ingredients_items.export_at', 'desc') ->paginate(10);
+            ->join('relevants', 'export_ingredients_items.PID', '=', 'relevants.id')
+            ->select('export_ingredients_items.*', 'users.firstname as ufname', 'item_ingredients.itemname', 'relevants.firstname as pfname')
+            ->orderBy('export_ingredients_items.export_at', 'desc')->paginate(10);
 
         return response()
             ->json([
@@ -144,6 +133,25 @@ class IngredientsController extends Controller
                 'record1' => $record1
             ]);
     }
+
+
+
+    public function addcategory(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+        ]);
+        $categorys = new Categorys_ingredients($request->all());
+        $categorys->save();
+
+        return response()
+            ->json([
+                'succeed' => true
+
+            ]);
+    }
+
 
     public function import_Ingredients(Request $request)
     {
@@ -180,11 +188,10 @@ class IngredientsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+        $Import->save();
 
         return response()
             ->json([
-                'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -219,11 +226,10 @@ class IngredientsController extends Controller
         $export->status = 'นำออก';
         $export->description = $request->description;
         $export->PID = $request->PID;
-        $seve = $export->save();
+        $export->save();
 
         return response()
             ->json([
-                'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -240,7 +246,7 @@ class IngredientsController extends Controller
                 'list' => $list
             ]);
     }
-    
+
     public function create()
     {
         //
@@ -284,12 +290,11 @@ class IngredientsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+        $Import->save();
 
 
         return response()
             ->json([
-                'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -356,15 +361,15 @@ class IngredientsController extends Controller
 
     public function reportsIngredients(Request $request)
     {
-  
+
 
         $record = DB::table('import_ingredients_items')
             ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_ingredients_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_ingredients.itemname',
                 'import_ingredients_items.qty_charge as im_qty_charge',
                 'import_ingredients_items.qty_balance',
@@ -383,10 +388,10 @@ class IngredientsController extends Controller
         $record1 = DB::table('export_ingredients_items')
             ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_ingredients_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_ingredients.itemname',
                 'export_ingredients_items.qty_charge as ex_qty_charge',
                 'export_ingredients_items.qty_balance',
@@ -410,15 +415,15 @@ class IngredientsController extends Controller
     }
     public function getreportsIngredients(Request $request)
     {
-  
+
 
         $record = DB::table('import_ingredients_items')
             ->join('users', 'import_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'import_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'import_ingredients_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_ingredients_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_ingredients.itemname',
                 'import_ingredients_items.qty_charge as im_qty_charge',
                 'import_ingredients_items.qty_balance',
@@ -436,10 +441,10 @@ class IngredientsController extends Controller
         $record1 = DB::table('export_ingredients_items')
             ->join('users', 'export_ingredients_items.UID', '=', 'users.id')
             ->join('item_ingredients', 'export_ingredients_items.idrm', '=', 'item_ingredients.id')
-            ->join('peoples', 'export_ingredients_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_ingredients_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_ingredients.itemname',
                 'export_ingredients_items.qty_charge as ex_qty_charge',
                 'export_ingredients_items.qty_balance',

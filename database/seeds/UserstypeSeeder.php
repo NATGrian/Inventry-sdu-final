@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Usertype;
-use App\Models\People_groups;
+use App\Models\Relevant_groups;
 
 
 class UserstypeSeeder extends Seeder
@@ -18,7 +18,7 @@ class UserstypeSeeder extends Seeder
             'role' => 'ผู้ปฎิบัติงาน',
         ]);
 
-        People_groups::create([
+        Relevant_groups::create([
             'role' => 'ผู้เบิก',
         ]);
     }

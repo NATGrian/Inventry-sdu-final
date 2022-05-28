@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid" id="people-container">
+  <div class="container-fluid" id="relevant-container">
     <Breadcrumb>
       <BreadcrumbItem to="/dashboard" replace>หน้าหลัก</BreadcrumbItem>
       <BreadcrumbItem>เจ้าหน้าที่ที่เกี่ยวข้อง</BreadcrumbItem>
@@ -7,25 +7,25 @@
     <br>
     <Row type="flex" justify="center" align="middle">
       <Col>
-      <Button id="btn-addpeople" type="primary" @click="addpeople = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
-      <Modal id="addpeople-modal" v-model="addpeople" title="เพิ่มเจ้าหน้าที่ที่เกี่ยวข้อง" @on-ok="add" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="500">
+      <Button id="btn-relevant" type="primary" @click="relevant = true" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มเจ้าหน้าที่</Button>
+      <Modal id="relevant-modal" v-model="relevant" title="เพิ่มเจ้าหน้าที่ที่เกี่ยวข้อง" @on-ok="add" @on-cancel="cancel" draggable reset-drag-position sticky :z-index="2000" width="500">
         <p slot="header" style="color:#0040FF;text-align:center">
           <Icon type="md-add"></Icon>
           <span>เพิ่มเจ้าหน้าที่ที่เกี่ยวข้อง</span>
 
         </p>
-        <Row type="flex" justify="space-between" :model="addpeoples">
+        <Row type="flex" justify="space-between" :model="relevants">
 
           <Col>
-          <Row type="flex" justify="center" ref="addpeoples">
+          <Row type="flex" justify="center" ref="relevants">
             <Col :md="8" :sm="12" class="profile-input">
             <span style="width: 100%;">ชื่อจริง</span>
-            <Input element-id="addpeoples-firstname" v-model="addpeoples.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
+            <Input element-id="relevants-firstname" v-model="relevants.firstname" prefix="ios-contact" style="width: auto" type="text" clearable />
             </Col>
             <br>
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">นามสกุล</span>
-            <Input element-id="addpeoples-lastname" v-model="addpeoples.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
+            <Input element-id="relevants-lastname" v-model="relevants.lastname" prefix="ios-contact" style="width: auto" type="text" clearable />
             </Col>
           </Row>
 
@@ -33,7 +33,7 @@
           <Row type="flex" justify="center">
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">ตำแหน่ง</span>
-            <Select element-id="addpeoples-groups" v-model="addpeoples.GID" filterable>
+            <Select element-id="relevants-groups" v-model="relevants.GID" filterable>
               <Option v-for="g in groups" :value="g.id" :key="g.id">{{ g.role }}</Option>
             </Select>
             </Col>
@@ -42,7 +42,7 @@
           <Row type="flex" justify="center">
             <Col :md="8" :sm="12" class="profile-input" offset="1">
             <span style="width: 100%;">รายละเอียด</span>
-            <Input element-id="addpeoples-description" v-model="addpeoples.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="......" />
+            <Input element-id="relevants-description" v-model="relevants.description" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="......" />
             </Col>
           </Row>
           </Col>
@@ -54,7 +54,7 @@
       </Col>
 
       <Col>
-      <Button id="btn_to-roles" type="primary" to="/people/roles" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
+      <Button id="btn_to-roles" type="primary" to="/relevant/roles" icon="md-add" style="background-color: rgb(0, 0, 0); border-color: white;">เพิ่มตำแหน่ง</Button>
 
       </Col>
 
@@ -95,7 +95,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in datapeople" :key="i.id">
+              <tr v-for="i in datarelevants" :key="i.id">
                 <td>{{i.firstname}} {{i.lastname}}</td>
                 <td>{{i.role}}</td>
                 <td>{{i.description}}</td>
@@ -114,13 +114,13 @@
       </template>
     </vue-html2pdf>
     <Row type="flex" justify="center">
-      <Table height="400" max-height="450" border ref="selection" :columns="columns" size="small" :data="datapeople" :loading="loading">
+      <Table height="400" max-height="450" border ref="selection" :columns="columns" size="small" :data="datarelevants" :loading="loading">
         <template slot-scope="{ index }" slot="action">
           <Button type="primary" size="small" style="margin-right: 3px" @click="show(index)">View</Button>
           <Button type="error" size="small" @click="remove(index)">Delete</Button>
         </template>
         <template slot="footer">
-          <Page :current="peoplespages.current_page" :total="peoplespages.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="peoplespages.per_page"/>
+          <Page :current="relevantspages.current_page" :total="relevantspages.total" size="small" simple @on-prev="onprev" @on-next="onnext" :page-size="relevantspages.per_page"/>
         </template>
       </Table>
     </Row>
@@ -131,7 +131,7 @@
         <p> <b style="color: #000;">ตำแหน่ง:</b> {{ showdata.role }} </p>
         </Col>
         <Col span="11">
-        <img :src="`/images/peoples/${showdata.image}`" alt="">
+        <img :src="`/images/relevants/${showdata.image}`" alt="">
         </Col>
       </Row>
 
@@ -175,13 +175,13 @@ export default {
       deletingIndex: "",
       deletingID: "",
       modalshow: false,
-      addpeoples: {
+      relevants: {
         firstname: "",
         lastname: "",
         GID: "",
         description: "",
       },
-      addpeople: false,
+      relevant: false,
       columns: [
         {
           title: "Name",
@@ -209,7 +209,7 @@ export default {
           slot: "action",
         },
       ],
-      datapeople: [],
+      datarelevants: [],
       groups: [],
       showdata: {
         firstname: "",
@@ -217,7 +217,7 @@ export default {
         role: "",
         image: "",
       },
-      peoplespages: {},
+      relevantspages: {},
       currentPage: 1,
       perPage: 10,
     };
@@ -225,11 +225,11 @@ export default {
   methods: {
     onnext(page) {
       this.currentPage = page;
-      this.getpeople();
+      this.getrelevant();
     },
     onprev(page) {
       this.currentPage = page;
-      this.getpeople();
+      this.getrelevant();
     },
     timestamp() {
       const today = new Date();
@@ -245,18 +245,18 @@ export default {
       this.filename = timestamps;
     },
     tableItems(value) {
-      const data = this.datapeople;
+      const data = this.datarelevants;
       if (value.length > 0) {
-        if (data.filter((people) => people.firstname === this.search)) {
-          this.datapeople = data.filter(
-            (people) =>
-              people.firstname.toLowerCase().indexOf(value.toLowerCase()) > -1
+        if (data.filter((relevant) => relevant.firstname === this.search)) {
+          this.datarelevants = data.filter(
+            (relevant) =>
+              relevant.firstname.toLowerCase().indexOf(value.toLowerCase()) > -1
           );
         } else {
-          this.getpeople();
+          this.getrelevant();
         }
       } else {
-        this.getpeople();
+        this.getrelevant();
       }
     },
 
@@ -269,11 +269,11 @@ export default {
       this.$refs.html2Pdf.generatePdf();
     },
     add() {
-      post("/api-inv/peoples", this.addpeoples)
+      post("/api-inv/relevants", this.relevants)
         .then((res) => {
           if (res.data.succeed) {
-            this.addpeople = false;
-            this.datapeople.unshift(res.data.people);
+            this.relevant = false;
+            this.datarelevants.unshift(res.data.relevants);
           }
           this.$Message.info("สำเร็จ");
         })
@@ -286,20 +286,20 @@ export default {
     },
 
     cancel() {
-        this.$refs.addpeoples.resetFields();
+        this.$refs.relevants.resetFields();
         this.$Message.info("ยกเลิกแล้ว");
     },
     show(index) {
       this.modalshow = true;
-      this.showdata.firstname = this.datapeople[index].firstname;
-      this.showdata.lastname = this.datapeople[index].lastname;
-      this.showdata.role = this.datapeople[index].role;
-      this.showdata.image = this.datapeople[index].image;
+      this.showdata.firstname = this.datarelevants[index].firstname;
+      this.showdata.lastname = this.datarelevants[index].lastname;
+      this.showdata.role = this.datarelevants[index].role;
+      this.showdata.image = this.datarelevants[index].image;
     },
     confirm() {
-      del("api-inv/peoples/" + this.deletingID).then((res) => {
+      del("api-inv/relevants/" + this.deletingID).then((res) => {
         this.$Loading.finish();
-        this.datapeople.splice(this.deletingIndex, 1);
+        this.datarelevants.splice(this.deletingIndex, 1);
         if (res.data.DELETE) {
           this.modalConfirm = false;
         }
@@ -311,14 +311,14 @@ export default {
     },
     remove(index) {
       this.deletingIndex = index;
-      this.deletingID = this.datapeople[index].id;
+      this.deletingID = this.datarelevants[index].id;
       this.modalConfirm = true;
     },
-    getpeople() {
-      let dataFetchUrl = `/api-inv/getpeoples?page=${this.currentPage}`;
+    getrelevant() {
+      let dataFetchUrl = `/api-inv/getrelevants?page=${this.currentPage}`;
       get(dataFetchUrl).then((res) => {
-        this.datapeople = res.data.peoples.data;
-        this.peoplespages = res.data.peoples;
+        this.datarelevants = res.data.relevants.data;
+        this.relevantspages = res.data.relevants;
         this.loading = false;
       });
     },
@@ -330,7 +330,7 @@ export default {
   },
 
   created() {
-    this.getpeople();
+    this.getrelevant();
     this.getgroups();
     setInterval(() => {
       this.timestamp();

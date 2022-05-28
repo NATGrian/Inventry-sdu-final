@@ -12,8 +12,8 @@ import dashboard from '../views/dashboard/dashboard.vue'
 import member from '../views/member/Member.vue'
 import roles from '../views/member/Role.vue'
 
-import people from '../views/people/People.vue'
-import rolesp from '../views/people/Role.vue'
+import relevant from '../views/relevant/Relevants.vue'
+import rolesp from '../views/relevant/Role.vue'
 import storage from '../views/storage/Storage.vue'
 
 import categoryingredients from '../views/ingredients/Categoryrm.vue'
@@ -51,6 +51,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
 	mode: 'history',
+	base: process.env.BASE_URL,
 	routes: [
 		{
 			path: '/',
@@ -118,8 +119,8 @@ const router = new VueRouter({
 		},
 
 		{
-			path: '/people',
-			component: people,
+			path: '/relevants',
+			component: relevant,
 			name: 'เจ้าหน้าที่ที่เกี่ยวข้อง',
 			meta: {
 				requiresAuth: true,
@@ -127,7 +128,7 @@ const router = new VueRouter({
 			}
 		},
 		{
-			path: '/people/roles',
+			path: '/relevant/roles',
 			component: rolesp,
 			name: 'ตำแหน่งเจ้าหน้าที่เกี่ยวข้อง',
 			meta: {

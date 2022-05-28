@@ -41,6 +41,7 @@
             </Button>
             <DropdownMenu slot="list">
               <DropdownItem><Button id="btn-report-ingredients" to="/report/ingredients" long size="small" type="text" ghost style="color: #000;">วัตถุดิบ</Button></DropdownItem>
+              <DropdownItem><Button id="btn-report-package" to="/report/package" long size="small" type="text" ghost style="color: #000;">บรรจุภัณฑ์</Button></DropdownItem>
               <DropdownItem><Button id="btn-report-products" to="/report/products" long size="small" type="text" ghost style="color: #000;">ผลิตภัณฑ์</Button></DropdownItem>
             </DropdownMenu>
           </Dropdown>

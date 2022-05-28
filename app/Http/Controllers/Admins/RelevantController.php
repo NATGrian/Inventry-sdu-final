@@ -5,39 +5,39 @@ namespace App\Http\Controllers\Admins;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-use App\Models\Peoples;
-use App\Models\People_groups;
+use App\Models\Relevants;
+use App\Models\Relevant_groups;
 
-class PeopleController extends Controller
+class RelevantController extends Controller
 {
 
     public function index()
     {
-        $peoples = DB::table('peoples')
-        ->join('people_groups', 'peoples.GID', '=', 'people_groups.id')
-        ->select('peoples.*', 'people_groups.role')
+        $relevants = DB::table('relevants')
+        ->join('relevant_groups', 'relevants.GID', '=', 'relevant_groups.id')
+        ->select('relevants.*', 'relevant_groups.role')
         ->get();
 
     	return response()
     		->json([
-    			'peoples' => $peoples
+    			'relevants' => $relevants
     		]);
     }
-    public function getpeoples()
+    public function getrelevants()
     {
-        $peoples = DB::table('peoples')
-        ->join('people_groups', 'peoples.GID', '=', 'people_groups.id')
-        ->select('peoples.*', 'people_groups.role')
+        $relevants = DB::table('relevants')
+        ->join('relevant_groups', 'relevants.GID', '=', 'relevant_groups.id')
+        ->select('relevants.*', 'relevant_groups.role')
             ->paginate(10);
 
             return response()
     		->json([
-    			'peoples' => $peoples
+    			'relevants' => $relevants
     		]);
     }
     public function getgroups()
     {
-        $groups = People_groups::all();
+        $groups = Relevant_groups::all();
 
     	return response()
     		->json([
@@ -58,14 +58,12 @@ class PeopleController extends Controller
             'GID' => 'required',
         ]);
     
-        $people = new peoples($request->all());
-        $people->save();
+        $relevant = new Relevants($request->all());
+        $relevant->save();
 
         return response()
             ->json([
                 'succeed' => true,
-                'people' => $people
-
             ]);
     }
     public function addgroups(Request $request)
@@ -75,13 +73,13 @@ class PeopleController extends Controller
             'description' => 'required|max:255',
         ]);
     
-        $groups = new People_groups($request->all());
+        $groups = new Relevant_groups($request->all());
         $groups->save();
 
         return response()
             ->json([
                 'succeed' => true,
-                'group' => $groups
+
             ]);
     }
     public function show($id)
@@ -101,7 +99,7 @@ class PeopleController extends Controller
 
     public function destroy($id)
     {
-        Peoples::where('id', $id)->delete();
+        Relevants::where('id', $id)->delete();
         return response()
             ->json([
                 'DELETE' => true
@@ -110,7 +108,7 @@ class PeopleController extends Controller
 
     public function groupsdestroy($id)
     {
-        People_groups::where('id', $id)->delete();
+        Relevant_groups::where('id', $id)->delete();
         return response()
             ->json([
                 'DELETE' => true

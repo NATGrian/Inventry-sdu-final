@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Factory;
 use App\User;
-use App\Models\Peoples;
+use App\Models\Relevants;
 use App\Models\Storages;
 class UsersTableSeeder extends Seeder
 {
@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
         		'api_token' => NULL
         	]);
         
-        	Peoples::create([
+        	Relevants::create([
                 'GID' => 1,
         		'firstname' => 'แอดมิน',
                 'lastname' => 'administrator',

@@ -8,7 +8,7 @@ use DateTime;
 use App\User;
 
 use App\Models\Storages;
-use App\Models\Peoples;
+use App\Models\Relevants;
 
 use App\Models\Item_packaging;
 use App\Models\Import_packagings_items;
@@ -39,7 +39,7 @@ class PackagingsController extends Controller
         return response()
             ->json([
                 'succeed' => true,
-                'categorys' => $categorys
+                
 
             ]);
     }
@@ -81,8 +81,8 @@ class PackagingsController extends Controller
         $Item = DB::table('export_packagings_items')
         ->join('users', 'export_packagings_items.UID', '=', 'users.id')
         ->join('item_packagings', 'export_packagings_items.idpack', '=', 'item_packagings.id')
-        ->join('peoples', 'export_packagings_items.PID', '=', 'peoples.id')
-        ->select('export_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'peoples.firstname as pfname')
+        ->join('relevants', 'export_packagings_items.PID', '=', 'relevants.id')
+        ->select('export_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'Relevants.firstname as pfname')
         ->orderBy('export_packagings_items.export_at', 'desc') ->get();
 
         return response()
@@ -106,9 +106,9 @@ class PackagingsController extends Controller
         $record = DB::table('import_packagings_items')
         ->join('users', 'import_packagings_items.UID', '=', 'users.id')
         ->join('item_packagings', 'import_packagings_items.idpack', '=', 'item_packagings.id')
-        ->join('peoples', 'import_packagings_items.PID', '=', 'peoples.id')
+        ->join('relevants', 'import_packagings_items.PID', '=', 'relevants.id')
         ->join('storages', 'import_packagings_items.storageID', '=', 'storages.id')
-        ->select('import_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'peoples.firstname as pfname', 'storages.name')
+        ->select('import_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'relevants.firstname as pfname', 'storages.name')
         ->orderBy('import_packagings_items.import_at', 'desc') ->get();
 
         return response()
@@ -121,16 +121,16 @@ class PackagingsController extends Controller
         $record = DB::table('import_packagings_items')
             ->join('users', 'import_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'import_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'import_packagings_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_packagings_items.PID', '=', 'relevants.id')
             ->join('storages', 'import_packagings_items.storageID', '=', 'storages.id')
-            ->select('import_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'peoples.firstname as pfname', 'storages.name')
+            ->select('import_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'relevants.firstname as pfname', 'storages.name')
             ->orderBy('import_packagings_items.import_at', 'desc') ->paginate(10);
 
         $record1 = DB::table('export_packagings_items')
             ->join('users', 'export_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'export_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'export_packagings_items.PID', '=', 'peoples.id')
-            ->select('export_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'peoples.firstname as pfname')
+            ->join('relevants', 'export_packagings_items.PID', '=', 'relevants.id')
+            ->select('export_packagings_items.*', 'users.firstname as ufname', 'item_packagings.itemname', 'relevants.firstname as pfname')
             ->orderBy('export_packagings_items.export_at', 'desc') ->paginate(10);
 
         return response()
@@ -175,11 +175,11 @@ class PackagingsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+        $Import->save();
 
         return response()
             ->json([
-                'import' => $seve,
+                // 'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -214,11 +214,11 @@ class PackagingsController extends Controller
         $export->status = 'นำออก';
         $export->description = $request->description;
         $export->PID = $request->PID;
-        $seve = $export->save();
+        $export->save();
 
         return response()
             ->json([
-                'import' => $seve,
+                // 'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -279,12 +279,12 @@ class PackagingsController extends Controller
         $Import->description = $request->description;
         $Import->PID = $request->PID;
         $Import->storageID = $request->storageID;
-        $seve = $Import->save();
+        $Import->save();
 
 
         return response()
             ->json([
-                'import' => $seve,
+                // 'import' => $seve,
                 'succeed' => true
             ]);
     }
@@ -356,10 +356,10 @@ class PackagingsController extends Controller
         $record = DB::table('import_packagings_items')
             ->join('users', 'import_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'import_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'import_packagings_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_packagings_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_packagings.itemname',
                 'import_packagings_items.qty_charge as im_qty_charge',
                 'import_packagings_items.qty_balance',
@@ -378,10 +378,10 @@ class PackagingsController extends Controller
         $record1 = DB::table('export_packagings_items')
             ->join('users', 'export_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'export_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'export_packagings_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_packagings_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_packagings.itemname',
                 'export_packagings_items.qty_charge as ex_qty_charge',
                 'export_packagings_items.qty_balance',
@@ -410,10 +410,10 @@ class PackagingsController extends Controller
         $record = DB::table('import_packagings_items')
             ->join('users', 'import_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'import_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'import_packagings_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'import_packagings_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_packagings.itemname',
                 'import_packagings_items.qty_charge as im_qty_charge',
                 'import_packagings_items.qty_balance',
@@ -431,10 +431,10 @@ class PackagingsController extends Controller
         $record1 = DB::table('export_packagings_items')
             ->join('users', 'export_packagings_items.UID', '=', 'users.id')
             ->join('item_packagings', 'export_packagings_items.idpack', '=', 'item_packagings.id')
-            ->join('peoples', 'export_packagings_items.PID', '=', 'peoples.id')
+            ->join('relevants', 'export_packagings_items.PID', '=', 'relevants.id')
             ->select(
                 'users.firstname as ufname',
-                'peoples.firstname as pfname',
+                'relevants.firstname as pfname',
                 'item_packagings.itemname',
                 'export_packagings_items.qty_charge as ex_qty_charge',
                 'export_packagings_items.qty_balance',
